@@ -1,0 +1,9 @@
+You ask AI to make a document shorter. It leaves out something important.
+Here, the policy allows refunds, but excludes renewal payments.
+The summary keeps the refund window, but drops that exception.
+Lossless lets you mark what must stay. Jev checks the rewrite.
+It repairs the missing idea, then checks again.
+Some text must stay word for word. Use Keep wording.
+For a whole section, extract its key ideas with Must cover.
+You can also check a draft you already have, and repair it if needed.
+Then change the tone or length. Your selected ideas stay part of the checks.

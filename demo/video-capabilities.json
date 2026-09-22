@@ -1,0 +1,49 @@
+{
+  "provenance": "Real key-idea extraction from the fictional policy, and deterministic exact-wording check against the saved repaired summary. UI is illustrated.",
+  "sourceFile": "customer-policy.md",
+  "section": "Cancellation takes effect at the end of the current billing period. The workspace remains available until that period ends, and cancellation prevents the next renewal. A confirmation email states the effective date so that the team can plan its transition. A customer can therefore cancel future billing while continuing to use time that has already been purchased. Cancellation is not the same operation as deleting a workspace, and staff should not present those actions as interchangeable.",
+  "facts": [
+    {
+      "id": "F1",
+      "text": "Cancellation takes effect at the end of the current billing period, preserves workspace access until then, and prevents the next renewal.",
+      "constraintId": "cancellation",
+      "sources": [
+        {
+          "start": 3382,
+          "end": 3449
+        },
+        {
+          "start": 3450,
+          "end": 3549
+        },
+        {
+          "start": 3639,
+          "end": 3747
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "text": "Cancellation is not the same operation as deleting a workspace, and staff should not present those actions as interchangeable.",
+      "constraintId": "cancellation",
+      "sources": [
+        {
+          "start": 3748,
+          "end": 3874
+        }
+      ]
+    }
+  ],
+  "wording": {
+    "phrase": "Renewal payments are non-refundable.",
+    "match": {
+      "start": 553,
+      "end": 589
+    }
+  },
+  "displayFacts": [
+    "Keep access until the billing period ends; prevent renewal.",
+    "Cancelling the subscription does not delete the workspace."
+  ],
+  "displayFactsNote": "Short display labels for the two saved extracted ideas, edited for readability; selection marks are not verification verdicts."
+}

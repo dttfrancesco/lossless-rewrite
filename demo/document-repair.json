@@ -1,0 +1,1593 @@
+{
+  "provenance": "Illustrative source; deliberately flawed input draft; real Jev checks and Codex repair. Edited replay, not live generation.",
+  "capturedAt": "2026-09-22T00:46:25.460Z",
+  "source": "# Customer account policy\n\nIllustrative policy for the Lossless Rewrite demo. This is fictional example text, not the terms of an actual service.\n\n## 1. Purpose and account ownership\n\nThis policy explains how a team workspace moves from evaluation to paid use, how changes affect billing, and what happens when the account closes. It is intended for account owners and the support staff answering their questions. Product tutorials explain individual features separately. When preparing a customer response, use the policy that applied to the relevant transaction rather than assuming the newest page governs every older purchase. Support should ask for the workspace identifier before discussing an invoice, but must not ask the customer to share passwords or recovery codes.\n\nAn account owner controls billing contacts, membership and subscription changes. Other members can use the workspace within the permissions assigned to them. A change of owner does not create a new subscription, restart an evaluation period or reset an existing invoice. The outgoing owner should verify that the replacement can access billing before leaving the workspace. Support can explain the transfer process but should not promise to bypass the account's ownership checks merely because a request sounds urgent.\n\n## 2. Evaluation period\n\nNew workspaces receive a 14-day trial. Trials do not automatically convert to paid subscriptions. The owner must choose a plan and confirm payment before paid service begins. A reminder near the end of the trial explains the available plans and provides an opportunity to export evaluation data. Sending that reminder does not constitute a purchase or extend the trial. Support may help an owner locate the upgrade controls but should not describe an unpaid trial as an overdue paid account.\n\nTrial workspaces can invite colleagues and test the standard collaboration features. Some administrative controls are available only on paid plans, and their absence during evaluation is not a billing fault. Creating another workspace does not transfer the first workspace's settings or content. If a team needs more time to evaluate a particular workflow, support can record the request for review; an extension is not guaranteed and must not be promised before it is confirmed.\n\n## 3. Plans, seats and invoices\n\nPlans are billed to the account owner using the billing details saved at checkout. The invoice identifies the workspace, billing period and number of paid seats. Customers should keep their billing email current so that receipts and service notices reach the right person. Changing an invoice contact updates future correspondence; it does not transfer workspace ownership. Support should distinguish a request to correct contact information from a request to change the legal details of an already issued invoice.\n\nAdded seats are charged proportionally for the remainder of the current billing period. Seat reductions take effect at the next billing period. Removing a member immediately prevents that member from using the workspace, but it does not create a credit for the remaining days of the current period. Before confirming a seat change, the owner can review the projected next invoice. Support should explain this timing clearly rather than using the word \"immediate\" for both access removal and the billing adjustment.\n\n## 4. Cancellation\n\nCancellation takes effect at the end of the current billing period. The workspace remains available until that period ends, and cancellation prevents the next renewal. A confirmation email states the effective date so that the team can plan its transition. A customer can therefore cancel future billing while continuing to use time that has already been purchased. Cancellation is not the same operation as deleting a workspace, and staff should not present those actions as interchangeable.\n\nOwners should export content and notify collaborators before access changes. If an owner cancels by mistake, support can explain the available options while the current period is still active. An unresolved support conversation does not by itself cancel a subscription or move its renewal date. The owner should use the cancellation control and retain the confirmation. Refund eligibility is determined separately under the next section; a cancellation confirmation is not a refund approval.\n\n## 5. Refund eligibility\n\nFull refunds are available within 14 days of the first purchase. Renewal payments are non-refundable. The first-purchase window starts when payment is confirmed, not when the customer first opens a particular feature or invites the rest of the team. This distinction must remain in any shortened explanation of the policy. A general statement that refunds are available within 14 days is incomplete because it does not identify which payment qualifies.\n\nCustomers request a refund through support and should include the relevant invoice identifier. Staff should acknowledge the request, check the transaction date and determine whether the transaction was a first purchase or a renewal. Do not describe an acknowledgement as approval. Once a refund has been approved and submitted, the payment provider controls the time it takes to appear in the customer's account. This policy does not promise a fixed bank processing time.\n\n## 6. Content after cancellation\n\nOwners can export workspace content for 30 days after cancellation takes effect. During that period the workspace is read-only: owners can retrieve existing material, but members cannot create or modify content. The export window starts at the effective cancellation date, not the date on which the owner clicked the cancellation button. Support should include the effective date when answering a question about remaining export time, rather than calculating it from the last customer email.\n\nAfter the export window closes, workspace content is scheduled for deletion. Customers should keep their own copies of exported material and verify that the export contains what they need before leaving. Exporting content does not export passwords, billing credentials or administrative access to other workspaces. A request to reopen a deleted workspace must not be treated as a promise that its content can be recovered. Support can check the account's current state without guaranteeing restoration.\n\n## 7. Support and communication\n\nStandard support operates Monday through Friday, from 09:00 to 17:00 UTC. Requests received outside those hours join the queue for the next support period. The submission confirmation means the request was received; it is not a guarantee that a person is already investigating it. Customers should include a concise description, workspace identifier and relevant invoice number where appropriate. Sensitive credentials should never be included in a ticket or screenshot.\n\nSupport responses should be concise, helpful and accurate. A warmer tone must not broaden eligibility, move a deadline or turn a conditional action into an unconditional promise. When summarizing several sections, preserve the distinction between a trial and a purchase, cancellation and deletion, and a first purchase and a renewal. If the available information does not establish an answer, explain what needs to be checked rather than filling the gap with a reassuring assumption.",
+  "initialText": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.\n\nCancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time. Full refunds are available within 14 days. Customers should contact support with their invoice identifier to request one. Payment-provider processing times vary.\n\nOwners have 30 days after cancellation takes effect to export content from the read-only workspace. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support is available Monday through Friday, 09:00–17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+  "instruction": "Summarize this policy for support staff in about 150 words. Keep the selected conditions and exceptions.",
+  "facts": [
+    {
+      "id": "F1",
+      "constraintId": "demo",
+      "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription.",
+      "sources": [
+        {
+          "start": 1323,
+          "end": 1420
+        }
+      ]
+    },
+    {
+      "id": "F2",
+      "constraintId": "demo",
+      "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period.",
+      "sources": [
+        {
+          "start": 2846,
+          "end": 2989
+        }
+      ]
+    },
+    {
+      "id": "F3",
+      "constraintId": "demo",
+      "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal.",
+      "sources": [
+        {
+          "start": 3382,
+          "end": 3549
+        }
+      ]
+    },
+    {
+      "id": "F4",
+      "constraintId": "demo",
+      "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable.",
+      "sources": [
+        {
+          "start": 4395,
+          "end": 4496
+        }
+      ]
+    },
+    {
+      "id": "F5",
+      "constraintId": "demo",
+      "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period.",
+      "sources": [
+        {
+          "start": 5356,
+          "end": 5567
+        }
+      ]
+    },
+    {
+      "id": "F6",
+      "constraintId": "demo",
+      "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.",
+      "sources": [
+        {
+          "start": 6386,
+          "end": 6459
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "draft",
+        "attempt": 0,
+        "text": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.\n\nCancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time. Full refunds are available within 14 days. Customers should contact support with their invoice identifier to request one. Payment-provider processing times vary.\n\nOwners have 30 days after cancellation takes effect to export content from the read-only workspace. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support is available Monday through Friday, 09:00–17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan.",
+            "start": 0,
+            "end": 110,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Account owners manage membership, billing contacts and subscription changes.",
+            "start": 111,
+            "end": 187,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.",
+            "start": 188,
+            "end": 297,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Cancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time.",
+            "start": 299,
+            "end": 438,
+            "paragraph": 1
+          },
+          {
+            "id": "S5",
+            "text": "Full refunds are available within 14 days.",
+            "start": 439,
+            "end": 481,
+            "paragraph": 1
+          },
+          {
+            "id": "S6",
+            "text": "Customers should contact support with their invoice identifier to request one.",
+            "start": 482,
+            "end": 560,
+            "paragraph": 1
+          },
+          {
+            "id": "S7",
+            "text": "Payment-provider processing times vary.",
+            "start": 561,
+            "end": 600,
+            "paragraph": 1
+          },
+          {
+            "id": "S8",
+            "text": "Owners have 30 days after cancellation takes effect to export content from the read-only workspace.",
+            "start": 602,
+            "end": 701,
+            "paragraph": 2
+          },
+          {
+            "id": "S9",
+            "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+            "start": 702,
+            "end": 773,
+            "paragraph": 2
+          },
+          {
+            "id": "S10",
+            "text": "Standard support is available Monday through Friday, 09:00–17:00 UTC.",
+            "start": 774,
+            "end": 843,
+            "paragraph": 2
+          },
+          {
+            "id": "S11",
+            "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+            "start": 844,
+            "end": 951,
+            "paragraph": 2
+          }
+        ],
+        "words": 147
+      }
+    },
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 0
+      }
+    },
+    {
+      "elapsedMs": 743,
+      "event": {
+        "type": "stage",
+        "stage": "adjudicating",
+        "attempt": 0,
+        "ids": [
+          "F4"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 7609,
+      "event": {
+        "type": "verified",
+        "attempt": 0,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+              },
+              "status": "kept",
+              "present": 0.97,
+              "sentences": [
+                "S1"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F2",
+                "kind": "must_cover",
+                "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S3"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F3",
+                "kind": "must_cover",
+                "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S4"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F4",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+              },
+              "status": "altered",
+              "present": 0.04,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "First-purchase restriction and renewal non-refundability are omitted."
+            },
+            {
+              "unit": {
+                "id": "F5",
+                "kind": "must_cover",
+                "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+              },
+              "status": "kept",
+              "present": 0.97,
+              "sentences": [
+                "S8"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F6",
+                "kind": "must_cover",
+                "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S10"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 738.1987999999999,
+          "adjudicationMs": 6859.95,
+          "decisionTokens": 2543
+        }
+      }
+    },
+    {
+      "elapsedMs": 7609,
+      "event": {
+        "type": "stage",
+        "stage": "repairing",
+        "attempt": 1,
+        "ids": [
+          "F4"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 21717,
+      "event": {
+        "type": "draft",
+        "attempt": 1,
+        "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.\n\nCancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time. The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable. Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.\n\nFor 30 days after cancellation takes effect, owners can export content while the workspace remains read-only. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support operates Monday through Friday, from 09:00 to 17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan.",
+            "start": 0,
+            "end": 139,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Account owners manage membership, billing contacts and subscription changes.",
+            "start": 140,
+            "end": 216,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.",
+            "start": 217,
+            "end": 344,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Cancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time.",
+            "start": 346,
+            "end": 493,
+            "paragraph": 1
+          },
+          {
+            "id": "S5",
+            "text": "The 14-day full refund applies only to the first purchase.",
+            "start": 494,
+            "end": 552,
+            "paragraph": 1
+          },
+          {
+            "id": "S6",
+            "text": "Renewal payments are non-refundable.",
+            "start": 553,
+            "end": 589,
+            "paragraph": 1
+          },
+          {
+            "id": "S7",
+            "text": "Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.",
+            "start": 590,
+            "end": 715,
+            "paragraph": 1
+          },
+          {
+            "id": "S8",
+            "text": "For 30 days after cancellation takes effect, owners can export content while the workspace remains read-only.",
+            "start": 717,
+            "end": 826,
+            "paragraph": 2
+          },
+          {
+            "id": "S9",
+            "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+            "start": 827,
+            "end": 898,
+            "paragraph": 2
+          },
+          {
+            "id": "S10",
+            "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.",
+            "start": 899,
+            "end": 972,
+            "paragraph": 2
+          },
+          {
+            "id": "S11",
+            "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+            "start": 973,
+            "end": 1080,
+            "paragraph": 2
+          }
+        ],
+        "words": 163
+      }
+    },
+    {
+      "elapsedMs": 21717,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 1
+      }
+    },
+    {
+      "elapsedMs": 22314,
+      "event": {
+        "type": "verified",
+        "attempt": 1,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S1"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F2",
+                "kind": "must_cover",
+                "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S3"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F3",
+                "kind": "must_cover",
+                "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S4"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F4",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S5",
+                "S6"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F5",
+                "kind": "must_cover",
+                "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S8"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F6",
+                "kind": "must_cover",
+                "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S10"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 596.343499999999,
+          "adjudicationMs": 0,
+          "decisionTokens": 2567
+        }
+      }
+    },
+    {
+      "elapsedMs": 22314,
+      "event": {
+        "type": "done",
+        "result": {
+          "attempts": [
+            {
+              "pass": "edit",
+              "text": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.\n\nCancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time. Full refunds are available within 14 days. Customers should contact support with their invoice identifier to request one. Payment-provider processing times vary.\n\nOwners have 30 days after cancellation takes effect to export content from the read-only workspace. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support is available Monday through Friday, 09:00–17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan.",
+                  "start": 0,
+                  "end": 110,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Account owners manage membership, billing contacts and subscription changes.",
+                  "start": 111,
+                  "end": 187,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.",
+                  "start": 188,
+                  "end": 297,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S4",
+                  "text": "Cancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time.",
+                  "start": 299,
+                  "end": 438,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S5",
+                  "text": "Full refunds are available within 14 days.",
+                  "start": 439,
+                  "end": 481,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S6",
+                  "text": "Customers should contact support with their invoice identifier to request one.",
+                  "start": 482,
+                  "end": 560,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S7",
+                  "text": "Payment-provider processing times vary.",
+                  "start": 561,
+                  "end": 600,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S8",
+                  "text": "Owners have 30 days after cancellation takes effect to export content from the read-only workspace.",
+                  "start": 602,
+                  "end": 701,
+                  "paragraph": 2
+                },
+                {
+                  "id": "S9",
+                  "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+                  "start": 702,
+                  "end": 773,
+                  "paragraph": 2
+                },
+                {
+                  "id": "S10",
+                  "text": "Standard support is available Monday through Friday, 09:00–17:00 UTC.",
+                  "start": 774,
+                  "end": 843,
+                  "paragraph": 2
+                },
+                {
+                  "id": "S11",
+                  "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+                  "start": 844,
+                  "end": 951,
+                  "paragraph": 2
+                }
+              ],
+              "words": 147,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+                    },
+                    "status": "kept",
+                    "present": 0.97,
+                    "sentences": [
+                      "S1"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F2",
+                      "kind": "must_cover",
+                      "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+                    },
+                    "status": "kept",
+                    "present": 0.99,
+                    "sentences": [
+                      "S3"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F3",
+                      "kind": "must_cover",
+                      "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+                    },
+                    "status": "kept",
+                    "present": 0.99,
+                    "sentences": [
+                      "S4"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F4",
+                      "kind": "must_cover",
+                      "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+                    },
+                    "status": "altered",
+                    "present": 0.04,
+                    "sentences": [],
+                    "numbersMissing": [],
+                    "decidedBy": "llm",
+                    "reason": "First-purchase restriction and renewal non-refundability are omitted."
+                  },
+                  {
+                    "unit": {
+                      "id": "F5",
+                      "kind": "must_cover",
+                      "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+                    },
+                    "status": "kept",
+                    "present": 0.97,
+                    "sentences": [
+                      "S8"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F6",
+                      "kind": "must_cover",
+                      "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+                    },
+                    "status": "kept",
+                    "present": 0.99,
+                    "sentences": [
+                      "S10"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  }
+                ],
+                "wording": [],
+                "escalated": 1,
+                "decisionMs": 738.1987999999999,
+                "adjudicationMs": 6859.95,
+                "decisionTokens": 2543
+              },
+              "repairing": [],
+              "writeMs": 0.0006999999999948159
+            },
+            {
+              "pass": "repair",
+              "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.\n\nCancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time. The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable. Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.\n\nFor 30 days after cancellation takes effect, owners can export content while the workspace remains read-only. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support operates Monday through Friday, from 09:00 to 17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan.",
+                  "start": 0,
+                  "end": 139,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Account owners manage membership, billing contacts and subscription changes.",
+                  "start": 140,
+                  "end": 216,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.",
+                  "start": 217,
+                  "end": 344,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S4",
+                  "text": "Cancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time.",
+                  "start": 346,
+                  "end": 493,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S5",
+                  "text": "The 14-day full refund applies only to the first purchase.",
+                  "start": 494,
+                  "end": 552,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S6",
+                  "text": "Renewal payments are non-refundable.",
+                  "start": 553,
+                  "end": 589,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S7",
+                  "text": "Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.",
+                  "start": 590,
+                  "end": 715,
+                  "paragraph": 1
+                },
+                {
+                  "id": "S8",
+                  "text": "For 30 days after cancellation takes effect, owners can export content while the workspace remains read-only.",
+                  "start": 717,
+                  "end": 826,
+                  "paragraph": 2
+                },
+                {
+                  "id": "S9",
+                  "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+                  "start": 827,
+                  "end": 898,
+                  "paragraph": 2
+                },
+                {
+                  "id": "S10",
+                  "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.",
+                  "start": 899,
+                  "end": 972,
+                  "paragraph": 2
+                },
+                {
+                  "id": "S11",
+                  "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+                  "start": 973,
+                  "end": 1080,
+                  "paragraph": 2
+                }
+              ],
+              "words": 163,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+                    },
+                    "status": "kept",
+                    "present": 0.98,
+                    "sentences": [
+                      "S1"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F2",
+                      "kind": "must_cover",
+                      "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+                    },
+                    "status": "kept",
+                    "present": 0.99,
+                    "sentences": [
+                      "S3"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F3",
+                      "kind": "must_cover",
+                      "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+                    },
+                    "status": "kept",
+                    "present": 0.98,
+                    "sentences": [
+                      "S4"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F4",
+                      "kind": "must_cover",
+                      "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+                    },
+                    "status": "kept",
+                    "present": 0.99,
+                    "sentences": [
+                      "S5",
+                      "S6"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F5",
+                      "kind": "must_cover",
+                      "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+                    },
+                    "status": "kept",
+                    "present": 0.98,
+                    "sentences": [
+                      "S8"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  },
+                  {
+                    "unit": {
+                      "id": "F6",
+                      "kind": "must_cover",
+                      "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+                    },
+                    "status": "kept",
+                    "present": 0.99,
+                    "sentences": [
+                      "S10"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  }
+                ],
+                "wording": [],
+                "escalated": 0,
+                "decisionMs": 596.343499999999,
+                "adjudicationMs": 0,
+                "decisionTokens": 2567
+              },
+              "repairing": [
+                "F4"
+              ],
+              "writeMs": 14107.848299999998
+            }
+          ],
+          "final": {
+            "pass": "repair",
+            "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.\n\nCancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time. The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable. Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.\n\nFor 30 days after cancellation takes effect, owners can export content while the workspace remains read-only. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support operates Monday through Friday, from 09:00 to 17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+            "sentences": [
+              {
+                "id": "S1",
+                "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan.",
+                "start": 0,
+                "end": 139,
+                "paragraph": 0
+              },
+              {
+                "id": "S2",
+                "text": "Account owners manage membership, billing contacts and subscription changes.",
+                "start": 140,
+                "end": 216,
+                "paragraph": 0
+              },
+              {
+                "id": "S3",
+                "text": "Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.",
+                "start": 217,
+                "end": 344,
+                "paragraph": 0
+              },
+              {
+                "id": "S4",
+                "text": "Cancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time.",
+                "start": 346,
+                "end": 493,
+                "paragraph": 1
+              },
+              {
+                "id": "S5",
+                "text": "The 14-day full refund applies only to the first purchase.",
+                "start": 494,
+                "end": 552,
+                "paragraph": 1
+              },
+              {
+                "id": "S6",
+                "text": "Renewal payments are non-refundable.",
+                "start": 553,
+                "end": 589,
+                "paragraph": 1
+              },
+              {
+                "id": "S7",
+                "text": "Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.",
+                "start": 590,
+                "end": 715,
+                "paragraph": 1
+              },
+              {
+                "id": "S8",
+                "text": "For 30 days after cancellation takes effect, owners can export content while the workspace remains read-only.",
+                "start": 717,
+                "end": 826,
+                "paragraph": 2
+              },
+              {
+                "id": "S9",
+                "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+                "start": 827,
+                "end": 898,
+                "paragraph": 2
+              },
+              {
+                "id": "S10",
+                "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.",
+                "start": 899,
+                "end": 972,
+                "paragraph": 2
+              },
+              {
+                "id": "S11",
+                "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+                "start": 973,
+                "end": 1080,
+                "paragraph": 2
+              }
+            ],
+            "words": 163,
+            "verification": {
+              "units": [
+                {
+                  "unit": {
+                    "id": "F1",
+                    "kind": "must_cover",
+                    "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+                  },
+                  "status": "kept",
+                  "present": 0.98,
+                  "sentences": [
+                    "S1"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                },
+                {
+                  "unit": {
+                    "id": "F2",
+                    "kind": "must_cover",
+                    "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+                  },
+                  "status": "kept",
+                  "present": 0.99,
+                  "sentences": [
+                    "S3"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                },
+                {
+                  "unit": {
+                    "id": "F3",
+                    "kind": "must_cover",
+                    "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+                  },
+                  "status": "kept",
+                  "present": 0.98,
+                  "sentences": [
+                    "S4"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                },
+                {
+                  "unit": {
+                    "id": "F4",
+                    "kind": "must_cover",
+                    "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+                  },
+                  "status": "kept",
+                  "present": 0.99,
+                  "sentences": [
+                    "S5",
+                    "S6"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                },
+                {
+                  "unit": {
+                    "id": "F5",
+                    "kind": "must_cover",
+                    "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+                  },
+                  "status": "kept",
+                  "present": 0.98,
+                  "sentences": [
+                    "S8"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                },
+                {
+                  "unit": {
+                    "id": "F6",
+                    "kind": "must_cover",
+                    "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+                  },
+                  "status": "kept",
+                  "present": 0.99,
+                  "sentences": [
+                    "S10"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                }
+              ],
+              "wording": [],
+              "escalated": 0,
+              "decisionMs": 596.343499999999,
+              "adjudicationMs": 0,
+              "decisionTokens": 2567
+            },
+            "repairing": [
+              "F4"
+            ],
+            "writeMs": 14107.848299999998
+          },
+          "sourceWords": 1115,
+          "targetWords": 150
+        }
+      }
+    }
+  ],
+  "result": {
+    "attempts": [
+      {
+        "pass": "edit",
+        "text": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.\n\nCancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time. Full refunds are available within 14 days. Customers should contact support with their invoice identifier to request one. Payment-provider processing times vary.\n\nOwners have 30 days after cancellation takes effect to export content from the read-only workspace. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support is available Monday through Friday, 09:00–17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan.",
+            "start": 0,
+            "end": 110,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Account owners manage membership, billing contacts and subscription changes.",
+            "start": 111,
+            "end": 187,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.",
+            "start": 188,
+            "end": 297,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Cancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time.",
+            "start": 299,
+            "end": 438,
+            "paragraph": 1
+          },
+          {
+            "id": "S5",
+            "text": "Full refunds are available within 14 days.",
+            "start": 439,
+            "end": 481,
+            "paragraph": 1
+          },
+          {
+            "id": "S6",
+            "text": "Customers should contact support with their invoice identifier to request one.",
+            "start": 482,
+            "end": 560,
+            "paragraph": 1
+          },
+          {
+            "id": "S7",
+            "text": "Payment-provider processing times vary.",
+            "start": 561,
+            "end": 600,
+            "paragraph": 1
+          },
+          {
+            "id": "S8",
+            "text": "Owners have 30 days after cancellation takes effect to export content from the read-only workspace.",
+            "start": 602,
+            "end": 701,
+            "paragraph": 2
+          },
+          {
+            "id": "S9",
+            "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+            "start": 702,
+            "end": 773,
+            "paragraph": 2
+          },
+          {
+            "id": "S10",
+            "text": "Standard support is available Monday through Friday, 09:00–17:00 UTC.",
+            "start": 774,
+            "end": 843,
+            "paragraph": 2
+          },
+          {
+            "id": "S11",
+            "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+            "start": 844,
+            "end": 951,
+            "paragraph": 2
+          }
+        ],
+        "words": 147,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+              },
+              "status": "kept",
+              "present": 0.97,
+              "sentences": [
+                "S1"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F2",
+                "kind": "must_cover",
+                "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S3"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F3",
+                "kind": "must_cover",
+                "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S4"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F4",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+              },
+              "status": "altered",
+              "present": 0.04,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "First-purchase restriction and renewal non-refundability are omitted."
+            },
+            {
+              "unit": {
+                "id": "F5",
+                "kind": "must_cover",
+                "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+              },
+              "status": "kept",
+              "present": 0.97,
+              "sentences": [
+                "S8"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F6",
+                "kind": "must_cover",
+                "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S10"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 738.1987999999999,
+          "adjudicationMs": 6859.95,
+          "decisionTokens": 2543
+        },
+        "repairing": [],
+        "writeMs": 0.0006999999999948159
+      },
+      {
+        "pass": "repair",
+        "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.\n\nCancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time. The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable. Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.\n\nFor 30 days after cancellation takes effect, owners can export content while the workspace remains read-only. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support operates Monday through Friday, from 09:00 to 17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan.",
+            "start": 0,
+            "end": 139,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Account owners manage membership, billing contacts and subscription changes.",
+            "start": 140,
+            "end": 216,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.",
+            "start": 217,
+            "end": 344,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Cancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time.",
+            "start": 346,
+            "end": 493,
+            "paragraph": 1
+          },
+          {
+            "id": "S5",
+            "text": "The 14-day full refund applies only to the first purchase.",
+            "start": 494,
+            "end": 552,
+            "paragraph": 1
+          },
+          {
+            "id": "S6",
+            "text": "Renewal payments are non-refundable.",
+            "start": 553,
+            "end": 589,
+            "paragraph": 1
+          },
+          {
+            "id": "S7",
+            "text": "Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.",
+            "start": 590,
+            "end": 715,
+            "paragraph": 1
+          },
+          {
+            "id": "S8",
+            "text": "For 30 days after cancellation takes effect, owners can export content while the workspace remains read-only.",
+            "start": 717,
+            "end": 826,
+            "paragraph": 2
+          },
+          {
+            "id": "S9",
+            "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+            "start": 827,
+            "end": 898,
+            "paragraph": 2
+          },
+          {
+            "id": "S10",
+            "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.",
+            "start": 899,
+            "end": 972,
+            "paragraph": 2
+          },
+          {
+            "id": "S11",
+            "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+            "start": 973,
+            "end": 1080,
+            "paragraph": 2
+          }
+        ],
+        "words": 163,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S1"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F2",
+                "kind": "must_cover",
+                "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S3"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F3",
+                "kind": "must_cover",
+                "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S4"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F4",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S5",
+                "S6"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F5",
+                "kind": "must_cover",
+                "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S8"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            },
+            {
+              "unit": {
+                "id": "F6",
+                "kind": "must_cover",
+                "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+              },
+              "status": "kept",
+              "present": 0.99,
+              "sentences": [
+                "S10"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 596.343499999999,
+          "adjudicationMs": 0,
+          "decisionTokens": 2567
+        },
+        "repairing": [
+          "F4"
+        ],
+        "writeMs": 14107.848299999998
+      }
+    ],
+    "final": {
+      "pass": "repair",
+      "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.\n\nCancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time. The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable. Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.\n\nFor 30 days after cancellation takes effect, owners can export content while the workspace remains read-only. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support operates Monday through Friday, from 09:00 to 17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+      "sentences": [
+        {
+          "id": "S1",
+          "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription; the owner must choose and pay for a plan.",
+          "start": 0,
+          "end": 139,
+          "paragraph": 0
+        },
+        {
+          "id": "S2",
+          "text": "Account owners manage membership, billing contacts and subscription changes.",
+          "start": 140,
+          "end": 216,
+          "paragraph": 0
+        },
+        {
+          "id": "S3",
+          "text": "Added seats are prorated for the remainder of the current billing period, while seat reductions take effect in the next period.",
+          "start": 217,
+          "end": 344,
+          "paragraph": 0
+        },
+        {
+          "id": "S4",
+          "text": "Cancellation prevents the next renewal and takes effect at the end of the current billing period, allowing the team to use its remaining paid time.",
+          "start": 346,
+          "end": 493,
+          "paragraph": 1
+        },
+        {
+          "id": "S5",
+          "text": "The 14-day full refund applies only to the first purchase.",
+          "start": 494,
+          "end": 552,
+          "paragraph": 1
+        },
+        {
+          "id": "S6",
+          "text": "Renewal payments are non-refundable.",
+          "start": 553,
+          "end": 589,
+          "paragraph": 1
+        },
+        {
+          "id": "S7",
+          "text": "Customers should contact support with the relevant invoice identifier; payment-provider processing times vary after approval.",
+          "start": 590,
+          "end": 715,
+          "paragraph": 1
+        },
+        {
+          "id": "S8",
+          "text": "For 30 days after cancellation takes effect, owners can export content while the workspace remains read-only.",
+          "start": 717,
+          "end": 826,
+          "paragraph": 2
+        },
+        {
+          "id": "S9",
+          "text": "Content is then scheduled for deletion, and recovery is not guaranteed.",
+          "start": 827,
+          "end": 898,
+          "paragraph": 2
+        },
+        {
+          "id": "S10",
+          "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.",
+          "start": 899,
+          "end": 972,
+          "paragraph": 2
+        },
+        {
+          "id": "S11",
+          "text": "Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+          "start": 973,
+          "end": 1080,
+          "paragraph": 2
+        }
+      ],
+      "words": 163,
+      "verification": {
+        "units": [
+          {
+            "unit": {
+              "id": "F1",
+              "kind": "must_cover",
+              "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription."
+            },
+            "status": "kept",
+            "present": 0.98,
+            "sentences": [
+              "S1"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          },
+          {
+            "unit": {
+              "id": "F2",
+              "kind": "must_cover",
+              "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period."
+            },
+            "status": "kept",
+            "present": 0.99,
+            "sentences": [
+              "S3"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          },
+          {
+            "unit": {
+              "id": "F3",
+              "kind": "must_cover",
+              "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal."
+            },
+            "status": "kept",
+            "present": 0.98,
+            "sentences": [
+              "S4"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          },
+          {
+            "unit": {
+              "id": "F4",
+              "kind": "must_cover",
+              "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable."
+            },
+            "status": "kept",
+            "present": 0.99,
+            "sentences": [
+              "S5",
+              "S6"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          },
+          {
+            "unit": {
+              "id": "F5",
+              "kind": "must_cover",
+              "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period."
+            },
+            "status": "kept",
+            "present": 0.98,
+            "sentences": [
+              "S8"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          },
+          {
+            "unit": {
+              "id": "F6",
+              "kind": "must_cover",
+              "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC."
+            },
+            "status": "kept",
+            "present": 0.99,
+            "sentences": [
+              "S10"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          }
+        ],
+        "wording": [],
+        "escalated": 0,
+        "decisionMs": 596.343499999999,
+        "adjudicationMs": 0,
+        "decisionTokens": 2567
+      },
+      "repairing": [
+        "F4"
+      ],
+      "writeMs": 14107.848299999998
+    },
+    "sourceWords": 1115,
+    "targetWords": 150
+  }
+}

@@ -1,0 +1,12 @@
+import { build } from "esbuild";
+import { mkdir, copyFile, readFile, writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+const root = resolve(import.meta.dirname, "..");
+const outdir = resolve(root, "extension/dist");
+await mkdir(outdir, { recursive: true });
+await build({ absWorkingDir: root, entryPoints: ["extension/background.js", "extension/panel.js"], bundle: true, format: "esm", platform: "browser", target: "chrome116", outdir, sourcemap: false });
+await build({ absWorkingDir: root, entryPoints: ["extension/content.js"], bundle: true, format: "iife", platform: "browser", target: "chrome116", outdir, sourcemap: false });
+for (const file of ["manifest.json", "panel.html", "panel.css", "README.html"]) await copyFile(resolve(root, "extension", file), resolve(outdir, file));
+const manifest = JSON.parse(await readFile(resolve(outdir, "manifest.json"), "utf8"));
+await writeFile(resolve(outdir, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+console.log(`Built unpacked extension: ${outdir}`);

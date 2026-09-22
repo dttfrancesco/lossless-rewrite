@@ -1,0 +1,467 @@
+{
+  "provenance": "Illustrative source; deliberately flawed input draft; real Jev checks and Codex repair. Edited replay, not live generation.",
+  "capturedAt": "2026-09-21T23:27:55.392Z",
+  "source": "Signups rose 18% during our trial. We had no control group, so we can't tell whether the redesign caused the increase. A larger test is planned.",
+  "initialText": "Our redesign increased signups by 18%. A larger test is planned.",
+  "instruction": "Make this shorter. Don't overstate the results.",
+  "facts": [
+    {
+      "id": "F1",
+      "constraintId": "demo",
+      "text": "The trial does not establish that the redesign caused the signup increase because there was no control group.",
+      "sources": [
+        {
+          "start": 0,
+          "end": 144
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "draft",
+        "attempt": 0,
+        "text": "Our redesign increased signups by 18%. A larger test is planned.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Our redesign increased signups by 18%.",
+            "start": 0,
+            "end": 38,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "A larger test is planned.",
+            "start": 39,
+            "end": 64,
+            "paragraph": 0
+          }
+        ],
+        "words": 11
+      }
+    },
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 0
+      }
+    },
+    {
+      "elapsedMs": 1192,
+      "event": {
+        "type": "stage",
+        "stage": "adjudicating",
+        "attempt": 0,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 6925,
+      "event": {
+        "type": "verified",
+        "attempt": 0,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+              },
+              "status": "altered",
+              "present": 0.02,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "Claims causation and omits the lack of a control group."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 1188.7373000000002,
+          "adjudicationMs": 5727.3044,
+          "decisionTokens": 559
+        }
+      }
+    },
+    {
+      "elapsedMs": 6925,
+      "event": {
+        "type": "stage",
+        "stage": "repairing",
+        "attempt": 1,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 18791,
+      "event": {
+        "type": "draft",
+        "attempt": 1,
+        "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase. A larger test is planned.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase.",
+            "start": 0,
+            "end": 122,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "A larger test is planned.",
+            "start": 123,
+            "end": 148,
+            "paragraph": 0
+          }
+        ],
+        "words": 25
+      }
+    },
+    {
+      "elapsedMs": 18791,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 1
+      }
+    },
+    {
+      "elapsedMs": 19378,
+      "event": {
+        "type": "verified",
+        "attempt": 1,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S1"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 586.2871000000014,
+          "adjudicationMs": 0,
+          "decisionTokens": 576
+        }
+      }
+    },
+    {
+      "elapsedMs": 19378,
+      "event": {
+        "type": "done",
+        "result": {
+          "attempts": [
+            {
+              "pass": "edit",
+              "text": "Our redesign increased signups by 18%. A larger test is planned.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Our redesign increased signups by 18%.",
+                  "start": 0,
+                  "end": 38,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "A larger test is planned.",
+                  "start": 39,
+                  "end": 64,
+                  "paragraph": 0
+                }
+              ],
+              "words": 11,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+                    },
+                    "status": "altered",
+                    "present": 0.02,
+                    "sentences": [],
+                    "numbersMissing": [],
+                    "decidedBy": "llm",
+                    "reason": "Claims causation and omits the lack of a control group."
+                  }
+                ],
+                "wording": [],
+                "escalated": 1,
+                "decisionMs": 1188.7373000000002,
+                "adjudicationMs": 5727.3044,
+                "decisionTokens": 559
+              },
+              "repairing": [],
+              "writeMs": 0.0008000000000265572
+            },
+            {
+              "pass": "repair",
+              "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase. A larger test is planned.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase.",
+                  "start": 0,
+                  "end": 122,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "A larger test is planned.",
+                  "start": 123,
+                  "end": 148,
+                  "paragraph": 0
+                }
+              ],
+              "words": 25,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+                    },
+                    "status": "kept",
+                    "present": 0.98,
+                    "sentences": [
+                      "S1"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  }
+                ],
+                "wording": [],
+                "escalated": 0,
+                "decisionMs": 586.2871000000014,
+                "adjudicationMs": 0,
+                "decisionTokens": 576
+              },
+              "repairing": [
+                "F1"
+              ],
+              "writeMs": 11864.761499999999
+            }
+          ],
+          "final": {
+            "pass": "repair",
+            "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase. A larger test is planned.",
+            "sentences": [
+              {
+                "id": "S1",
+                "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase.",
+                "start": 0,
+                "end": 122,
+                "paragraph": 0
+              },
+              {
+                "id": "S2",
+                "text": "A larger test is planned.",
+                "start": 123,
+                "end": 148,
+                "paragraph": 0
+              }
+            ],
+            "words": 25,
+            "verification": {
+              "units": [
+                {
+                  "unit": {
+                    "id": "F1",
+                    "kind": "must_cover",
+                    "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+                  },
+                  "status": "kept",
+                  "present": 0.98,
+                  "sentences": [
+                    "S1"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                }
+              ],
+              "wording": [],
+              "escalated": 0,
+              "decisionMs": 586.2871000000014,
+              "adjudicationMs": 0,
+              "decisionTokens": 576
+            },
+            "repairing": [
+              "F1"
+            ],
+            "writeMs": 11864.761499999999
+          },
+          "sourceWords": 26
+        }
+      }
+    }
+  ],
+  "result": {
+    "attempts": [
+      {
+        "pass": "edit",
+        "text": "Our redesign increased signups by 18%. A larger test is planned.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Our redesign increased signups by 18%.",
+            "start": 0,
+            "end": 38,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "A larger test is planned.",
+            "start": 39,
+            "end": 64,
+            "paragraph": 0
+          }
+        ],
+        "words": 11,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+              },
+              "status": "altered",
+              "present": 0.02,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "Claims causation and omits the lack of a control group."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 1188.7373000000002,
+          "adjudicationMs": 5727.3044,
+          "decisionTokens": 559
+        },
+        "repairing": [],
+        "writeMs": 0.0008000000000265572
+      },
+      {
+        "pass": "repair",
+        "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase. A larger test is planned.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase.",
+            "start": 0,
+            "end": 122,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "A larger test is planned.",
+            "start": 123,
+            "end": 148,
+            "paragraph": 0
+          }
+        ],
+        "words": 25,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S1"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 586.2871000000014,
+          "adjudicationMs": 0,
+          "decisionTokens": 576
+        },
+        "repairing": [
+          "F1"
+        ],
+        "writeMs": 11864.761499999999
+      }
+    ],
+    "final": {
+      "pass": "repair",
+      "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase. A larger test is planned.",
+      "sentences": [
+        {
+          "id": "S1",
+          "text": "Signups rose 18% during the trial, but without a control group, it cannot establish that the redesign caused the increase.",
+          "start": 0,
+          "end": 122,
+          "paragraph": 0
+        },
+        {
+          "id": "S2",
+          "text": "A larger test is planned.",
+          "start": 123,
+          "end": 148,
+          "paragraph": 0
+        }
+      ],
+      "words": 25,
+      "verification": {
+        "units": [
+          {
+            "unit": {
+              "id": "F1",
+              "kind": "must_cover",
+              "text": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+            },
+            "status": "kept",
+            "present": 0.98,
+            "sentences": [
+              "S1"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          }
+        ],
+        "wording": [],
+        "escalated": 0,
+        "decisionMs": 586.2871000000014,
+        "adjudicationMs": 0,
+        "decisionTokens": 576
+      },
+      "repairing": [
+        "F1"
+      ],
+      "writeMs": 11864.761499999999
+    },
+    "sourceWords": 26
+  }
+}

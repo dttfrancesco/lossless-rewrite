@@ -1,0 +1,13 @@
+{
+  "sourceFile": "demo/customer-policy.md",
+  "instruction": "Summarize this policy for support staff in about 150 words. Keep the selected conditions and exceptions.",
+  "initialText": "New workspaces get a 14-day trial and are not charged automatically; the owner must choose and pay for a plan. Account owners manage membership, billing contacts and subscription changes. Added seats are prorated for the rest of the current billing period, while seat reductions apply next period.\n\nCancellation stops the next renewal and takes effect at the end of the current billing period, so the team can use its remaining paid time. Full refunds are available within 14 days. Customers should contact support with their invoice identifier to request one. Payment-provider processing times vary.\n\nOwners have 30 days after cancellation takes effect to export content from the read-only workspace. Content is then scheduled for deletion, and recovery is not guaranteed. Standard support is available Monday through Friday, 09:00–17:00 UTC. Include the workspace identifier and relevant invoice details, but never share passwords or recovery codes.",
+  "requirements": [
+    { "text": "New workspaces receive a 14-day trial that does not automatically convert to a paid subscription.", "quote": "New workspaces receive a 14-day trial. Trials do not automatically convert to paid subscriptions." },
+    { "text": "Added seats are prorated for the remainder of the current period; seat reductions take effect at the next billing period.", "quote": "Added seats are charged proportionally for the remainder of the current billing period. Seat reductions take effect at the next billing period." },
+    { "text": "Cancellation takes effect at the end of the current billing period and prevents the next renewal.", "quote": "Cancellation takes effect at the end of the current billing period. The workspace remains available until that period ends, and cancellation prevents the next renewal." },
+    { "text": "The 14-day full refund applies only to the first purchase. Renewal payments are non-refundable.", "quote": "Full refunds are available within 14 days of the first purchase. Renewal payments are non-refundable." },
+    { "text": "Owners can export content for 30 days after cancellation takes effect; the workspace is read-only during that period.", "quote": "Owners can export workspace content for 30 days after cancellation takes effect. During that period the workspace is read-only: owners can retrieve existing material, but members cannot create or modify content." },
+    { "text": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC.", "quote": "Standard support operates Monday through Friday, from 09:00 to 17:00 UTC." }
+  ]
+}

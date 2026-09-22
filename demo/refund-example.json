@@ -1,0 +1,6 @@
+{
+  "source": "Your refund is still under review. We will email you when a decision has been made.",
+  "instruction": "Make this email friendlier. Keep its meaning unchanged.",
+  "initialText": "Good news! Your refund has been approved. We'll send you an email with the details soon.",
+  "requirement": "The refund is still under review. No decision to approve the refund has been made."
+}

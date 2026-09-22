@@ -1,0 +1,523 @@
+{
+  "provenance": "Illustrative source; deliberately flawed input draft; real Jev checks and Codex repair. Edited replay, not live generation.",
+  "capturedAt": "2026-09-22T00:08:19.213Z",
+  "source": "Your refund is still under review. We will email you when a decision has been made.",
+  "initialText": "Good news! Your refund has been approved. We'll send you an email with the details soon.",
+  "instruction": "Make this email friendlier. Keep its meaning unchanged.",
+  "facts": [
+    {
+      "id": "F1",
+      "constraintId": "demo",
+      "text": "The refund is still under review. No decision to approve the refund has been made.",
+      "sources": [
+        {
+          "start": 0,
+          "end": 83
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "draft",
+        "attempt": 0,
+        "text": "Good news! Your refund has been approved. We'll send you an email with the details soon.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Good news!",
+            "start": 0,
+            "end": 10,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Your refund has been approved.",
+            "start": 11,
+            "end": 41,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "We'll send you an email with the details soon.",
+            "start": 42,
+            "end": 88,
+            "paragraph": 0
+          }
+        ],
+        "words": 16
+      }
+    },
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 0
+      }
+    },
+    {
+      "elapsedMs": 1774,
+      "event": {
+        "type": "stage",
+        "stage": "adjudicating",
+        "attempt": 0,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 7822,
+      "event": {
+        "type": "verified",
+        "attempt": 0,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The refund is still under review. No decision to approve the refund has been made."
+              },
+              "status": "altered",
+              "present": 0.01,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "Approval replaces pending review and no-decision status."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 1771.5367999999999,
+          "adjudicationMs": 6039.8976999999995,
+          "decisionTokens": 569
+        }
+      }
+    },
+    {
+      "elapsedMs": 7822,
+      "event": {
+        "type": "stage",
+        "stage": "repairing",
+        "attempt": 1,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 20041,
+      "event": {
+        "type": "draft",
+        "attempt": 1,
+        "text": "Thanks for your patience! Your refund remains under review; no approval decision has been made. We’ll email you afterward.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Thanks for your patience!",
+            "start": 0,
+            "end": 25,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Your refund remains under review; no approval decision has been made.",
+            "start": 26,
+            "end": 95,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "We’ll email you afterward.",
+            "start": 96,
+            "end": 122,
+            "paragraph": 0
+          }
+        ],
+        "words": 19
+      }
+    },
+    {
+      "elapsedMs": 20041,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 1
+      }
+    },
+    {
+      "elapsedMs": 20683,
+      "event": {
+        "type": "verified",
+        "attempt": 1,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The refund is still under review. No decision to approve the refund has been made."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S2"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 640.636599999998,
+          "adjudicationMs": 0,
+          "decisionTokens": 573
+        }
+      }
+    },
+    {
+      "elapsedMs": 20683,
+      "event": {
+        "type": "done",
+        "result": {
+          "attempts": [
+            {
+              "pass": "edit",
+              "text": "Good news! Your refund has been approved. We'll send you an email with the details soon.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Good news!",
+                  "start": 0,
+                  "end": 10,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Your refund has been approved.",
+                  "start": 11,
+                  "end": 41,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "We'll send you an email with the details soon.",
+                  "start": 42,
+                  "end": 88,
+                  "paragraph": 0
+                }
+              ],
+              "words": 16,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "The refund is still under review. No decision to approve the refund has been made."
+                    },
+                    "status": "altered",
+                    "present": 0.01,
+                    "sentences": [],
+                    "numbersMissing": [],
+                    "decidedBy": "llm",
+                    "reason": "Approval replaces pending review and no-decision status."
+                  }
+                ],
+                "wording": [],
+                "escalated": 1,
+                "decisionMs": 1771.5367999999999,
+                "adjudicationMs": 6039.8976999999995,
+                "decisionTokens": 569
+              },
+              "repairing": [],
+              "writeMs": 0.0007000000000516593
+            },
+            {
+              "pass": "repair",
+              "text": "Thanks for your patience! Your refund remains under review; no approval decision has been made. We’ll email you afterward.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Thanks for your patience!",
+                  "start": 0,
+                  "end": 25,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Your refund remains under review; no approval decision has been made.",
+                  "start": 26,
+                  "end": 95,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "We’ll email you afterward.",
+                  "start": 96,
+                  "end": 122,
+                  "paragraph": 0
+                }
+              ],
+              "words": 19,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "The refund is still under review. No decision to approve the refund has been made."
+                    },
+                    "status": "kept",
+                    "present": 0.98,
+                    "sentences": [
+                      "S2"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  }
+                ],
+                "wording": [],
+                "escalated": 0,
+                "decisionMs": 640.636599999998,
+                "adjudicationMs": 0,
+                "decisionTokens": 573
+              },
+              "repairing": [
+                "F1"
+              ],
+              "writeMs": 12216.962099999999
+            }
+          ],
+          "final": {
+            "pass": "repair",
+            "text": "Thanks for your patience! Your refund remains under review; no approval decision has been made. We’ll email you afterward.",
+            "sentences": [
+              {
+                "id": "S1",
+                "text": "Thanks for your patience!",
+                "start": 0,
+                "end": 25,
+                "paragraph": 0
+              },
+              {
+                "id": "S2",
+                "text": "Your refund remains under review; no approval decision has been made.",
+                "start": 26,
+                "end": 95,
+                "paragraph": 0
+              },
+              {
+                "id": "S3",
+                "text": "We’ll email you afterward.",
+                "start": 96,
+                "end": 122,
+                "paragraph": 0
+              }
+            ],
+            "words": 19,
+            "verification": {
+              "units": [
+                {
+                  "unit": {
+                    "id": "F1",
+                    "kind": "must_cover",
+                    "text": "The refund is still under review. No decision to approve the refund has been made."
+                  },
+                  "status": "kept",
+                  "present": 0.98,
+                  "sentences": [
+                    "S2"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                }
+              ],
+              "wording": [],
+              "escalated": 0,
+              "decisionMs": 640.636599999998,
+              "adjudicationMs": 0,
+              "decisionTokens": 573
+            },
+            "repairing": [
+              "F1"
+            ],
+            "writeMs": 12216.962099999999
+          },
+          "sourceWords": 16
+        }
+      }
+    }
+  ],
+  "result": {
+    "attempts": [
+      {
+        "pass": "edit",
+        "text": "Good news! Your refund has been approved. We'll send you an email with the details soon.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Good news!",
+            "start": 0,
+            "end": 10,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Your refund has been approved.",
+            "start": 11,
+            "end": 41,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "We'll send you an email with the details soon.",
+            "start": 42,
+            "end": 88,
+            "paragraph": 0
+          }
+        ],
+        "words": 16,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The refund is still under review. No decision to approve the refund has been made."
+              },
+              "status": "altered",
+              "present": 0.01,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "Approval replaces pending review and no-decision status."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 1771.5367999999999,
+          "adjudicationMs": 6039.8976999999995,
+          "decisionTokens": 569
+        },
+        "repairing": [],
+        "writeMs": 0.0007000000000516593
+      },
+      {
+        "pass": "repair",
+        "text": "Thanks for your patience! Your refund remains under review; no approval decision has been made. We’ll email you afterward.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Thanks for your patience!",
+            "start": 0,
+            "end": 25,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Your refund remains under review; no approval decision has been made.",
+            "start": 26,
+            "end": 95,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "We’ll email you afterward.",
+            "start": 96,
+            "end": 122,
+            "paragraph": 0
+          }
+        ],
+        "words": 19,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The refund is still under review. No decision to approve the refund has been made."
+              },
+              "status": "kept",
+              "present": 0.98,
+              "sentences": [
+                "S2"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 640.636599999998,
+          "adjudicationMs": 0,
+          "decisionTokens": 573
+        },
+        "repairing": [
+          "F1"
+        ],
+        "writeMs": 12216.962099999999
+      }
+    ],
+    "final": {
+      "pass": "repair",
+      "text": "Thanks for your patience! Your refund remains under review; no approval decision has been made. We’ll email you afterward.",
+      "sentences": [
+        {
+          "id": "S1",
+          "text": "Thanks for your patience!",
+          "start": 0,
+          "end": 25,
+          "paragraph": 0
+        },
+        {
+          "id": "S2",
+          "text": "Your refund remains under review; no approval decision has been made.",
+          "start": 26,
+          "end": 95,
+          "paragraph": 0
+        },
+        {
+          "id": "S3",
+          "text": "We’ll email you afterward.",
+          "start": 96,
+          "end": 122,
+          "paragraph": 0
+        }
+      ],
+      "words": 19,
+      "verification": {
+        "units": [
+          {
+            "unit": {
+              "id": "F1",
+              "kind": "must_cover",
+              "text": "The refund is still under review. No decision to approve the refund has been made."
+            },
+            "status": "kept",
+            "present": 0.98,
+            "sentences": [
+              "S2"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          }
+        ],
+        "wording": [],
+        "escalated": 0,
+        "decisionMs": 640.636599999998,
+        "adjudicationMs": 0,
+        "decisionTokens": 573
+      },
+      "repairing": [
+        "F1"
+      ],
+      "writeMs": 12216.962099999999
+    },
+    "sourceWords": 16
+  }
+}

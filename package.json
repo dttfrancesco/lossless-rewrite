@@ -1,0 +1,55 @@
+{
+  "name": "lossless-rewrite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI rewriting with semantic coverage checks and automatic repair, powered by Jev.",
+  "engines": {
+    "node": ">=22.16"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "rewrite": "tsx cli/rewrite.ts",
+    "demo": "tsx cli/rewrite.ts --replay",
+    "typecheck": "tsc --noEmit",
+    "bench": "tsx eval/run-coverage.ts",
+    "test": "tsx --test lib/**/*.test.ts && node --test extension/*.test.mjs",
+    "extension:build": "node scripts/build-extension.mjs",
+    "companion:setup": "tsx companion/setup.ts",
+    "video:render": "remotion render video/index.tsx Lossless public/demo/social.mp4 --props=video/props.json",
+    "video:still": "remotion still video/index.tsx Lossless public/demo/poster.jpg --frame=90",
+    "hero:still": "remotion still video/index.tsx Comparison docs/hero-ai-chat.png",
+    "social:still": "remotion still video/index.tsx Social docs/social-preview.png",
+    "demo:capture": "tsx eval/capture-demo.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/gateway": "^4.0.87",
+    "@ai-sdk/google": "^4.0.76",
+    "@ai-sdk/openai": "^4.0.71",
+    "@ai-sdk/openai-compatible": "^3.0.53",
+    "@anthropic-ai/sdk": "^0.127.0",
+    "@typesafe-ai/sdk": "^0.6.0",
+    "ai": "^7.0.107",
+    "next": "^16.3.5",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@remotion/bundler": "4.0.526",
+    "@remotion/cli": "4.0.526",
+    "@remotion/renderer": "4.0.526",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.20.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "esbuild": "^0.28.2",
+    "remotion": "4.0.526",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "seconds": 6.4,
+    "timing": "speech",
+    "narration": "You ask AI to make a document shorter. It leaves out something important."
+  },
+  {
+    "seconds": 5.2,
+    "timing": "speech",
+    "narration": "Here, the policy allows refunds, but excludes renewal payments."
+  },
+  {
+    "seconds": 4.866666666666666,
+    "timing": "speech",
+    "narration": "The summary keeps the refund window, but drops that exception."
+  },
+  {
+    "seconds": 5.866666666666666,
+    "timing": "speech",
+    "narration": "Lossless lets you mark what must stay. Jev checks the rewrite."
+  },
+  {
+    "seconds": 4.066666666666666,
+    "timing": "speech",
+    "narration": "It repairs the missing idea, then checks again."
+  },
+  {
+    "seconds": 5.533333333333333,
+    "timing": "speech",
+    "narration": "Some text must stay word for word. Use Keep wording."
+  },
+  {
+    "seconds": 4.866666666666666,
+    "timing": "speech",
+    "narration": "For a whole section, extract its key ideas with Must cover."
+  },
+  {
+    "seconds": 5.066666666666666,
+    "timing": "speech",
+    "narration": "You can also check a draft you already have, and repair it if needed."
+  },
+  {
+    "seconds": 6.5,
+    "timing": "speech",
+    "narration": "Then change the tone or length. Your selected ideas stay part of the checks."
+  }
+]

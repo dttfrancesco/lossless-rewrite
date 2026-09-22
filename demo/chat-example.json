@@ -1,0 +1,6 @@
+{
+  "source": "Signups rose 18% during our trial. We had no control group, so we can't tell whether the redesign caused the increase. A larger test is planned.",
+  "instruction": "Make this shorter. Don't overstate the results.",
+  "initialText": "Our redesign increased signups by 18%. A larger test is planned.",
+  "requirement": "The trial does not establish that the redesign caused the signup increase because there was no control group."
+}

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Lossless Rewrite",
+  "version": "0.1.0",
+  "description": "Choose what must survive an AI rewrite. Check replies beside your conversation.",
+  "minimum_chrome_version": "116",
+  "permissions": ["sidePanel", "storage", "scripting", "activeTab", "nativeMessaging"],
+  "optional_host_permissions": ["https://chatgpt.com/*", "https://claude.ai/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "Open Lossless Rewrite" },
+  "side_panel": { "default_path": "panel.html" },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'" }
+}

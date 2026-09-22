@@ -1,0 +1,6 @@
+{
+  "source": "Full refunds are available within 14 days of your first purchase. Renewals are non-refundable. Contact support to request a refund.",
+  "instruction": "Make this email shorter and friendlier. Keep the policy unchanged.",
+  "initialText": "Not a good fit? Get a full refund within 14 days. Just contact support and we'll help you out.",
+  "requirement": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+}

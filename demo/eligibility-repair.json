@@ -1,0 +1,528 @@
+{
+  "provenance": "Illustrative source; deliberately flawed input draft; real Jev checks and Codex repair. Edited replay, not live generation.",
+  "capturedAt": "2026-09-22T00:41:23.898Z",
+  "source": "Full refunds are available within 14 days of your first purchase. Renewals are non-refundable. Contact support to request a refund.",
+  "initialText": "Not a good fit? Get a full refund within 14 days. Just contact support and we'll help you out.",
+  "instruction": "Make this email shorter and friendlier. Keep the policy unchanged.",
+  "facts": [
+    {
+      "id": "F1",
+      "constraintId": "demo",
+      "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund.",
+      "sources": [
+        {
+          "start": 0,
+          "end": 131
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "draft",
+        "attempt": 0,
+        "text": "Not a good fit? Get a full refund within 14 days. Just contact support and we'll help you out.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Not a good fit?",
+            "start": 0,
+            "end": 15,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Get a full refund within 14 days.",
+            "start": 16,
+            "end": 49,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Just contact support and we'll help you out.",
+            "start": 50,
+            "end": 94,
+            "paragraph": 0
+          }
+        ],
+        "words": 19
+      }
+    },
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 0
+      }
+    },
+    {
+      "elapsedMs": 713,
+      "event": {
+        "type": "stage",
+        "stage": "adjudicating",
+        "attempt": 0,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 6532,
+      "event": {
+        "type": "verified",
+        "attempt": 0,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+              },
+              "status": "altered",
+              "present": 0.02,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "First-purchase limitation and renewal-payment exclusion were omitted."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 709.5678,
+          "adjudicationMs": 5813.4992,
+          "decisionTokens": 590
+        }
+      }
+    },
+    {
+      "elapsedMs": 6532,
+      "event": {
+        "type": "stage",
+        "stage": "repairing",
+        "attempt": 1,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 26827,
+      "event": {
+        "type": "draft",
+        "attempt": 1,
+        "text": "First purchase not a fit? Get a full refund within 14 days. Renewals are non-refundable; request it through support.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "First purchase not a fit?",
+            "start": 0,
+            "end": 25,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Get a full refund within 14 days.",
+            "start": 26,
+            "end": 59,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Renewals are non-refundable; request it through support.",
+            "start": 60,
+            "end": 116,
+            "paragraph": 0
+          }
+        ],
+        "words": 19
+      }
+    },
+    {
+      "elapsedMs": 26827,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 1
+      }
+    },
+    {
+      "elapsedMs": 27440,
+      "event": {
+        "type": "verified",
+        "attempt": 1,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+              },
+              "status": "kept",
+              "present": 0.87,
+              "sentences": [
+                "S3",
+                "S2"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 612.4357999999993,
+          "adjudicationMs": 0,
+          "decisionTokens": 595
+        }
+      }
+    },
+    {
+      "elapsedMs": 27440,
+      "event": {
+        "type": "done",
+        "result": {
+          "attempts": [
+            {
+              "pass": "edit",
+              "text": "Not a good fit? Get a full refund within 14 days. Just contact support and we'll help you out.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Not a good fit?",
+                  "start": 0,
+                  "end": 15,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Get a full refund within 14 days.",
+                  "start": 16,
+                  "end": 49,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "Just contact support and we'll help you out.",
+                  "start": 50,
+                  "end": 94,
+                  "paragraph": 0
+                }
+              ],
+              "words": 19,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+                    },
+                    "status": "altered",
+                    "present": 0.02,
+                    "sentences": [],
+                    "numbersMissing": [],
+                    "decidedBy": "llm",
+                    "reason": "First-purchase limitation and renewal-payment exclusion were omitted."
+                  }
+                ],
+                "wording": [],
+                "escalated": 1,
+                "decisionMs": 709.5678,
+                "adjudicationMs": 5813.4992,
+                "decisionTokens": 590
+              },
+              "repairing": [],
+              "writeMs": 0.0007999999999697138
+            },
+            {
+              "pass": "repair",
+              "text": "First purchase not a fit? Get a full refund within 14 days. Renewals are non-refundable; request it through support.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "First purchase not a fit?",
+                  "start": 0,
+                  "end": 25,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Get a full refund within 14 days.",
+                  "start": 26,
+                  "end": 59,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "Renewals are non-refundable; request it through support.",
+                  "start": 60,
+                  "end": 116,
+                  "paragraph": 0
+                }
+              ],
+              "words": 19,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+                    },
+                    "status": "kept",
+                    "present": 0.87,
+                    "sentences": [
+                      "S3",
+                      "S2"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  }
+                ],
+                "wording": [],
+                "escalated": 0,
+                "decisionMs": 612.4357999999993,
+                "adjudicationMs": 0,
+                "decisionTokens": 595
+              },
+              "repairing": [
+                "F1"
+              ],
+              "writeMs": 20294.5294
+            }
+          ],
+          "final": {
+            "pass": "repair",
+            "text": "First purchase not a fit? Get a full refund within 14 days. Renewals are non-refundable; request it through support.",
+            "sentences": [
+              {
+                "id": "S1",
+                "text": "First purchase not a fit?",
+                "start": 0,
+                "end": 25,
+                "paragraph": 0
+              },
+              {
+                "id": "S2",
+                "text": "Get a full refund within 14 days.",
+                "start": 26,
+                "end": 59,
+                "paragraph": 0
+              },
+              {
+                "id": "S3",
+                "text": "Renewals are non-refundable; request it through support.",
+                "start": 60,
+                "end": 116,
+                "paragraph": 0
+              }
+            ],
+            "words": 19,
+            "verification": {
+              "units": [
+                {
+                  "unit": {
+                    "id": "F1",
+                    "kind": "must_cover",
+                    "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+                  },
+                  "status": "kept",
+                  "present": 0.87,
+                  "sentences": [
+                    "S3",
+                    "S2"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                }
+              ],
+              "wording": [],
+              "escalated": 0,
+              "decisionMs": 612.4357999999993,
+              "adjudicationMs": 0,
+              "decisionTokens": 595
+            },
+            "repairing": [
+              "F1"
+            ],
+            "writeMs": 20294.5294
+          },
+          "sourceWords": 20
+        }
+      }
+    }
+  ],
+  "result": {
+    "attempts": [
+      {
+        "pass": "edit",
+        "text": "Not a good fit? Get a full refund within 14 days. Just contact support and we'll help you out.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Not a good fit?",
+            "start": 0,
+            "end": 15,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Get a full refund within 14 days.",
+            "start": 16,
+            "end": 49,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Just contact support and we'll help you out.",
+            "start": 50,
+            "end": 94,
+            "paragraph": 0
+          }
+        ],
+        "words": 19,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+              },
+              "status": "altered",
+              "present": 0.02,
+              "sentences": [],
+              "numbersMissing": [],
+              "decidedBy": "llm",
+              "reason": "First-purchase limitation and renewal-payment exclusion were omitted."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 709.5678,
+          "adjudicationMs": 5813.4992,
+          "decisionTokens": 590
+        },
+        "repairing": [],
+        "writeMs": 0.0007999999999697138
+      },
+      {
+        "pass": "repair",
+        "text": "First purchase not a fit? Get a full refund within 14 days. Renewals are non-refundable; request it through support.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "First purchase not a fit?",
+            "start": 0,
+            "end": 25,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Get a full refund within 14 days.",
+            "start": 26,
+            "end": 59,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Renewals are non-refundable; request it through support.",
+            "start": 60,
+            "end": 116,
+            "paragraph": 0
+          }
+        ],
+        "words": 19,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+              },
+              "status": "kept",
+              "present": 0.87,
+              "sentences": [
+                "S3",
+                "S2"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 612.4357999999993,
+          "adjudicationMs": 0,
+          "decisionTokens": 595
+        },
+        "repairing": [
+          "F1"
+        ],
+        "writeMs": 20294.5294
+      }
+    ],
+    "final": {
+      "pass": "repair",
+      "text": "First purchase not a fit? Get a full refund within 14 days. Renewals are non-refundable; request it through support.",
+      "sentences": [
+        {
+          "id": "S1",
+          "text": "First purchase not a fit?",
+          "start": 0,
+          "end": 25,
+          "paragraph": 0
+        },
+        {
+          "id": "S2",
+          "text": "Get a full refund within 14 days.",
+          "start": 26,
+          "end": 59,
+          "paragraph": 0
+        },
+        {
+          "id": "S3",
+          "text": "Renewals are non-refundable; request it through support.",
+          "start": 60,
+          "end": 116,
+          "paragraph": 0
+        }
+      ],
+      "words": 19,
+      "verification": {
+        "units": [
+          {
+            "unit": {
+              "id": "F1",
+              "kind": "must_cover",
+              "text": "The 14-day full refund applies only to the first purchase. Renewal payments are not eligible for a refund."
+            },
+            "status": "kept",
+            "present": 0.87,
+            "sentences": [
+              "S3",
+              "S2"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          }
+        ],
+        "wording": [],
+        "escalated": 0,
+        "decisionMs": 612.4357999999993,
+        "adjudicationMs": 0,
+        "decisionTokens": 595
+      },
+      "repairing": [
+        "F1"
+      ],
+      "writeMs": 20294.5294
+    },
+    "sourceWords": 20
+  }
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lossless Rewrite · Cut words, not ideas.</title>
+  <meta name="description" content="Your model rewrites. Jev checks what survived. Explore a saved check and repair, then try the open-source editor or CLI.">
+  <meta property="og:title" content="Lossless Rewrite · Cut words, not ideas.">
+  <meta property="og:description" content="AI rewriting with semantic coverage checks and automatic repair, powered by Jev.">
+  <meta property="og:image" content="https://dttfrancesco.github.io/lossless-rewrite/social-preview.png">
+  <meta property="og:url" content="https://dttfrancesco.github.io/lossless-rewrite/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="style.css"><script src="replay.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="./">lossless rewrite<span>.</span></a><a href="https://github.com/dttfrancesco/lossless-rewrite">GitHub ↗</a></header>
+  <main>
+    <section class="intro"><p class="eyebrow">Powered by Jev</p><h1>Cut words,<br>not ideas.</h1><p class="lead">Your model rewrites. Jev checks what survived.<br>Missing ideas trigger a repair.</p><div class="actions"><a class="primary" href="#replay">Explore the example ↓</a><a href="#video">Watch the walkthrough</a></div></section>
+    <section id="replay" aria-labelledby="replay-title">
+      <div class="section-heading"><div><p class="eyebrow">A long policy. One lost exception.</p><h2 id="replay-title">Shorter can change the meaning.</h2></div><span class="label">Saved run · no setup</span></div>
+      <p>A summary says refunds are available within 14 days. The source limits that to the first purchase and excludes renewals.</p>
+      <div class="steps" role="group" aria-label="Replay stage"><button data-stage="before" aria-pressed="true">1. Check the summary</button><button data-stage="after" aria-pressed="false">2. See the repair</button></div>
+      <div class="comparison"><article><h3>Source passage</h3><p class="meta">From the complete 1,115-word policy</p><p id="source-passage" class="passage">Full refunds are available within 14 days of the first purchase. Renewal payments are non-refundable.</p></article><article><h3 id="output-title">Summary before repair</h3><p id="result-label" class="meta">The refund condition changed</p><p id="output-passage" class="passage">Full refunds are available within 14 days.</p></article></div>
+      <p id="check-summary" role="status">Loading the saved checks…</p><div id="checks" class="checks" aria-label="Selected requirements"></div>
+      <details><summary>Read the complete input and output</summary><h3>Instruction</h3><p id="instruction"></p><div class="full-documents"><div><h3>Full source</h3><pre id="full-source"></pre></div><div><h3 id="full-output-title">Complete summary before repair</h3><pre id="full-output"></pre></div></div><a href="customer-policy.md" download>Download source document</a></details>
+      <p class="note">The omission was deliberately added to this fictional example. The checks and repair are from a real saved run. This is a replay, not live inference.</p>
+    </section>
+    <section id="video"><div class="section-heading"><h2>See the whole workflow.</h2><span class="label">48 seconds · captions</span></div><video controls playsinline preload="metadata" poster="poster.jpg" aria-label="Lossless Rewrite walkthrough"><source src="walkthrough.mp4" type="video/mp4"><track kind="captions" src="captions.vtt" srclang="en" label="English" default></video></section>
+    <section class="next"><h2>Use it with your own documents.</h2><p>Keep exact wording, preserve meaning, or extract a section’s key ideas. Combine protections, rewrite, and inspect the checks.</p><p>The local editor and CLI support API models and authenticated Codex or Claude Code. Live meaning checks need a Jev key. The browser extension is experimental.</p><a class="primary" href="https://github.com/dttfrancesco/lossless-rewrite#install">Install Lossless Rewrite ↗</a></section>
+  </main><footer>Open source · MIT · Only selected requirements are checked. Meaning checks can be wrong.</footer>
+</body></html>

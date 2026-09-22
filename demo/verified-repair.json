@@ -1,0 +1,585 @@
+{
+  "provenance": "Illustrative delivery policy; deliberately incomplete input draft; real Jev checks and Codex repair. Edited replay, not live generation.",
+  "capturedAt": "2026-09-21T22:34:09.102Z",
+  "source": "## Delivery and returns\n\nShopping online should feel straightforward. Customers need to understand the delivery cost and their options for returning an order before they pay, rather than discovering an unexpected charge or searching for the policy afterwards. This explanation will appear on the checkout help page, where people want a quick answer without reading a long document.\n\nDelivery is free on orders of $50 or more. Orders below $50 have a delivery charge, shown at checkout before payment. The checkout also lists the available shipping options so customers can review the choices for their order. Keep the minimum order amount clear wherever free delivery is mentioned: leaving out the condition would promise a different offer.\n\nReturns are accepted within 30 days of delivery. Instructions for starting a return are included in the order confirmation email. Customers who cannot find that email or who need help with an order can contact the support team. The final explanation should be short and welcoming, while still giving people enough information to decide whether to buy.",
+  "initialText": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free, and any available shipping options are shown before payment. Returns are accepted within 30 days of delivery, with instructions in the order confirmation email. Customers can review these details before buying and contact the support team if they need help with their order.",
+  "instruction": "Make the tone friendlier. Do not change any delivery or returns conditions.",
+  "facts": [
+    {
+      "id": "F1",
+      "constraintId": "demo",
+      "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge.",
+      "sources": [
+        {
+          "start": 0,
+          "end": 1093
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "draft",
+        "attempt": 0,
+        "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free, and any available shipping options are shown before payment. Returns are accepted within 30 days of delivery, with instructions in the order confirmation email. Customers can review these details before buying and contact the support team if they need help with their order.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+            "start": 0,
+            "end": 97,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Delivery is free, and any available shipping options are shown before payment.",
+            "start": 98,
+            "end": 176,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Returns are accepted within 30 days of delivery, with instructions in the order confirmation email.",
+            "start": 177,
+            "end": 276,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Customers can review these details before buying and contact the support team if they need help with their order.",
+            "start": 277,
+            "end": 390,
+            "paragraph": 0
+          }
+        ],
+        "words": 58
+      }
+    },
+    {
+      "elapsedMs": 2,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 0
+      }
+    },
+    {
+      "elapsedMs": 733,
+      "event": {
+        "type": "stage",
+        "stage": "adjudicating",
+        "attempt": 0,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 6887,
+      "event": {
+        "type": "verified",
+        "attempt": 0,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+              },
+              "status": "altered",
+              "present": 0.01,
+              "sentences": [],
+              "numbersMissing": [
+                50
+              ],
+              "decidedBy": "llm",
+              "reason": "Omits $50 minimum and charge for orders below it."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 729.8773,
+          "adjudicationMs": 6148.8166,
+          "decisionTokens": 638
+        }
+      }
+    },
+    {
+      "elapsedMs": 6887,
+      "event": {
+        "type": "stage",
+        "stage": "repairing",
+        "attempt": 1,
+        "ids": [
+          "F1"
+        ]
+      }
+    },
+    {
+      "elapsedMs": 12277,
+      "event": {
+        "type": "draft",
+        "attempt": 1,
+        "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment. Returns are accepted within 30 days of delivery, with instructions in the confirmation email. Customers can contact support if they need help.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+            "start": 0,
+            "end": 97,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment.",
+            "start": 98,
+            "end": 247,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Returns are accepted within 30 days of delivery, with instructions in the confirmation email.",
+            "start": 248,
+            "end": 341,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Customers can contact support if they need help.",
+            "start": 342,
+            "end": 390,
+            "paragraph": 0
+          }
+        ],
+        "words": 59
+      }
+    },
+    {
+      "elapsedMs": 12277,
+      "event": {
+        "type": "stage",
+        "stage": "verifying",
+        "attempt": 1
+      }
+    },
+    {
+      "elapsedMs": 12887,
+      "event": {
+        "type": "verified",
+        "attempt": 1,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+              },
+              "status": "kept",
+              "present": 0.97,
+              "sentences": [
+                "S2"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 609.088600000001,
+          "adjudicationMs": 0,
+          "decisionTokens": 644
+        }
+      }
+    },
+    {
+      "elapsedMs": 12887,
+      "event": {
+        "type": "done",
+        "result": {
+          "attempts": [
+            {
+              "pass": "edit",
+              "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free, and any available shipping options are shown before payment. Returns are accepted within 30 days of delivery, with instructions in the order confirmation email. Customers can review these details before buying and contact the support team if they need help with their order.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+                  "start": 0,
+                  "end": 97,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Delivery is free, and any available shipping options are shown before payment.",
+                  "start": 98,
+                  "end": 176,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "Returns are accepted within 30 days of delivery, with instructions in the order confirmation email.",
+                  "start": 177,
+                  "end": 276,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S4",
+                  "text": "Customers can review these details before buying and contact the support team if they need help with their order.",
+                  "start": 277,
+                  "end": 390,
+                  "paragraph": 0
+                }
+              ],
+              "words": 58,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+                    },
+                    "status": "altered",
+                    "present": 0.01,
+                    "sentences": [],
+                    "numbersMissing": [
+                      50
+                    ],
+                    "decidedBy": "llm",
+                    "reason": "Omits $50 minimum and charge for orders below it."
+                  }
+                ],
+                "wording": [],
+                "escalated": 1,
+                "decisionMs": 729.8773,
+                "adjudicationMs": 6148.8166,
+                "decisionTokens": 638
+              },
+              "repairing": [],
+              "writeMs": 0.0006999999999948159
+            },
+            {
+              "pass": "repair",
+              "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment. Returns are accepted within 30 days of delivery, with instructions in the confirmation email. Customers can contact support if they need help.",
+              "sentences": [
+                {
+                  "id": "S1",
+                  "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+                  "start": 0,
+                  "end": 97,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S2",
+                  "text": "Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment.",
+                  "start": 98,
+                  "end": 247,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S3",
+                  "text": "Returns are accepted within 30 days of delivery, with instructions in the confirmation email.",
+                  "start": 248,
+                  "end": 341,
+                  "paragraph": 0
+                },
+                {
+                  "id": "S4",
+                  "text": "Customers can contact support if they need help.",
+                  "start": 342,
+                  "end": 390,
+                  "paragraph": 0
+                }
+              ],
+              "words": 59,
+              "verification": {
+                "units": [
+                  {
+                    "unit": {
+                      "id": "F1",
+                      "kind": "must_cover",
+                      "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+                    },
+                    "status": "kept",
+                    "present": 0.97,
+                    "sentences": [
+                      "S2"
+                    ],
+                    "numbersMissing": [],
+                    "decidedBy": "decision"
+                  }
+                ],
+                "wording": [],
+                "escalated": 0,
+                "decisionMs": 609.088600000001,
+                "adjudicationMs": 0,
+                "decisionTokens": 644
+              },
+              "repairing": [
+                "F1"
+              ],
+              "writeMs": 5388.8659
+            }
+          ],
+          "final": {
+            "pass": "repair",
+            "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment. Returns are accepted within 30 days of delivery, with instructions in the confirmation email. Customers can contact support if they need help.",
+            "sentences": [
+              {
+                "id": "S1",
+                "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+                "start": 0,
+                "end": 97,
+                "paragraph": 0
+              },
+              {
+                "id": "S2",
+                "text": "Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment.",
+                "start": 98,
+                "end": 247,
+                "paragraph": 0
+              },
+              {
+                "id": "S3",
+                "text": "Returns are accepted within 30 days of delivery, with instructions in the confirmation email.",
+                "start": 248,
+                "end": 341,
+                "paragraph": 0
+              },
+              {
+                "id": "S4",
+                "text": "Customers can contact support if they need help.",
+                "start": 342,
+                "end": 390,
+                "paragraph": 0
+              }
+            ],
+            "words": 59,
+            "verification": {
+              "units": [
+                {
+                  "unit": {
+                    "id": "F1",
+                    "kind": "must_cover",
+                    "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+                  },
+                  "status": "kept",
+                  "present": 0.97,
+                  "sentences": [
+                    "S2"
+                  ],
+                  "numbersMissing": [],
+                  "decidedBy": "decision"
+                }
+              ],
+              "wording": [],
+              "escalated": 0,
+              "decisionMs": 609.088600000001,
+              "adjudicationMs": 0,
+              "decisionTokens": 644
+            },
+            "repairing": [
+              "F1"
+            ],
+            "writeMs": 5388.8659
+          },
+          "sourceWords": 172
+        }
+      }
+    }
+  ],
+  "result": {
+    "attempts": [
+      {
+        "pass": "edit",
+        "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free, and any available shipping options are shown before payment. Returns are accepted within 30 days of delivery, with instructions in the order confirmation email. Customers can review these details before buying and contact the support team if they need help with their order.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+            "start": 0,
+            "end": 97,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Delivery is free, and any available shipping options are shown before payment.",
+            "start": 98,
+            "end": 176,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Returns are accepted within 30 days of delivery, with instructions in the order confirmation email.",
+            "start": 177,
+            "end": 276,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Customers can review these details before buying and contact the support team if they need help with their order.",
+            "start": 277,
+            "end": 390,
+            "paragraph": 0
+          }
+        ],
+        "words": 58,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+              },
+              "status": "altered",
+              "present": 0.01,
+              "sentences": [],
+              "numbersMissing": [
+                50
+              ],
+              "decidedBy": "llm",
+              "reason": "Omits $50 minimum and charge for orders below it."
+            }
+          ],
+          "wording": [],
+          "escalated": 1,
+          "decisionMs": 729.8773,
+          "adjudicationMs": 6148.8166,
+          "decisionTokens": 638
+        },
+        "repairing": [],
+        "writeMs": 0.0006999999999948159
+      },
+      {
+        "pass": "repair",
+        "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment. Returns are accepted within 30 days of delivery, with instructions in the confirmation email. Customers can contact support if they need help.",
+        "sentences": [
+          {
+            "id": "S1",
+            "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+            "start": 0,
+            "end": 97,
+            "paragraph": 0
+          },
+          {
+            "id": "S2",
+            "text": "Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment.",
+            "start": 98,
+            "end": 247,
+            "paragraph": 0
+          },
+          {
+            "id": "S3",
+            "text": "Returns are accepted within 30 days of delivery, with instructions in the confirmation email.",
+            "start": 248,
+            "end": 341,
+            "paragraph": 0
+          },
+          {
+            "id": "S4",
+            "text": "Customers can contact support if they need help.",
+            "start": 342,
+            "end": 390,
+            "paragraph": 0
+          }
+        ],
+        "words": 59,
+        "verification": {
+          "units": [
+            {
+              "unit": {
+                "id": "F1",
+                "kind": "must_cover",
+                "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+              },
+              "status": "kept",
+              "present": 0.97,
+              "sentences": [
+                "S2"
+              ],
+              "numbersMissing": [],
+              "decidedBy": "decision"
+            }
+          ],
+          "wording": [],
+          "escalated": 0,
+          "decisionMs": 609.088600000001,
+          "adjudicationMs": 0,
+          "decisionTokens": 644
+        },
+        "repairing": [
+          "F1"
+        ],
+        "writeMs": 5388.8659
+      }
+    ],
+    "final": {
+      "pass": "repair",
+      "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout. Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment. Returns are accepted within 30 days of delivery, with instructions in the confirmation email. Customers can contact support if they need help.",
+      "sentences": [
+        {
+          "id": "S1",
+          "text": "Shopping online should feel straightforward, with delivery and returns explained before checkout.",
+          "start": 0,
+          "end": 97,
+          "paragraph": 0
+        },
+        {
+          "id": "S2",
+          "text": "Delivery is free on orders of $50 or more; orders below $50 have a delivery charge, shown at checkout with available shipping options before payment.",
+          "start": 98,
+          "end": 247,
+          "paragraph": 0
+        },
+        {
+          "id": "S3",
+          "text": "Returns are accepted within 30 days of delivery, with instructions in the confirmation email.",
+          "start": 248,
+          "end": 341,
+          "paragraph": 0
+        },
+        {
+          "id": "S4",
+          "text": "Customers can contact support if they need help.",
+          "start": 342,
+          "end": 390,
+          "paragraph": 0
+        }
+      ],
+      "words": 59,
+      "verification": {
+        "units": [
+          {
+            "unit": {
+              "id": "F1",
+              "kind": "must_cover",
+              "text": "Delivery is free only on orders of $50 or more; orders below $50 have a delivery charge."
+            },
+            "status": "kept",
+            "present": 0.97,
+            "sentences": [
+              "S2"
+            ],
+            "numbersMissing": [],
+            "decidedBy": "decision"
+          }
+        ],
+        "wording": [],
+        "escalated": 0,
+        "decisionMs": 609.088600000001,
+        "adjudicationMs": 0,
+        "decisionTokens": 644
+      },
+      "repairing": [
+        "F1"
+      ],
+      "writeMs": 5388.8659
+    },
+    "sourceWords": 172
+  }
+}

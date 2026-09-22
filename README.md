@@ -2,15 +2,21 @@
 
 ### Cut words, not ideas.
 
-**Your model rewrites. Jev checks what survived. Missing ideas trigger a repair.**
+Ever asked AI to shorten a report, then had to add the important bits back?
 
-Shorten, summarize or restyle a document while checking that your chosen ideas and exact wording survive.
+Choose what must stay. **Your model rewrites, and Jev checks for missing ideas and helps repair them.**
 
 Use the local editor, command line, or experimental browser extension.
 
 [![An AI summary drops a refund exception. Lossless detects the omission and restores it.](docs/hero-ai-chat.png)](public/demo/social.mp4)
 
 [Explore the saved demo](https://dttfrancesco.github.io/lossless-rewrite/) · [Watch the video](#watch-the-demo) · [Install](#install)
+
+## A few uses
+
+- 📄 **Papers:** tighten the writing while preserving results and caveats.
+- 📋 **Policies:** simplify the text while keeping conditions, exceptions and deadlines.
+- ✉️ **Emails:** change the tone while keeping the message and commitments.
 
 ## How it works
 
@@ -34,14 +40,6 @@ The result is a rewrite of the whole document, with your selected details checke
 [Editor guide](docs/EDITOR.md) · [CLI guide](docs/CLI.md) · [Extension](extension/README.md) · [Use the TypeScript engine](docs/ENGINE.md)
 
 Combine protections on overlapping passages. Undo and redo changes in the editor.
-
-## Use cases
-
-- **Research summaries:** keep results, sample sizes and limitations.
-- **Policies and support:** keep refund exceptions, eligibility and deadlines.
-- **Technical docs:** keep requirements, defaults and error cases.
-- **Proposals:** keep deliverables, exclusions and commitments.
-- **Agent handoffs:** keep constraints, acceptance criteria and required steps.
 
 ## Watch the demo
 

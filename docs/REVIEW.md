@@ -1,27 +1,41 @@
 # Validation status
 
-Updated 22 September 2026. These results describe local checks, not a guarantee of correctness or a completed browser-store release.
+Updated 1 October 2026 for extension 0.5.15. These are implementation checks and observed examples, not a benchmark of semantic accuracy.
 
 | Area | Evidence | Limit |
 |---|---|---|
-| Automated tests | 44 tests: 29 TypeScript engine/CLI/companion/import tests and 15 extension tests | Fixtures do not establish live-site compatibility. |
-| Clean install and build | Source-only checkout passes `npm ci`, all 44 tests, type checking, Next.js production build, extension build and no-key replay on Node.js 24.19.0; install audit reports 0 vulnerabilities | Windows is the locally exercised platform. The [CI workflow](https://github.com/dttfrancesco/lossless-rewrite/actions/workflows/ci.yml) runs the release checks on Windows and Linux. |
-| CLI replay | No-key run shows five retained conditions, one altered condition, then all six passing after repair | The omitted condition was deliberately seeded. |
-| Long-document demo | 1,115-word fictional policy; final summary 163 words; six selected conditions checked | Manually selected requirements; one example, not a success-rate estimate. |
-| Editor interactions | Browser checks at 390, 600, 820, 1100 and 1440 px; direct textarea marking, overlapping protections, duplicate prevention, Ctrl+Z/redo, Clear recovery and popup dismissal; live extraction and rewrite passed | Desktop browser exercised; mobile touch and other browsers still need trials. |
-| Browser demo | Static replay of the saved check and repair; selectable requirements, complete input/output, captioned video | No live generation or user-document upload on the public demo page. |
-| Writer paths | Codex extraction, writing and repair exercised through editor/CLI; compatible endpoint contract tested locally | Other paid providers need live validation. [Connection status](MODELS.md). |
-| Native companion | Framed transport tests include source host and compiled Windows executable; unpacked Chrome installation and current-user Windows host registration completed | Live extension-to-host and chat-site interactions, plus non-Windows installation, need manual trials. |
+| Regression tests | Engine/CLI/companion suite and 77 extension tests pass locally. Covers send safeguards, stale-result invalidation, context teardown, rules, highlights, PDF upload and OAuth callback validation. | Fixtures do not establish compatibility with every live account or layout. |
+| Type checking | `npm run typecheck` passes. | Supabase Edge Functions use a separate Deno runtime and are excluded from the app's TypeScript project. |
+| Builds and package | Next.js production build, store extension build, package audit, no-key replay and static demo build pass locally. | The package audit checks expected files and known credential patterns; it is not store approval. |
+| Email handlers | Five Deno tests pass for confirmation delivery, duplicate requests, failure reporting and scoped unsubscribe. | These unit tests do not exercise a live email provider. |
+| Store identity | Public key hashes to the store ID; callback checks reject mismatches. User confirmed Google sign-in with the store-ID build. | A registered callback is required for custom IDs and forks. Store approval has not been verified. |
+| Installed chats | User reports working flows on ChatGPT, Claude, Gemini, Grok and DeepSeek. An installed ChatGPT rewrite retained a fictional caveat and returned a passing check. | Not an independent full acceptance matrix. Provider UI, locales and account variants can change. |
+| PDF and rules | Local tests cover upload behaviour, bounded rules, rule capture/undo, per-chat selections and hosted rule-check construction. User exercised the PDF reader and rules workflow. | Scans need external OCR. Saved writing rules are checked only through the hosted inline path. |
+| CLI replay | Saved fictional policy check/repair runs without keys or live provider calls. | The omission was deliberately seeded. One example is not a success-rate estimate. |
+| Free service | Google sign-in, monthly credits, larger-check confirmation, explicit interest registration and unsubscribe handlers are implemented. | Paid subscriptions are disabled; automatic checks and saved reference projects remain private-test features. |
 
-The editor preserves raw character offsets for exact-wording checks, invalidates stale results after edits, displays unresolved/uncertain checks, and retains repair evidence across serialization. These behaviors have regression coverage. PDF import accepts selectable text; scanned PDFs require OCR.
+## Reproduce
 
-## Known limits
+```sh
+npm ci
+npm test
+npm run typecheck
+npm run build
+npm run extension:build:store
+node scripts/audit-extension.mjs --store
+npm run demo
+node scripts/build-site.mjs
+```
 
-- Semantic checks and extraction can be wrong. Only selected requirements receive individual checks.
-- Reaching a word target is secondary to retaining the selected content; a bounded run can end above target or with unresolved checks.
-- Cancellation can stop listening without ending an already running provider request.
-- Local execution does not mean offline inference: live text goes to the configured writer and checker.
-- The extension is experimental. Installed ChatGPT/Claude behavior, registration, permission flows, streaming and navigation still need the [manual acceptance matrix](../extension/README.md).
-- The media are an illustrated extension preview using real saved check/repair evidence, not a recording of an installed chat integration.
+The [CI workflow](https://github.com/dttfrancesco/lossless-rewrite/actions/workflows/ci.yml) runs repository checks on Windows and Linux. Local testing was on Windows. See the individual commit's CI result for remote validation.
 
-Reproduce local validation with `npm test`, `npm run typecheck`, `npm run build`, `npm run extension:build` and `npm run demo`.
+## Limits
+
+- Only selected requirements and enabled writing rules are individually checked. Meaning judgments can be wrong or uncertain; a pass does not prove the source true or the complete output lossless.
+- Highlights compare text. A retained paraphrase may not be highlighted as a source match.
+- Word limits are requests to the writer. Preserving selected content can conflict with the requested length.
+- Cancellation may stop listening while a provider request continues.
+- Local storage does not mean offline inference: live text goes to the configured chat and checking providers.
+- The captioned video shows an earlier illustrated interface. Current store images 01-03 use installed-extension captures; 04-05 are labelled source-derived previews with fictional data.
+
+[Extension guide](../extension/README.md) · [Release record](../extension/RELEASE-CHECKLIST.md) · [Privacy](../extension/PRIVACY.md)

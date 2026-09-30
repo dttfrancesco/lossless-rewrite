@@ -1,4 +1,86 @@
 # Chrome release record
+## 0.5.15 store identity · 1 October 2026
+
+- Store draft ID: `cnnhnhonmpadooefbdnpokpipokghigb`. User-provided public key hashes to that exact Chrome ID; store builds fail on a mismatch.
+- Exact store callback added to Supabase with user approval and verified in URL Configuration. Existing three redirects and shared Site URL remain unchanged. Callback guard accepts only the current unpacked and store identities; tests reject cross-identity completion and unexpected URLs.
+- Separate `extension/store-dist` build pins the store public key without changing the existing unpacked installation's identity. Build with `npm run extension:build:store`; audit with `node scripts/audit-extension.mjs --store`.
+- Five numbered 1280x800 RGB JPEG store screenshots prepared in `extension/store-assets`; all inspected. Images 01-03 use installed-extension captures; 04-05 are explicitly labelled source-derived UI previews. All examples are fictional. Upload archive: `chrome-store-five-screenshots.zip`.
+- Store ZIP: `private/extension-release/lossless-rewrite-chrome-store-0.5.15.zip`. 77 extension tests pass. User confirmed Google sign-in works after installing the store-ID test build. Not submitted for review.
+
+## 0.5.14 store preparation · 1 October 2026
+
+- 77 extension tests pass; build and package audit pass. Candidate ZIP is `private/extension-release/lossless-rewrite-chrome-0.5.14.zip` (not yet the final store sign-in build).
+- Automatic local capture of supported explicit writing preferences includes Undo, an off switch, bounded storage and no additional model call. Alt+Shift+R opens writing rules from the chat or panel, with help labels.
+- User reports working ChatGPT, Claude, Gemini, Grok and DeepSeek flows. These reports supersede earlier login blockers; they are not a complete independent acceptance test of every feature on every provider.
+- Publication blockers: obtain the store draft ID, add its exact Google/Supabase callback, rebuild and test sign-in with that identity, and refresh listing screenshots.
+- Current writing-rule privacy disclosure deployed to production on 1 October 2026, deployment `dpl_JDtxs186Lf5dsGThXN3WuV3qGWyt`; canonical privacy URL responds with HTTP 200 and the new automatic-capture disclosure.
+- Browser control rejects the developer dashboard. The user must create/upload the draft there; upload alone does not publish it. No submission or approval has occurred.
+
+## 0.5.12 centred quick actions
+
+- The round launcher sits at the exact centre of its open six-action menu. Edge clamping moves the wheel and centre together; dragging starts from the displayed position.
+- Added direct PDF action. Source becomes Add source when there are no marked passages and opens a guide with the PDF alternative. Selections, PDF and highlight controls use visible button borders and active states.
+- 72 extension tests and TypeScript checks pass. Local browser fixture confirmed zero-pixel centre difference, the empty-source guide, and PDF routing without sending a chat message. The installed build needs reload and chat refresh.
+
+## 0.5.11 compact PDF reader
+
+- After opening a PDF, collapse upload guidance, shorten the file row and hide the linked-chat label to give the document more height. Initial guidance explains that a chat attachment is not automatically available inside Lossless. Fit/zoom and selected passages stay available.
+- Reset browser test viewport and closed the duplicate ChatGPT preview to restore chat space. Further narrow layout tests use a local fixed-width fixture, not browser-wide emulation.
+
+
+## 0.5.10 PDF panel and writing rules · 30 September 2026
+
+- Open PDF switches the tab-specific Chrome side panel to a local reader. Drag/drop or click a PDF; fit, zoom and page navigation retain selectable text. The UI distinguishes marked passages sent to chat from the full PDF, which stays local.
+- Writing rules are explicitly saved on this device, editable and switchable, and included in future Lossless sends across chats. Rule-only sends work. Hosted Jev checks evaluate compliance separately from semantic coverage, use the existing credit quote/reservation flow, and preserve uncertainty. The companion and full editor do not check these saved rules yet.
+- 71 extension tests and TypeScript checks pass. Browser fixture checks cover PDF rendering, navigation, zoom, selection and marking, plus narrow rules-dialog editing and saving. Chrome transport is simulated in these UI fixtures.
+- Hosted API v12 deployed with existing authenticated-user validation. A synthetic live run returned kept for an English-language rule and missing for a numbered-list rule, and preserved the source claim. Earlier active-voice judgment was uncertain. This is a smoke test, not evidence of general style-check accuracy. Duplicate request rejection and one-credit usage recording passed. Temporary test accounts were removed.
+- Installed ChatGPT content script reports 0.5.10 after the user's reload. Open PDF was clicked without sending or altering the user's pending draft. User screenshot confirms the native PDF panel opened beside ChatGPT. The empty reader and ChatGPT attachment preview are separate. Browser-control viewport override was cleared after it squeezed the user chat; ChatGPT viewport width restored to 1534px. No user prompt was sent.
+
+
+## 0.5.9 overlay fixes · 30 September 2026
+
+- Fixed the Selections card inheriting the 44px launcher width; card and menu are clamped to the viewport. Removed repeated instructions from the selections view.
+- Reply highlighting compares rendered text before invalidating: cosmetic nodes/action buttons and same-text reply replacements now rebuild ranges without losing highlights. Actual reply changes still invalidate them.
+- Five menu actions: Source highlights, Reply highlights, Selections, Sidebar and Hide. Source/reply preferences persist independently; Alt+Shift+H toggles both. The logo can be dragged (or moved with Alt+arrow keys), with its position saved. × hides the launcher; sidebar Selections & PDF restores it.
+- 66 extension tests pass, including highlight lifecycle, independent preferences and viewport bounds. Local browser checks confirmed readable selections, dragging without sending/opening, five actions, reply highlights surviving added markup and replacement nodes, separate toggle states, and Hide. Installed 0.5.9 still requires reload and refresh.
+
+## 0.5.8 quieter controls · 30 September 2026
+
+- Keep wording and Keep meaning use consistent amber/green buttons in the chat, editor and PDF reader. Marking a chat passage leaves its source colour and returns focus to the composer without a success popup.
+- Completed checks use a small logo badge. Findings are available on demand; they do not open the card or scroll the page. A compact radial menu opens Highlights, Selections/checks and Sidebar. Escape and outside clicks close it.
+- Reply highlights distinguish matching marked wording from other wording (blue), without guessing semantic evidence. The colour preference persists and applies to sources and replies. Regeneration invalidates old reply highlights.
+- Worker tracks sidebar presence per browser window; the launcher returns on close. Only trusted extension panel ports and supported top-level chat tabs can use these controls. Opening the sidebar does not run a check or send a prompt.
+- 63 extension tests and typecheck passed. Local browser fixture verified mixed source/reply colours, one send, quiet check results, off toggle, stale reply clearing, and sidebar visibility. This uses simulated Chrome transport; installed 0.5.8 needs the usual manual reload and refresh.
+- Supersedes the 0.5.7 candidate. Not submitted to the store; store callback registration and broader installed-platform acceptance remain pending.
+
+## 0.5.7 release candidate · 30 September 2026
+
+Status: packaged and prepared; NOT submitted or published to the store.
+
+- Reproduced the reported prompt rejection in installed ChatGPT 0.5.6. The editor inserted all text but rendered paragraph separators as double/five newlines. The verifier now tolerates paragraph spacing while rejecting changed/missing words, punctuation, spaces and merged lines. Explicit-send and stale-draft tests remain in place.
+- Browser verification with the actual 0.5.7 bundle and a paragraph-based contenteditable composer sent the complete prompt exactly once. The local fixture simulates Chrome APIs and calls no model; installed provider acceptance remains separate.
+- Gemini composer detection now prefers its observed labelled textbox over its Quill clipboard helper. Claude and Gemini reply selectors target observed assistant-only content bodies. These fixes require a reload for installed acceptance.
+- 60 extension tests pass; TypeScript and extension build pass. Package audit: 209 files, 8,801,348 uncompressed bytes; no matched credential patterns or external script tags. Audit output and candidate ZIP are in ignored private/extension-release.
+- Updated public privacy policy: https://lossless-rewrite.vercel.app/privacy.html. Store description, privacy answers and reviewer instructions are in STORE-LISTING.md. Paid plans remain Coming soon; checkout disabled.
+- Captured a genuine installed ChatGPT selection screenshot at 1280×800 and a 440×280 promotional image. The screenshot shows the existing 0.5.6 UI; it is not proof that the 0.5.7 send fix passed installed testing.
+
+### Acceptance status
+
+| Boundary | Evidence | Remaining |
+| --- | --- | --- |
+| ChatGPT | Installed error reproduced; paragraph-spacing regression passes | Reload and test one complete 0.5.7 send/check |
+| Claude | Signed-in synthetic prompt and reply observed; precise assistant body identified | Reload and verify Lossless send, check, highlighting |
+| Gemini | Labelled composer and second Quill editor observed; detection fixed | Service returned an error to the plain sample prompt; full Lossless test pending |
+| Grok | Composer and Submit control observed | Logged out; sending presents acceptance of provider terms, so no test sent |
+| DeepSeek | Sign-in page observed | User login/terms required; no credentials or account created |
+| Google / Free checks | Existing unpacked callback and backend tests previously verified | Register and test the separate store-issued extension ID |
+| PDF | Existing local reader/selection harness and project tests pass | Installed 0.5.7 PDF round-trip pending |
+| Preregistration | Confirmation delivered to owner Gmail; footer unsubscribe removed only owner Pro interest | Complete |
+| Store upload | Candidate ZIP, copy, privacy and artwork prepared | Browser control rejects developer dashboard access; manual draft upload required |
+
+Do not advertise complete platform compatibility until the corresponding installed checks pass. Uploading a draft is necessary to obtain the store ID; it does not authorize declaring untested functionality ready. Add that exact callback to Supabase's redirect allowlist and the extension callback guard, rebuild, then verify Google login before submitting for review. Do not replace the shared project's Site URL or remove other applications' redirects.
+
+Official submission references: https://developer.chrome.com/docs/webstore/publish, https://developer.chrome.com/docs/webstore/images, https://developer.chrome.com/docs/webstore/cws-dashboard-privacy.
 
 ## 0.4.9 identity and pricing polish
 

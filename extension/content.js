@@ -1,5 +1,6 @@
 import { mountInline } from "./inline.js";
 import { sameComposerText } from "./inline-send.js";
+import { createContentRuntime } from "./content-runtime.js";
 // This script runs in Chrome's isolated world. No window-message or page event bridge.
 (() => {
   if (globalThis.__losslessLoaded) return;
@@ -24,6 +25,13 @@ import { sameComposerText } from "./inline-send.js";
       const chat = candidates.filter(el => el.closest('form') && el.getAttribute?.('aria-label') === 'Ask ChatGPT');
       if (chat.length) return chat.length === 1 ? chat[0] : null;
     }
+    // Observed named composers distinguish the chat input from helper editors
+    // such as Gemini/Quill's off-screen contenteditable clipboard.
+    const label = { 'claude.ai': 'Write your prompt to Claude', 'gemini.google.com': 'Enter a prompt for Gemini' }[new URL(location.href).hostname];
+    if (label) {
+      const chat = candidates.filter(el => el.getAttribute?.('aria-label') === label);
+      if (chat.length) return chat.length === 1 ? chat[0] : null;
+    }
     return candidates.length === 1 ? candidates[0] : null;
   }
   const value = (el) => el instanceof HTMLTextAreaElement ? el.value : el.innerText;
@@ -34,14 +42,22 @@ import { sameComposerText } from "./inline-send.js";
     if (!sameComposerText(value(el), after)) throw new Error("The editor did not accept the complete prompt. Review the chat draft and use copy/paste.");
   }
   let inline, disposed = false;
-  const allowed = async () => { try { return Boolean((await chrome.runtime.sendMessage({ kind: "inline-access" }))?.allowed); } catch { return false; } };
-  const inlineReady = allowed().then(ok => { if (ok && !disposed) inline = mountInline({ composer, value, write, visible, allowed }); });
-  function dispose() { disposed = true; clearTimeout(timer); observer.disconnect(); inline?.destroy(); references.clear(); chrome.runtime.onMessage.removeListener(receive); delete globalThis.__losslessLoaded; }
+  let timer, observer;
+  const runtime = createContentRuntime(chrome.runtime, dispose);
+  const allowed = async () => { try { return Boolean((await runtime.send({ kind: "inline-access" }))?.allowed); } catch { return false; } };
+  const inlineReady = allowed().then(ok => { if (ok && !disposed) inline = mountInline({ composer, value, write, visible, allowed, sendMessage: runtime.send, active: runtime.active }); });
+  function dispose() {
+    if (disposed) return;
+    disposed = true; clearTimeout(timer); observer?.disconnect(); inline?.destroy(); references.clear();
+    try { chrome.runtime.onMessage.removeListener(receive); } catch { /* The old context is already gone. */ }
+    delete globalThis.__losslessLoaded;
+  }
   function receive(message, sender, respond) {
-    if (sender.id !== chrome.runtime.id || message.kind !== "lossless") return;
+    if (disposed || !runtime.active() || sender.id !== chrome.runtime.id || message.kind !== "lossless") return;
     try {
       if (message.action === "disable") { dispose(); return respond({ disabled: true }); }
       if (message.action === "access-changed") { allowed().then(ok => { if (!ok) dispose(); }); return respond({ received: true }); }
+      if (message.action === "inline-ui") { inlineReady.then(()=>inline?.uiState(message));return respond({received:true}); }
       if (message.action === "activate") return respond({ activated: true, available: Boolean(composer()) });
       if (message.action === "inline-options") { inlineReady.then(() => { if (!inline || disposed) respond({ error: "Refresh this chat after granting site access." }); else { inline.open(); respond({ opened: true }); } }, e => respond({ error: e.message })); return true; }
       if (message.action === "highlight-reply") { inlineReady.then(() => inline && !disposed ? inline.highlight() : { error: "Refresh this chat after granting site access." }).then(respond, e => respond({ error: e.message })); return true; }
@@ -74,13 +90,14 @@ import { sameComposerText } from "./inline-send.js";
       if (message.action === "reveal") { const item = references.get(message.id); if (!item?.el.isConnected || text(item.el) !== message.expected) throw new Error("Page message no longer matches the captured text."); item.el.scrollIntoView({ block: "center", behavior: "smooth" }); return respond({ located: true }); }
     } catch (error) { respond({ error: error.message }); }
   }
+  if (!runtime.active()) return;
   chrome.runtime.onMessage.addListener(receive);
-  let timer;
-  const observer = new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(() => {
+  observer = new MutationObserver(() => { if (disposed || !runtime.active()) return; clearTimeout(timer); timer = setTimeout(() => {
+    if (disposed || !runtime.active()) return;
     const navigation = lastURL !== location.href; lastURL = location.href;
     const ids = [];
     for (const [id, item] of references) if (!item.el.isConnected || text(item.el) !== item.text) { ids.push(id); item.text = item.el.isConnected ? text(item.el) : ""; }
-    if (navigation || ids.length) chrome.runtime.sendMessage({ kind: "page-changed", ids, navigation }).catch(() => {});
+    if (navigation || ids.length) void runtime.send({ kind: "page-changed", ids, navigation }).catch(() => {});
   }, 150); });
   observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 })();

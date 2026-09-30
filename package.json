@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "AI rewriting with semantic coverage checks and automatic repair, powered by Jev.",
+  "description": "Cut words, not ideas. Preserve selected meaning, exact wording and writing rules in AI rewrites. Chrome extension, local editor and CLI.",
   "engines": {
     "node": ">=22.16"
   },
@@ -18,6 +18,7 @@
     "test": "tsx --test lib/**/*.test.ts && tsx --test extension/*.test.mjs",
     "test:extension": "tsx --test extension/*.test.mjs",
     "extension:build": "node scripts/build-extension.mjs",
+    "extension:build:store": "node scripts/build-extension.mjs --store",
     "companion:setup": "tsx companion/setup.ts",
     "video:render": "remotion render video/index.tsx Lossless public/demo/social.mp4 --props=video/props.json",
     "video:still": "remotion still video/index.tsx Lossless public/demo/poster.jpg --frame=90",
@@ -31,12 +32,14 @@
     "@ai-sdk/openai": "^4.0.71",
     "@ai-sdk/openai-compatible": "^3.0.53",
     "@anthropic-ai/sdk": "^0.127.0",
+    "@supabase/supabase-js": "2.117.2",
     "@typesafe-ai/sdk": "^0.6.0",
     "ai": "^7.0.107",
     "next": "^16.3.5",
     "pdfjs-dist": "^6.3.289",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "stripe": "22.6.2",
     "zod": "4.5.4"
   },
   "devDependencies": {
@@ -48,6 +51,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "esbuild": "^0.28.2",
+    "fake-indexeddb": "6.2.4",
     "remotion": "4.0.526",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",

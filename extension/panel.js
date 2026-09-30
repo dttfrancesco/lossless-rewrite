@@ -1,3 +1,5 @@
+import { setupWritingRules } from './writing-rules-ui.js';
+const writingRules=setupWritingRules();
 import recorded from "../demo/document-repair.json";
 import { newDocument, invalidate, currentEnvelope, summary, preparePrompt, evidenceFor, extendFeedback, assertCheckerOnly } from "./shared.js";
 import { refreshEvidenceLabels, requireIdle, beginOperation, evidenceLabel } from "./view.js";
@@ -10,6 +12,7 @@ const keyboard = shortcutLabels();
 for (const el of document.querySelectorAll("[data-insert-keys]")) el.textContent = keyboard.insert;
 for (const el of document.querySelectorAll('[data-send-keys]')) el.textContent = keyboard.send;
 for (const el of document.querySelectorAll('[data-highlight-keys]')) el.textContent = keyboard.highlight;
+for (const el of document.querySelectorAll('[data-rules-keys]')) el.textContent = keyboard.rules;
 $("open-shortcuts").onclick = () => $("shortcuts-dialog").showModal();
 $("close-shortcuts").onclick = () => $("shortcuts-dialog").close();
 let state = newDocument(); let active = null; let inference = null; let connection = false; let port; const callbacks = new Map();
@@ -47,10 +50,17 @@ function persist() { state._instance = instance; return chrome.storage.session.s
 function notice(text, error = false) { $("status").textContent = text; $("status").classList.toggle("error", error); }
 function changed(reason, refresh = true) { invalidate(state, reason); active = null; $("cancel").hidden = true; persist(); notice(state.notice); if (refresh) renderRequirements(); else refreshEvidenceLabels($("requirements"), state); renderTraces(); taskUI(); counts(); $("revision-changes").replaceChildren(); }
 function saveEdit(key, value) { state[key] = value; changed(); }
+let panelWindow;
+async function reportPanelPresence() {
+  try { panelWindow ??= (await chrome.windows.getCurrent()).id;port?.postMessage({kind:'panel-presence',windowId:panelWindow,visible:document.visibilityState==='visible' && !document.body.classList.contains('expanded')}); } catch { /* The panel can be closing. */ }
+}
+document.addEventListener('visibilitychange',reportPanelPresence);
 function attachPort() {
   port = chrome.runtime.connect({ name: "lossless-panel" });
+  reportPanelPresence();
   port.onDisconnect.addListener(() => { port = null; connection = false; $("connection").textContent = "Extension worker disconnected. Reconnect before continuing. A running request was not restarted."; active = null; $("cancel").hidden = true; for (const cb of callbacks.values()) cb.reject(new Error("Extension worker disconnected")); callbacks.clear(); });
   port.onMessage.addListener((m) => {
+    if(m.kind==='open-writing-rules'){writingRules.open();return;}
     if (m.kind === "connection") { connection = false; $("connection").textContent = m.error; for (const cb of callbacks.values()) cb.reject(new Error(m.error)); callbacks.clear(); active = null; $("cancel").hidden = true; return; }
     if (m.kind === "page-changed") {
       if ([state.sourceRef, state.replyRef].some((r) => r && r.tabId === m.tabId && (m.navigation || m.ids.includes(r.id)))) { changed("The captured page message changed. Import it again before checking."); state.complete = false; $("complete").checked = false; persist(); } return;
@@ -275,3 +285,6 @@ attachPort();
 const saved = await chrome.storage.session.get("document"); if (saved.document) state = saved.document;
 if (state.sourceRef || state.replyRef) { invalidate(state, "Review captured messages after reopening; previous page evidence is stale."); state.complete = false; await persist(); }
 render(); await renderSites(); await launchSite();
+
+chrome.storage.local.get('autoCheckConsent').then(v => { $('auto-check-consent').checked = Boolean(v.autoCheckConsent); });
+$('auto-check-consent').onchange = () => chrome.storage.local.set({autoCheckConsent:$('auto-check-consent').checked});

@@ -1,5 +1,6 @@
 :root{font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:#202322;background:#fff;color-scheme:light;font-synthesis:none}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0}
 a{color:inherit;text-underline-offset:4px}
 header{max-width:1184px;margin:auto;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #e8e9e8}
@@ -26,6 +27,13 @@ li:last-child{margin-bottom:0}
 .action{display:block;width:100%;padding:12px 8px;border:1px solid #202322;border-radius:8px;background:#202322;color:#fff;font-family:inherit;font-size:14px;font-weight:600;line-height:1.5;text-align:center;text-decoration:none}
 a.action:hover{background:#393f3b;border-color:#393f3b}
 .action:disabled{border-color:#e8e9e8;color:#686f69;background:#f7f8f7;cursor:not-allowed}
+button.action{cursor:pointer}button.action:hover:not(:disabled){background:#393f3b}
+header>a.plans-button{font-size:14px;font-weight:600;color:#202322;text-align:center;border:1px solid #202322;border-radius:8px;padding:10px 16px;max-width:none;white-space:nowrap;text-decoration:none}
+header>a.plans-button:hover{background:#f4f5f4;text-decoration:none}
+button:focus-visible,input:focus-visible{outline:2px solid #202322;outline-offset:4px}
+.account-main{max-width:650px}.account-main .terms{font-size:14px;line-height:1.6}.account-main #account-status{font-size:15px}
+.account-main fieldset{border:0;padding:0;margin:24px 0}.account-main fieldset label{display:flex;align-items:flex-start;gap:10px;font-size:15px;font-weight:600}.account-main input[type=checkbox]{margin-top:5px;flex:none}
+.account-main .sign-out{width:auto;background:#fff;color:#202322;border-color:#dfe2df;margin-top:24px}
 a:focus-visible,summary:focus-visible{outline:2px solid #202322;outline-offset:5px}
 .terms{font-size:12px;color:#626963;margin:24px 0}
 details{max-width:780px;font-size:14px;color:#575e59;border-top:1px solid #e8e9e8;padding-top:18px}
@@ -34,3 +42,8 @@ details p{margin:12px 0}
 @media(max-width:900px){.plans{gap:14px}.plan{padding:26px 20px 22px}.price strong{font-size:46px}}
 @media(max-width:720px){header{padding:22px}.brand{font-size:22px;gap:10px}.brand img{width:32px;height:32px}header>a:last-child{max-width:90px;text-align:right}main{padding:32px 22px}.plans{grid-template-columns:1fr;gap:20px}.plan{padding:28px}.purpose{min-height:0}h1{font-size:36px}.price strong{font-size:52px}.preview{margin-bottom:28px}.intro{font-size:17px}}
 @media(prefers-reduced-motion:no-preference){a.action{transition:background .15s,border-color .15s}}
+
+@media(max-width:520px){header{flex-wrap:wrap;gap:16px}.account-main{padding-top:28px}}
+
+.coming{display:block;font:600 12px/1.5 system-ui;color:#575e59;margin-top:8px;letter-spacing:0}
+dialog{width:min(460px,calc(100vw - 32px));padding:26px;border:1px solid #dfe2df;border-radius:12px;color:#202322;background:#fff}dialog::backdrop{background:#0006}.interest-actions{display:grid;gap:10px}.action.secondary{color:#202322;background:#fff;border-color:#dfe2df}button.action.secondary:hover{background:#f4f5f4}

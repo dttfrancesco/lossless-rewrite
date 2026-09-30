@@ -1,0 +1,7 @@
+project_id = "lossless-rewrite"
+
+[functions.lossless-api]
+verify_jwt = false
+
+[functions.lossless-billing-webhook]
+verify_jwt = false

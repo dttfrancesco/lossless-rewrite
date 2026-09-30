@@ -10,11 +10,11 @@ const fixture = `
 const listeners=[]; const stored={}; let granted=false;
 document.addEventListener('DOMContentLoaded',()=>{const banner=document.createElement('p');banner.textContent='Local UI test: permissions and chat access are simulated.';banner.style.cssText='padding:10px;margin:0;background:#fff0ce;color:#403919;font:14px system-ui';document.body.prepend(banner);});
 window.chrome={
- runtime:{connect:()=>({onDisconnect:{addListener(){}},onMessage:{addListener(){}},postMessage(){throw new Error('Native messaging is unavailable in this UI harness.')}}),sendMessage:async m=>m.action==='activate'?{activated:true,available:true,tabId:1}:{error:'UI harness: use copy and paste.'},getURL:path=>'/'+path},
+ runtime:{connect:()=>({onDisconnect:{addListener(){}},onMessage:{addListener(){}},postMessage(){throw new Error('Native messaging is unavailable in this UI harness.')}}),sendMessage:async m=>m.kind==='writing-rules'?(m.action==='save'?(stored.rules=m.value):stored.rules||{enabled:true,rules:[]}):m.action==='activate'?{activated:true,available:true,tabId:1}:{error:'UI harness: use copy and paste.'},getURL:path=>'/'+path},
  storage:{session:{get:async key=>({[key]:stored[key]}),set:async items=>{Object.assign(stored,items);for(const fn of listeners)fn(Object.fromEntries(Object.entries(items).map(([k,v])=>[k,{newValue:v}])),'session');}},local:{get:async()=>({}),set:async()=>{},remove:async()=>{}},onChanged:{addListener:fn=>listeners.push(fn)}},
  permissions:{contains:async()=>granted,request:async()=>{granted=true;return true;},remove:async()=>{granted=false;return true;}},tabs:{query:async()=>[{id:1,...(granted?{url:'https://chatgpt.com/'}:{})}],create:async({url})=>window.open(url,'_blank')}
 };`;
-const allowed = new Map([["/", "panel.html"], ...['icons/mark.svg','plans.html','plans.css','panel.html','panel.js','content.js','panel.css','README.html','reference.html','reference.js','reference.css','pdf.worker.mjs','pdf_viewer.css'].map(f=>['/'+f,f])]);
+const allowed = new Map([["/", "panel.html"], ...['icons/mark.svg','plans.html','plans.css','plans.js','account.html','account.js','panel.html','panel.js','content.js','panel.css','README.html','reference.html','reference.js','reference.css','pdf.worker.mjs','pdf_viewer.css'].map(f=>['/'+f,f])]);
 const server = http.createServer(async (req, res) => {
   const path = new URL(req.url, "http://127.0.0.1").pathname;
   if (path === "/chat-fixture.html") { res.setHeader("Content-Type", "text/html"); res.end(await readFile(resolve(import.meta.dirname, "extension-chat-fixture.html"), "utf8")); return; }
@@ -24,7 +24,7 @@ const server = http.createServer(async (req, res) => {
   const file = allowed.get(path); if (!file) { res.writeHead(404); res.end(); return; }
   try {
     let body = await readFile(resolve(root, file), "utf8");
-    if (file === "panel.html") body = body.replace('<script type="module"', '<script src="fixture.js"></script><script type="module"');
+    if (["panel.html", "account.html", "plans.html"].includes(file)) body = body.replace('<script type="module"', '<script src="fixture.js"></script><script type="module"');
     if (file === 'reference.html') body = body.replace('<script type="module"', '<script src="fixture-protections.js"></script><script type="module"');
     res.setHeader("Content-Type", /\.m?js$/.test(file) ? "text/javascript" : file.endsWith(".css") ? "text/css" : file.endsWith(".svg") ? "image/svg+xml" : "text/html");
     res.setHeader("Cache-Control", "no-store"); res.end(body);

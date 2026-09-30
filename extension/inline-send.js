@@ -1,8 +1,10 @@
 // A single explicit send transaction. Never retries, simulates Enter, or guesses a button.
 export function sameComposerText(a, b) {
-  // Chromium's contenteditable insertText may render one extra empty block.
-  // Tolerate blank-line multiplicity only; never ignore words or punctuation.
-  const normalize = text => text.replace(/\r\n/g, "\n").replace(/\n{3,}/g, "\n\n");
+  // Rich editors turn each inserted line into a paragraph. innerText then adds
+  // paragraph spacing (one newline can become two or more). Compare the same
+  // sequence of lines, still preserving every word, space and punctuation mark.
+  // A missing line break is not equivalent: never join separate lines together.
+  const normalize = text => text.replace(/\r\n/g, "\n").replace(/\n+/g, "\n");
   return normalize(a) === normalize(b);
 }
 export async function sendPrepared({ snapshot, prepared, adapter, wait = () => new Promise(r => setTimeout(r, 180)) }) {

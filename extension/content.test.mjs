@@ -4,8 +4,8 @@ import { buildSync } from "esbuild";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 const code = buildSync({ entryPoints: [fileURLToPath(new URL("./content.js", import.meta.url))], bundle: true, write: false, format: "iife" }).outputFiles[0].text;
-function harness() {
-  let handler; let mutation; let timer; const events = []; const sent = [];
+function harness(host = 'chatgpt.com') {
+  let handler; let mutation; let timer; let disconnected = false; const events = []; const sent = [];
   class Textarea {
     constructor(text) { this._value = text; this.disabled = false; this.events = []; }
     get value() { return this._value; } set value(v) { this._value = v; }
@@ -14,9 +14,9 @@ function harness() {
   const article = { innerText: "User\nComplete source with a condition.", isConnected: true, getClientRects: () => [1], parentElement: { closest: () => null }, scrollIntoView: () => events.push("scroll") };
   const composer = new Textarea("Existing unsent draft"); let composers = [composer];
   const document = { documentElement: {}, querySelectorAll: (selector) => selector.startsWith("article") ? [article] : composers };
-  const chrome = { runtime: { id: "extension-id", onMessage: { addListener: (fn) => handler = fn }, sendMessage: (m) => { if (m.kind === "inline-access") return Promise.resolve({ allowed: false }); sent.push(m); return Promise.resolve(); } } };
-  vm.runInNewContext(code, { chrome, document, URL, location: { href: "https://chatgpt.com/c/1" }, HTMLTextAreaElement: Textarea, getComputedStyle: () => ({ visibility: "visible" }), MutationObserver: class { constructor(fn) { mutation = fn; } observe() {} }, Event: class { constructor(type) { this.type = type; } }, clearTimeout() {}, setTimeout(fn) { timer = fn; }, getSelection: () => null });
-  return { article, composer, sent, ambiguous() { composers = [composer, new Textarea("Other")]; }, writingBlock() { const block = new Textarea('Editable response'); block.getAttribute = name => name === 'aria-label' ? 'Start writing' : null; composer.getAttribute = name => name === 'aria-label' ? 'Ask ChatGPT' : null; composer.closest = selector => selector === 'form' ? {} : null; composers = [block, composer]; return block; }, mutate() { mutation(); timer(); }, request(action, fields = {}, senderId = "extension-id") { let response; handler({ kind: "lossless", action, ...fields }, { id: senderId }, (r) => response = r); return response; } };
+  const chrome = { runtime: { id: "extension-id", onMessage: { addListener: (fn) => handler = fn, removeListener() {} }, sendMessage: (m) => { if (m.kind === "inline-access") return Promise.resolve({ allowed: false }); sent.push(m); return Promise.resolve(); } } };
+  vm.runInNewContext(code, { chrome, document, URL, location: { href: `https://${host}/c/1` }, HTMLTextAreaElement: Textarea, getComputedStyle: () => ({ visibility: "visible" }), MutationObserver: class { constructor(fn) { mutation = fn; } observe() {} disconnect() { disconnected = true; } }, Event: class { constructor(type) { this.type = type; } }, clearTimeout() {}, setTimeout(fn) { timer = fn; }, getSelection: () => null });
+  return { article, composer, sent, get disconnected() { return disconnected; }, invalidate() { chrome.runtime.sendMessage = () => { throw new Error('Extension context invalidated.'); }; }, ambiguous() { composers = [composer, new Textarea("Other")]; }, writingBlock() { const block = new Textarea('Editable response'); block.getAttribute = name => name === 'aria-label' ? 'Start writing' : null; composer.getAttribute = name => name === 'aria-label' ? 'Ask ChatGPT' : null; composer.closest = selector => selector === 'form' ? {} : null; composers = [block, composer]; return block; }, mutate() { mutation(); timer(); }, request(action, fields = {}, senderId = "extension-id") { let response; handler({ kind: "lossless", action, ...fields }, { id: senderId }, (r) => response = r); return response; } };
 }
 test("adapter captures only a chosen message and ignores foreign extension messages", () => {
   const h = harness(); assert.equal(h.request("list", {}, "other-id"), undefined);
@@ -44,4 +44,29 @@ test('ChatGPT editable answers do not disable or receive chat composer insertion
   assert.equal(block.value, 'Editable response');
   assert.equal(block.events.length, 0);
   assert.equal(h.composer.value, 'Existing unsent draft\n\nPrompt');
+});
+
+for (const [host,label] of [['gemini.google.com','Enter a prompt for Gemini'],['claude.ai','Write your prompt to Claude']]) {
+  test(`${host} uses the labelled composer despite another editable helper`, () => {
+    const h=harness(host),helper=h.writingBlock();
+    h.composer.getAttribute=name=>name==='aria-label'?label:null;
+    assert.equal(h.request('composer').available,true);
+    assert.equal(h.request('stage',{mode:'replace',expected:h.composer.value,text:'Keep the caveat.'}).staged,true);
+    assert.equal(helper.value,'Editable response');
+    assert.equal(h.composer.value,'Keep the caveat.');
+  });
+}
+
+
+test('an old content observer stops after reload without changing the chat draft', async () => {
+  const h = harness();
+  h.request('list');
+  h.invalidate();
+  h.article.innerText = 'Chat changed after the extension reload.';
+  assert.doesNotThrow(() => h.mutate());
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(h.disconnected, true);
+  assert.equal(h.request('composer'), undefined);
+  assert.equal(h.composer.value, 'Existing unsent draft');
+  assert.equal(h.sent.length, 0);
 });

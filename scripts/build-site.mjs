@@ -11,7 +11,7 @@ for (const [from, to] of [
   ["public/demo/social.mp4", "walkthrough.mp4"],
   ["public/demo/poster.jpg", "poster.jpg"],
   ["public/demo/captions.vtt", "captions.vtt"],
-  ["docs/social-preview.png", "social-preview.png"],
+  ["docs/hero-extension.jpg", "hero-extension.jpg"],
   ["demo/customer-policy.md", "customer-policy.md"],
 ]) await copyFile(resolve(root, from), resolve(out, to));
 const demo = JSON.parse(await readFile(resolve(root, "demo/document-repair.json"), "utf8"));

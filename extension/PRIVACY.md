@@ -1,16 +1,13 @@
 # Extension privacy
 
-Applies to the 0.4.6 unpacked preview. Updated 30 September 2026.
+Updated 1 October 2026 for 0.5.15.
 
-- Source text, rewrites, selected ideas and check history use Chrome extension session storage. **Save locally** stores one document in local extension storage; **Clear document** removes that saved copy and resets the session document. Uninstalling removes extension storage. Local saves are not encrypted by Lossless Rewrite. There is no browser sync.
-- The extension has no analytics, advertising SDK, account system or hosted data collection endpoint. The local UI test harness is excluded from the installable build.
-- The manifest requests access only to ChatGPT, Claude, Gemini, Grok and DeepSeek origins so controls can appear automatically. Chrome manages that access. No all-sites or browsing-history permission is requested.
-- Selecting a passage and clicking Keep wording or Keep meaning saves that passage, its protection type and source label in extension session storage for the current chat tab and conversation. PDF selections include filename and page number. Clear selections removes them; closing the chat tab removes its selections and reader bindings. They are not synchronized or encrypted by Lossless.
-- The PDF reader opens files chosen from your device using bundled PDF.js code, worker, fonts and character maps. It does not upload the PDF. Selected passages are sent only when you subsequently submit with the Lossless send shortcut or `/lossless`. Scanned-image OCR is not included.
-- Pressing Ctrl+Shift+Enter (Mac: Command+Shift+Enter) in the chat box, or submitting a draft beginning with `/lossless` through normal Enter/Send, reads that draft, adds the chat's saved selections locally, and submits the resulting prompt to that same chat provider. There is no separate confirmation dialog. Ordinary sends without the command or shortcut are unchanged. Shift-Enter remains a newline. Unknown send controls leave the prompt staged for manual sending; there are no automatic retries. Site permission is checked before insertion and submission.
-- In chat mode, you decide when to send source material, selected ideas and drafts to your chat provider. That provider's terms and privacy settings apply. A chat review is produced by that provider, not by a separate Lossless service.
-- In companion mode, the companion sends necessary text only to the configured decision provider (Jev by default). It never calls another model for extraction, second opinions, writing or repair. The provider’s terms apply. The checker key stays in the companion, not in extension storage or chat prompts. Uncertain checks remain marked for review.
-- The optional native-messaging permission connects only to the configured Lossless companion. No clipboard reading happens in the background. Clipboard writes and downloads require an explicit user action.
-- Sharing an exported evidence file can reveal the full source and rewrite. Review it before sharing.
+Read the complete policy: https://lossless-rewrite.vercel.app/privacy.html
 
-The extension does not make confidentiality, correctness or publisher-compliance guarantees. Use only material you are permitted to process with the chosen provider. Contact the maintainer through the public repository for product questions; do not post private manuscript text or credentials in issues.
+Source for the published policy: `mail-site/privacy.html`.
+
+The policy covers local selections and PDFs, Google/Supabase sign-in, hosted Jev checks, optional companion processing, Brevo plan-update emails, unsubscribe links, usage records, retention and deletion requests. It applies to the Free launch; paid checkout is disabled.
+
+Contact hello@llmderby.com with “Lossless Rewrite” in the subject. Do not post manuscript text or credentials in public support issues.
+
+Writing rules are saved locally, included only in explicit Lossless sends, and sent with the reply for hosted checks. Automatic capture recognizes supported style requests at the start of a message after you send it. This detection stays on your device and does not scan conversation history or AI replies. You can undo capture or disable it in My writing rules, where rules can also be edited or removed. This disclosure is live at the policy URL above as of 1 October 2026.

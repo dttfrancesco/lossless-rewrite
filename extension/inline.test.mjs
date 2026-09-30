@@ -45,7 +45,8 @@ test('unknown send control stages the prompt without guessing or retrying', asyn
 });
 test('rich editor blank blocks are tolerated but lost words and changed punctuation are not', () => {
   assert.equal(sameComposerText('Finding.\n\n\nCaveat.', 'Finding.\n\nCaveat.'), true);
-  assert.equal(sameComposerText('Finding.\nCaveat.', 'Finding.\n\nCaveat.'), false);
+  assert.equal(sameComposerText('Finding.\nCaveat.', 'Finding.\n\nCaveat.'), true);
+  assert.equal(sameComposerText('Finding.Caveat.', 'Finding.\n\nCaveat.'), false);
   assert.equal(sameComposerText('Finding.', 'Finding.\n\nCaveat.'), false);
   assert.equal(sameComposerText('Finding!', 'Finding.'), false);
 });

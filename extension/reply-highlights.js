@@ -23,14 +23,18 @@ export function findPassageMatches(text, items) {
   return { matches, found: found.size };
 }
 
-function lastReply() {
-  // Observed ChatGPT message containers, including editable writing blocks.
-  // Other sites can expose the same explicit assistant-role semantics.
-  const replies = [...document.querySelectorAll('[data-markdown-text-style="assistant-message"], [data-message-author-role="assistant"], article[aria-label="Assistant"], [role="article"][aria-label="Assistant"]')]
+export function lastReply() {
+  // Observed site-specific reply bodies, excluding headings and action bars.
+  const siteSelector = {
+    'claude.ai': '[data-testid="assistant-message"] [data-perf-reply-text]',
+    'gemini.google.com': 'model-response-content message-content',
+  }[globalThis.location?.hostname];
+  const selector = siteSelector || '[data-markdown-text-style="assistant-message"], [data-message-author-role="assistant"], article[aria-label="Assistant"], [role="article"][aria-label="Assistant"]';
+  const replies = [...document.querySelectorAll(selector)]
     .filter(el => el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden');
   return replies.at(-1);
 }
-function textNodes(root) {
+export function textNodes(root) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = []; let text = '', node, priorBlock;
   while ((node = walker.nextNode())) {
     const parent = node.parentElement;
@@ -43,38 +47,75 @@ function textNodes(root) {
   }
   return { text, nodes };
 }
+// Unmatched reply wording is a visual category, never a semantic verdict.
+export function otherWordingRanges(length, matches) {
+  const ranges = []; let end = 0;
+  for (const match of [...matches].sort((a,b) => a.start-b.start)) {
+    if (match.start > end) ranges.push({start:end,end:match.start});
+    end = Math.max(end, match.end);
+  }
+  if (end < length) ranges.push({start:end,end:length});
+  return ranges;
+}
 export function createReplyHighlighter(onChange = () => {}) {
-  let active = false, observer, style, target;
-  const keys = ['lossless-kept-wording', 'lossless-kept-meaning'];
-  function clear() {
-    observer?.disconnect(); observer = undefined;
-    for (const key of keys) globalThis.CSS?.highlights?.delete(key);
-    style?.remove(); style = undefined; target = undefined; active = false; onChange();
-  }
-  function toggle(items) {
-    if (active) { clear(); return 'Highlights hidden.'; }
-    if (!items.length) throw new Error('Select a passage to keep first. Then use Show kept text after the reply finishes.');
-    if (!globalThis.CSS?.highlights || typeof Highlight === 'undefined') throw new Error('This browser does not support text highlighting. Update Chrome and try again.');
-    const reply = lastReply();
-    if (!reply) throw new Error('Cannot identify the latest reply on this layout. Use the full editor to compare the text.');
-    const { text, nodes } = textNodes(reply), result = findPassageMatches(text, items);
-    if (!result.matches.length) return 'No matching wording found in the latest reply. Ideas may be paraphrased; this is not a meaning check.';
-    const wording = new Highlight(), meaning = new Highlight();
-    wording.priority = 1; // The stricter wording mark wins when protections overlap.
-    for (const match of result.matches) {
-      const first = nodes.find(n => n.end > match.start), last = nodes.find(n => n.end >= match.end);
-      if (!first || !last) continue;
-      const range = document.createRange(); range.setStart(first.node, match.start - first.start); range.setEnd(last.node, match.end - last.start);
-      (match.type === 'keep_wording' ? wording : meaning).add(range);
+  let sourceEnabled = true, replyEnabled = true, observer, style, target, capturedText, replyItems = [], sources = new Map();
+  const keys = ['lossless-kept-wording', 'lossless-kept-meaning', 'lossless-other-wording'];
+  function paint() {
+    if (!globalThis.CSS?.highlights || typeof Highlight === 'undefined') return;
+    for (const key of keys) CSS.highlights.delete(key);
+    if (!sourceEnabled && !replyEnabled) return;
+    if (!style) {
+      style = document.createElement('style'); style.dataset.lossless = 'highlight-style';
+      style.textContent = '::highlight(lossless-kept-wording){background:#ffe4a6;color:#4b3100}::highlight(lossless-kept-meaning){background:#c5ead5;color:#174b33}::highlight(lossless-other-wording){background:#e1edff;color:#173c68}';
+      document.head.append(style);
     }
-    style = document.createElement('style'); style.dataset.lossless = 'highlight-style';
-    style.textContent = '::highlight(lossless-kept-wording){background-color:#ffdf91;color:#352300}::highlight(lossless-kept-meaning){background-color:#b9e6cc;color:#123c25}';
-    document.head.append(style);
-    CSS.highlights.set(keys[0], wording); CSS.highlights.set(keys[1], meaning); active = true; target = reply;
-    // Streaming, regeneration or editing invalidates the display instead of leaving stale highlights.
-    observer = new MutationObserver(clear); observer.observe(reply, { subtree: true, childList: true, characterData: true });
-    reply.scrollIntoView({ block: 'center', behavior: 'smooth' }); onChange();
-    return `Matching text highlighted for ${result.found} of ${items.length} passages. Amber: Keep wording. Green: Keep meaning. Paraphrases are not checked.${result.limited ? ' Display limited to 300 matches.' : ''}`;
+    const wording = new Highlight(), meaning = new Highlight(), other = new Highlight();
+    wording.priority = 2; meaning.priority = 1;
+    if(sourceEnabled) for (const {item,range} of sources.values()) {
+      if (range.startContainer.isConnected && normalized(range.toString()).value.trim() === normalized(item.text).value.trim()) (item.type === 'keep_wording' ? wording : meaning).add(range);
+    }
+    if (replyEnabled && target?.isConnected) {
+      const {text,nodes} = textNodes(target), result = findPassageMatches(text,replyItems);
+      const add = (match, highlight) => {
+        const first = nodes.find(n => n.end > match.start), last = nodes.find(n => n.end >= match.end);
+        if (!first || !last || match.end <= match.start) return;
+        const range = document.createRange();
+        range.setStart(first.node,Math.max(0,match.start-first.start)); range.setEnd(last.node,match.end-last.start); highlight.add(range);
+      };
+      for (const m of result.matches) add(m,m.type === 'keep_wording' ? wording : meaning);
+      for (const m of otherWordingRanges(text.length,result.matches)) if (text.slice(m.start,m.end).trim()) add(m,other);
+    }
+    CSS.highlights.set(keys[0],wording); CSS.highlights.set(keys[1],meaning); CSS.highlights.set(keys[2],other);
   }
-  return { toggle, clear, reconcile() { if (active && (!target?.isConnected || lastReply() !== target)) clear(); }, get active() { return active; } };
+  function clear() { observer?.disconnect(); observer=undefined; target=undefined; capturedText=undefined; replyItems=[]; paint(); onChange(); }
+  function remember(item,range) { if (range) sources.set(item.id,{item,range:range.cloneRange()}); paint(); }
+  function sync(items) { const ids=new Set(items.map(i=>i.id)); for(const id of sources.keys()) if(!ids.has(id))sources.delete(id); paint(); }
+  function reply(items) {
+    clear(); target=lastReply(); if(!target)return;
+    capturedText=normalized(textNodes(target).text).value;
+    replyItems=structuredClone(items); observe(); paint(); onChange();
+  }
+  function observe() {
+    observer?.disconnect(); observer=new MutationObserver(reconcile);
+    observer.observe(target,{subtree:true,childList:true,characterData:true});
+  }
+  function reconcile() {
+    if(!target)return;
+    const latest=lastReply();
+    // Chat providers add action buttons and replace Markdown nodes after streaming.
+    // Rebuild DOM ranges if the reply text is unchanged; only invalidate actual edits.
+    if(!latest || normalized(textNodes(latest).text).value!==capturedText){clear();return;}
+    if(latest!==target){target=latest;observe();}
+    paint();
+  }
+  function setEnabled(value,scope='all') {
+    if(scope==='all'||scope==='source')sourceEnabled=Boolean(value);
+    if(scope==='all'||scope==='reply')replyEnabled=Boolean(value);
+    paint();onChange();
+  }
+  function reset() { sources.clear(); clear(); style?.remove(); style=undefined; }
+  return {remember,sync,reply,clear,reset,setEnabled,reconcile,
+    toggle(scope='all') { const before=scope==='source'?sourceEnabled:scope==='reply'?replyEnabled:sourceEnabled||replyEnabled;setEnabled(!before,scope);return `${scope==='all'?'Highlights':scope==='source'?'Source highlights':'Reply highlights'} ${!before?'on':'off'}.`; },
+    get active() { return sourceEnabled||replyEnabled; }, get sourceEnabled(){return sourceEnabled;},get replyEnabled(){return replyEnabled;}
+  };
 }

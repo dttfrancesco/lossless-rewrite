@@ -34,8 +34,14 @@ test('overlapping wording and meaning are retained, identical marks deduplicated
 });
 test('real worker store serializes selections, rejects stale readers and blocks foreign senders', async () => {
   const stored = {}, tab = { id: 5, url };
-  globalThis.chrome = { runtime: { getURL: file => `chrome-extension://test/${file}` }, permissions: { contains: async () => true }, storage: { session: { get: async key => key === null ? structuredClone(stored) : ({ [key]: structuredClone(stored[key]) }), set: async data => Object.assign(stored, structuredClone(data)), remove: async keys => { for (const key of keys) delete stored[key]; } } }, tabs: { get: async () => tab, sendMessage: async () => {} } };
+  globalThis.chrome = { runtime: { getURL: file => `chrome-extension://test/${file}` }, permissions: { contains: async () => true }, storage: { local:{get:async()=>({})},session: { get: async key => key === null ? structuredClone(stored) : ({ [key]: structuredClone(stored[key]) }), set: async data => Object.assign(stored, structuredClone(data)), remove: async keys => { for (const key of keys) delete stored[key]; } } }, tabs: { get: async () => tab, sendMessage: async () => {} } };
   const sender = { tab, url, frameId: 0 };
+  const panelPaths=[];chrome.sidePanel={setOptions:async options=>panelPaths.push(options)};
+  await protectionMessage({action:'reader'},sender);
+  assert.equal(panelPaths[0].tabId,5);assert.match(panelPaths[0].path,/^reference.html\?token=/);
+  const readerToken=new URLSearchParams(panelPaths[0].path.split('?')[1]).get('token');
+  await protectionMessage({action:'back',token:readerToken},{url:'chrome-extension://test/'+panelPaths[0].path});
+  assert.equal(panelPaths[1].path,'panel.html');
   await Promise.all([protectionMessage({ action: 'add', item: passage }, sender), protectionMessage({ action: 'add', item: { ...passage, text: 'Sample size 42.' } }, sender)]);
   assert.equal((await protectionMessage({ action: 'get' }, sender)).context.items.length, 2);
   await assert.rejects(protectionMessage({ action: 'clear', scope: 'https://chatgpt.com/c/elsewhere' }, sender));

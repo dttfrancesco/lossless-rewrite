@@ -9,6 +9,7 @@ node_modules/
 .next/
 out/
 dist/
+extension/store-dist/
 *.tsbuildinfo
 next-env.d.ts
 
@@ -21,3 +22,6 @@ private/
 # misc
 .DS_Store
 *.log
+
+.vercel
+.env*

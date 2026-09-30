@@ -1,113 +1,101 @@
+<img src="extension/icons/mark.svg" width="48" height="48" alt="Lossless Rewrite logo">
+
 # Lossless Rewrite
 
 ### Cut words, not ideas.
 
-Ever asked AI to shorten a report, then had to add the important bits back?
+Asked AI to shorten your writing, then had to put the important parts back?
 
-Choose what must stay. **Your model rewrites, and Jev checks for missing ideas and helps repair them.**
+**Choose what must survive. Rewrite in your usual AI chat. Check what was kept, changed or lost.**
 
-Use the local editor, command line, or experimental browser extension.
+For dense discussions, related work, policies and emails. Works with **ChatGPT, Claude, Gemini, Grok and DeepSeek**.
 
-[![An AI summary drops a refund exception. Lossless detects the omission and restores it.](docs/hero-ai-chat.png)](public/demo/social.mp4)
+[![Select a passage in your AI chat and choose Keep meaning or Keep wording](docs/hero-extension.jpg)](extension/README.md)
 
-[Explore the saved demo](https://dttfrancesco.github.io/lossless-rewrite/) · [Watch the video](#watch-the-demo) · [Install](#install)
+[Install the extension](#install) · [How to use it](extension/README.md) · [All five screenshots](extension/store-assets/SCREENSHOTS.md) · [Saved demo](https://dttfrancesco.github.io/lossless-rewrite/)
 
-## A few uses
+## In your existing chat
 
-- 📄 **Papers:** tighten the writing while preserving results and caveats.
-- 📋 **Policies:** simplify the text while keeping conditions, exceptions and deadlines.
-- ✉️ **Emails:** change the tone while keeping the message and commitments.
+1. **Mark a passage:** keep its meaning, or preserve the exact words. Select from the chat or a PDF reference.
+2. **Write your request:** for example, “Condense this discussion to 300 words.”
+3. **Press Ctrl+Shift+Enter** (⌘+Shift+Enter on Mac). Lossless includes your selections and sends through the chat you are already using.
+4. **Check the finished reply.** Review missing or changed ideas. **Fix in chat** prepares a repair for you to review and send.
 
-## How it works
+Your chat handles writing and repairs. No separate writing-model API is needed for the extension.
 
-1. **Select what must stay:** exact wording, the same meaning, or key ideas extracted from a section.
-2. **Rewrite the document:** ask your model to summarize, shorten or change the tone.
-3. **Check the result:** see which selected details survived, inspect failures, and request a repair.
+## What it does
 
-The result is a rewrite of the whole document, with your selected details checked.
+| Feature | What you get |
+|---|---|
+| **Keep meaning** | Check that a selected claim survives paraphrasing, including its conditions, numbers and uncertainty. |
+| **Keep wording** | Preserve a quote or approved sentence; check exact text locally. Combine overlapping protections. |
+| **PDF references** | Read a PDF beside your chat and mark passages with their filename and page number. |
+| **Writing rules** | Save specific preferences across chats. Supported explicit style requests can be remembered locally, with Undo and an off switch. Check whether the reply follows them. |
+| **Highlights** | Toggle source and reply colours separately. Text matches are visual aids; meaning is checked separately. |
+| **Quick controls** | Move or hide the small launcher. Open selections, PDF references or the sidebar without leaving the chat. |
+| **Full editor** | Check an existing draft, extract a section's key ideas into a checklist, inspect evidence, undo marks and export results. |
+| **Local app and CLI** | Rewrite whole documents with API models or authenticated Codex / Claude Code, with bounded check-and-repair attempts. |
 
-## What you can do
+A few uses:
 
-- **Keep wording:** check that a quote or approved sentence stays exactly as written.
-- **Keep meaning:** allow paraphrasing while checking facts, conditions and uncertainty.
-- **Must cover:** extract a section’s key ideas into a checklist you review before rewriting.
-- **Rewrite and compress:** change tone or structure, summarize, or request a word count or percentage reduction.
-- **Check an existing draft:** compare it with the source through the CLI or extension, without generating a new version.
-- **Repair and revise:** restore missing details, give follow-up style feedback, and check again.
-- **Trace each check:** see matching source/output passages and explanations; inspect attempt history and export evidence through the extension.
-- **Import or exclude:** open `.txt`/`.md`; import selectable-text PDFs or omit source passages in the editor.
+- **Discussion sections:** condense the argument without dropping results or limitations.
+- **Related work:** combine several sources while keeping their distinct claims and attribution.
+- **Policies:** simplify wording without losing exceptions, conditions or deadlines.
+- **Emails:** change the tone while keeping the message and commitments.
 
-[Editor guide](docs/EDITOR.md) · [CLI guide](docs/CLI.md) · [Extension](extension/README.md) · [Use the TypeScript engine](docs/ENGINE.md)
+## Free now
 
-Combine protections on overlapping passages. Undo and redo changes in the editor.
+Marking, prompting and exact-wording checks need no Lossless account. **Google sign-in includes 25 hosted check credits per calendar month**, with no API key. On Free, you choose when to check. Larger checks show their credit cost first.
 
-## Watch the demo
-
-<a href="public/demo/social.mp4"><img src="public/demo/poster.jpg" alt="Watch Lossless detect and repair a missing refund condition" width="640"></a>
-
-[▶ Watch the 48-second walkthrough](public/demo/social.mp4) · [Caption file](public/demo/captions.vtt)
-
-Male narration and on-screen captions. Shows meaning checks, exact wording, key-idea coverage, existing-draft checks and style changes.
-
-### The example, explained
-
-A **1,115-word customer policy** says that first purchases can be refunded within 14 days, but renewals cannot. A summary drops the renewal exception. Lossless flags the change and restores it in a **163-word summary, with all six selected checks passing**.
-
-Illustrated chat; deliberate omission, real checks and repair.
-
-**Example files:** [Full source document (.md)](demo/customer-policy.md) · [Instruction, selections and complete outputs](demo/document-walkthrough.md)
-
-## What the checks mean
-
-Only selected details are individually checked. A pass means they were judged consistent with the source, not that the source is true. Extraction and meaning checks can be wrong; unresolved results stay visible, and a rewrite may miss its length target.
-
-[Saved demo run](demo/document-repair.json) · [Validation status](docs/REVIEW.md)
+**Plus and Pro are coming soon.** Automatic checking and saved multi-PDF projects are in private testing. You can register interest from **Compare plans**; no payment or subscription starts. The optional [own-key setup](extension/README.md#use-your-own-checking-key) is also available on Free.
 
 ## Install
 
-Requires **Git and Node.js 22.16+**.
+**Current version: 0.5.15. A Chrome Web Store listing is being prepared; store installation is not available yet.**
+
+Until it is approved, load the extension from source. Requires Git, Node.js 22.16+ and Chrome 116+.
 
 ```sh
 git clone https://github.com/dttfrancesco/lossless-rewrite.git
 cd lossless-rewrite
-npm install
+npm ci
+npm run extension:build:store
+```
+
+Open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked**, and select **extension/store-dist**. Pin Lossless and open a supported chat. This build uses the project's public extension identity so the configured Google sign-in callback matches.
+
+Already installed? Rebuild the same folder, click **Reload** in Chrome and refresh the chat. Avoid enabling two Lossless copies together. On PowerShell, use `npm.cmd` if script execution blocks `npm`.
+
+[Extension setup, shortcuts and troubleshooting](extension/README.md)
+
+## Local editor and CLI
+
+The same repository also includes a standalone editor and command-line engine.
+
+```sh
 npm run demo
 ```
 
-This terminal demo replays a saved check and repair. **No API keys, model calls or network requests during replay.**
-
-### Live rewriting
-
-You need a **Jev API key** for meaning checks and **one connected model** for rewriting.
-
-1. Copy [`.env.example`](.env.example) to `.env.local`.
-2. Add your [Jev key](https://www.jevai.org/agent/keys) and configure a writer. For an already authenticated Codex CLI:
-
-   ```dotenv
-   TYPESAFE_API_KEY=your-jev-key
-   LLM_PROVIDER=codex-cli
-   LLM_MODEL=default
-   ```
-
-   For API keys or CLI login instructions, see [model setup](docs/MODELS.md).
-3. Run `npm run dev` and open [localhost:3000](http://localhost:3000).
-
-Supported connections: OpenAI, Anthropic, Gemini, AI Gateway, compatible endpoints, Codex CLI and Claude Code. Custom model IDs are supported. Keys remain local; live text goes to your selected model and Jev.
-
-Prefer the terminal? Use the same setup, without a dev server:
+This replays a saved check and repair without keys or live model calls. For live use, copy [`.env.example`](.env.example) to `.env.local`, configure a writer and checking key, then run `npm run dev` for the editor or:
 
 ```sh
-npm run rewrite -- --file input.md --instruction "Make this clearer."
+npm run rewrite -- --file input.md --instruction "Condense this discussion."
 ```
 
-The CLI supports existing drafts, explicit protections, stdin and JSON reports. Without selections, it extracts key ideas. On PowerShell, use `npm.cmd`. [CLI examples](docs/CLI.md)
+[Model setup](docs/MODELS.md) · [Editor](docs/EDITOR.md) · [CLI](docs/CLI.md) · [TypeScript engine](docs/ENGINE.md)
 
-### Browser extension
+## Demo and limits
 
-An **experimental Chrome sidebar** helps protect ideas while condensing text in ChatGPT, Claude, Gemini, Grok or DeepSeek. Exact wording checks run locally. Use your existing chat for writing and repairs; the optional companion checks meaning with Jev, without calling a second model. You can also prepare and import a review from your chat without an API key.
+[Watch the captioned engine walkthrough](public/demo/social.mp4) · [Full fictional source](demo/customer-policy.md) · [Saved example and outputs](demo/document-walkthrough.md)
 
-Load it unpacked. Select passages in your chat or the local PDF reader, then send a `/lossless` request using the normal chat box. Full installed-site compatibility is still being validated, and unsupported layouts use copy/paste. [Install the extension](extension/README.md)
+The video illustrates the checking workflow using an earlier interface. Current extension screenshots are above. Its seeded omission and saved repair are an example, not an accuracy benchmark.
 
-## Contribute
+Only selected requirements are individually checked. Meaning checks can be wrong; a pass is not fact-checking or a guarantee that nothing was lost. Highlights match text, not paraphrased meaning. Word counts remain requests to the writing model.
 
-Found a missed detail, false alarm or awkward repair? Share a small synthetic or redacted example. [Contribution guide](CONTRIBUTING.md) · [MIT license](LICENSE)
+Selected passages go to your chat when you send with Lossless. Hosted checks send the selected text, enabled rules and reply to the checking service. PDFs stay on your device; attach a PDF in the chat too if the model needs the entire document. [Privacy](extension/PRIVACY.md) · [Validation and limitations](docs/REVIEW.md)
+
+## Build with us
+
+Report a missed idea, false alarm or awkward workflow with a small **fictional or redacted** example. Please keep private papers and credentials out of issues.
+
+[Contributing](CONTRIBUTING.md) · [Architecture](docs/EXTENSION-DESIGN.md) · [MIT license](LICENSE)

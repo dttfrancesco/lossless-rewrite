@@ -1,5 +1,6 @@
 import { contextFor, addProtection, chatScope } from './protections.js';
 import { supportedPage } from './shared.js';
+import { activeRules } from './writing-rules.js';
 
 // Serial read-modify-write keeps PDF selections and chat selections from racing.
 let queue = Promise.resolve();
@@ -40,6 +41,10 @@ async function handle(m, sender) {
   if (m.scope && m.scope !== context.scope) throw new Error('The chat changed. Select the passage again.');
   switch (m.action) {
     case 'get': break;
+    case 'import': {
+      if (!binding || !Array.isArray(m.items) || m.items.length>100) throw new Error('Open a saved reference project from the PDF reader.');
+      let next=context;for(const item of m.items)next=addProtection(next,item);context=next;break;
+    }
     case 'add': context = addProtection(context, m.item); break;
     case 'remove': context = { ...context, items: context.items.filter(i => i.id !== m.id) }; break;
     case 'clear': context = { ...context, items: [] }; break;
@@ -48,15 +53,15 @@ async function handle(m, sender) {
     case 'reader': {
       if (binding) throw new Error('Reader already open.');
       const token = crypto.randomUUID();
-      const reader = await chrome.tabs.create({ url: 'about:blank', active: false });
-      await chrome.storage.session.set({ [`reader:${token}`]: { readerTabId: reader.id, tabId, scope: context.scope } });
-      await chrome.tabs.update(reader.id, { url: `${readerURL}?token=${token}`, active: true });
+      await chrome.storage.session.set({ [`reader:${token}`]: { readerTabId: tabId, tabId, scope: context.scope, sidePanel: true } });
+      try { await chrome.sidePanel.setOptions({tabId,path:`reference.html?token=${token}`,enabled:true}); } catch(error) { await chrome.storage.session.remove(`reader:${token}`);throw error; }
       break;
     }
-    case 'back': if (binding) await chrome.tabs.update(tabId, { active: true }); break;
+    case 'back': if (binding) { if(binding.sidePanel)await chrome.sidePanel.setOptions({tabId,path:'panel.html',enabled:true});else await chrome.tabs.update(tabId,{active:true}); } break;
     default: throw new Error('Unknown protection action.');
   }
   await chrome.storage.session.set({ [key]: context });
   if (m.action !== 'get') await chrome.tabs.sendMessage(tabId, { kind: 'lossless', action: 'protections-changed' }).catch(() => {});
-  return { context };
+  const {writingRules}=await chrome.storage.local.get('writingRules');
+  return { context:{...context,rules:activeRules(writingRules)} };
 }

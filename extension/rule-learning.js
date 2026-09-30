@@ -1,0 +1,45 @@
+// Deliberately local and conservative: only standalone, explicit style requests.
+// Never scan conversation history, assistant replies, quoted material or PDFs.
+export function detectWritingRules(draft) {
+  if (typeof draft !== 'string' || draft.length > 5000) return [];
+  const text = draft.replace(/^\s*\/(?:lossless|loseless)\s+/i, '');
+  if (/[`"“”{}<>]|^\s*>/m.test(text)) return [];
+  // A preference must lead the message, rather than occur inside pasted prose.
+  if (!/^\s*(?:please\s+)?(?:from now on[, ]+|in future[, ]+|always\s+|remember to\s+)?(?:use|avoid|prefer|i prefer|do not use|don't use|never use|keep)\b/i.test(text)) return [];
+  const rules = [];
+  for (const part of text.split(/[.!\n]+/)) {
+    const sentence = part.trim();
+    if (!sentence) continue;
+    if (sentence.length > 180 || /[?:]|\b(this time|this reply|this paragraph|for now|for this|only here|\d+\s*words?)\b/i.test(sentence)) break;
+    const rule = sentence.replace(/^i prefer\s+/i, 'Prefer ').replace(/^(?:please\s+)?(?:from now on[, ]+|in future[, ]+|always\s+|remember to\s+)?/i, '').replace(/^please\s+/i, '');
+    if (!/^(?:use|avoid|prefer|do not use|don't use|never use|keep)\s+/i.test(rule)) break;
+    // The whole instruction must describe a known writing preference. Do not
+    // turn a sentence containing a style keyword into a permanent instruction.
+    if (!/^(?:(?:use|prefer|do not use|don't use|never use|avoid)\s+(?:British English|American English|active voice|passive voice|em dashes|semicolons|bullet points|numbered lists|short sentences|plain language|jargon|a formal tone|an informal tone)|keep\s+(?:sentences short|paragraphs short))(?:\s+(?:in (?:your|my) (?:writing|replies)|when writing))?$/i.test(rule)) break;
+    rules.push(rule[0].toUpperCase() + rule.slice(1) + '.');
+  }
+  return [...new Set(rules)].slice(0, 3);
+}
+
+export function mergeLearnedRules(value, draft) {
+  if (value.autoLearn === false || !value.enabled) return { value, added: [] };
+  const key = text => text.toLowerCase().replace(/[.!]+$/, '').trim();
+  const existing = new Set(value.rules.map(key));
+  const added = detectWritingRules(draft).filter(rule => !existing.has(key(rule))).slice(0, Math.max(0, 20 - value.rules.length));
+  return { value: { ...value, rules: [...value.rules, ...added] }, added };
+}
+
+// Wait for the chat to consume the draft. A click on a disabled Send button,
+// failed send, another chat, or an edited draft must not save preferences.
+export async function waitForSentDraft({ snapshot, composer, value, url, active, wait = () => new Promise(resolve => setTimeout(resolve, 100)) }) {
+  for (let attempt = 0; attempt < 15; attempt++) {
+    await wait();
+    if (!active() || url() !== snapshot.url) return false;
+    const el = composer();
+    if (el !== snapshot.el) return false;
+    const current = value(el).trim();
+    if (!current) return true;
+    if (current !== snapshot.text.trim()) return false;
+  }
+  return false;
+}

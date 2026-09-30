@@ -1,86 +1,124 @@
 # Lossless Rewrite for Chrome
 
-**Cut words, not ideas.** Protect key ideas or exact wording, condense your text in your usual AI chat, and review what survived.
+**Cut words, not ideas.** Keep selected ideas, exact wording and writing requirements when condensing text in your existing AI chat.
 
-Version 0.4.4 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek are the five declared chat origins. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
+Version **0.5.15** supports ChatGPT, Claude, Gemini, Grok and DeepSeek. The store listing is being prepared; this guide installs the source build. Site layouts can change. [Validation status](../docs/REVIEW.md).
 
 ## Install
 
-Use Node 22.16+:
+Requires Git, Node.js 22.16+ and Chrome 116+.
 
 ```sh
+git clone https://github.com/dttfrancesco/lossless-rewrite.git
+cd lossless-rewrite
 npm ci
-npm run extension:build
-npm run test:extension
+npm run extension:build:store
 ```
 
-Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `extension/dist`. Pin the extension and click its icon. **Expand** opens a wider editor.
+1. Open `chrome://extensions` and enable **Developer mode**.
+2. Choose **Load unpacked** and select `extension/store-dist`.
+3. Pin Lossless, open a supported chat and click the extension icon.
 
-When upgrading an existing installation, rebuild its folder and press **Reload** in Chrome, then refresh your chat tab. A different folder can produce a different extension ID; companion registration must match it.
+The public key in `store-identity.json` gives this build the project's store identity and registered Google sign-in callback. It is not a secret. For a separate development identity use `npm run extension:build` and load `extension/dist`; hosted sign-in only works with a registered callback. Forks need their own identity and backend configuration.
 
-## Use your existing chat
+To update, rebuild the same folder, click **Reload** and refresh chat tabs. Disable any older duplicate installation. On PowerShell, use `npm.cmd` if needed.
 
-No API key, companion or Lossless account is needed. Your chat provider's account, usage and payment rules still apply.
+## Rewrite in your chat
 
-1. Open a supported chat. Lossless detects it automatically after Chrome grants the extension access to the five declared chat sites.
-2. Select text in the conversation and choose **Keep meaning** or **Keep wording**. Overlapping selections can use both. Lossless stays hidden during ordinary chat; typing **/lossless** shows the saved-passage count and sending instructions. Use **Selections** to review or remove passages.
-3. To use a PDF reference, click the extension icon, then **Selections & PDF → Open PDF**. Open a file from your device, select text on a page, and choose what must stay. The reader is linked to that conversation. Open PDF is also available while typing /lossless.
-4. Write a normal request, for example `Condense this discussion to 300 words.` With the chat box focused, press **Ctrl+Shift+Enter** (Mac: **⌘+Shift+Enter**) to include your selections and send. No slash command is required. You can still start with **/lossless** and use normal Enter or Send.
+1. Select a passage. Choose **Keep meaning** to allow paraphrasing, or **Keep wording** for exact text. You can keep several passages and overlap protections.
+2. Write an instruction in the chat box, such as `Condense this discussion to 300 words.`
+3. Press **Ctrl+Shift+Enter** (Mac: **Command+Shift+Enter**). Lossless adds the marked passages and enabled writing rules, then sends through the current chat.
+4. After the reply finishes, choose **Check finished reply**. Open **Selections** to inspect findings. **Fix in chat** prepares a complete repair request; review it and send it yourself.
 
-Lossless adds your selected passages and preservation instructions, then sends through the current site's composer. A leading slash command, if present, is removed. Ordinary Enter and Shift-Enter are unchanged. There is no second submission or prompt-review dialog. If a Send button cannot be identified, the enhanced text stays in the composer for manual sending. No automatic retries are made.
+Your last chat selection is remembered when you move to the composer, even without pressing Keep meaning. Use the Keep buttons to retain several passages. The send shortcut also works while source text is selected, provided you already have a draft in the chat box. Marking a passage alone does not choose an editing instruction or send a message.
 
-With no text marked to keep, /lossless leaves your draft untouched and explains what to select. Remove the command to send an ordinary message instead. A brief receipt reports when selections were added and Send was pressed; it does not claim the provider accepted the request or that Jev checked the reply. Close the notice with × or Escape. Word limits remain instructions to the chat model, not enforced length guarantees.
+A leading `/lossless` or `/loseless` with normal Send still works. Ordinary messages and Shift+Enter are unchanged. If the chat changes, access is removed or the composer cannot accept the complete prompt, Lossless stops. An unrecognized Send control leaves the prepared draft for manual sending; it does not retry automatically.
 
-**Alt+Shift+L** (Mac: **Option+Shift+L**) adds `/lossless` at the start of your draft without sending. It keeps your existing text and does not duplicate a command already present. You can use it before or after typing.
+Selections are scoped to the tab and conversation. They survive refresh during the browser session, clear when the tab closes or you move to a different existing conversation, and follow a new chat into its assigned URL after the first explicit send.
 
-**Shortcuts** in the sidebar header explains sending, highlighting, newlines and dismissal. The inline popup's **?** button shows the same help. The send shortcut requires a nonempty draft and text marked to keep; it does not run from another editor or send automatically when you mark text.
+## Check meaning
 
-Selections belong to the current tab and conversation, survive a page reload during the browser session, and are removed when the chat tab closes. Moving between existing conversations clears them. After an explicit first send, selections follow a new chat into its assigned conversation URL.
+Open **Account → Continue with Google**. Free includes **25 check credits per calendar month**, with no checking API key or companion installation. Your existing chat provider's account and limits still apply.
 
-The local PDF reader supports selectable text, page navigation, files up to 25 MB, and passages up to 12,000 characters. It includes the filename and page number with each selected passage. The entire PDF is not uploaded. Scanned pages need OCR elsewhere. Chrome's built-in PDF viewer and arbitrary embedded PDF viewers are not injected; open the downloaded reference using **Open PDF**.
+On Free, choose **Check finished reply**. One normal-sized check uses one credit; larger checks show a quote first. Both selected meanings and enabled writing rules count toward check size. Exact-wording checks run locally. Failed provider requests release reserved credits; no automatic retry is made.
 
-This streamlines sending. It does not automatically check or repair the resulting reply. Use the checker below for that.
+Hosted checks currently use Jev through the project's Supabase endpoint. A meaning verdict can be wrong or uncertain. Only marked requirements and enabled rules are individually checked, not the truth or completeness of the entire document.
 
-### Show kept text in the reply
+## PDF references
 
-After the reply finishes, press **Alt+Shift+H** or choose **Show kept text** in the sidebar or inline controls. Press again to hide the highlights. Amber marks text selected as Keep wording; green marks text selected as Keep meaning. Overlapping wording marks take priority. No API key or model call is used.
+Choose **PDF** from the round menu, or **Selections & PDF → Open PDF** in the sidebar. Drop a PDF into the reader or click to choose one. The reader replaces the Lossless sidebar and leaves the chat visible. Drag the panel edge to resize it.
 
-This finds matching text, ignoring layout whitespace. It does not find semantic paraphrases or prove that meaning was preserved. The notice reports how many marked passages have text matches. Highlights clear when the reply changes, a new reply replaces it, the conversation changes, or selections change. Automatic reply detection currently targets ChatGPT's observed assistant containers and explicitly labelled assistant articles; other layouts report a fallback to the full editor.
+Select text on a page and click **Keep meaning** or **Keep wording**. Its filename and page number accompany the passage when you send with Lossless.
 
-## Check what survived
+**Only marked passages are sent.** The full PDF stays on your device. Attach it in the chat as well if you want the model to read the whole document. Opening a file in the chat does not automatically open it in the Lossless reader.
 
-Choose **Check a rewrite** in the sidebar to open the full editor. Its existing checks, overlapping protections, evidence, undo and companion tools remain available.
+Selectable-text PDFs up to 25 MB are supported. Scanned pages need OCR elsewhere. Saved multi-PDF reference projects are in private testing for the planned Pro tier; the basic PDF reader is available now.
 
-1. Add your complete source or notes. Include source labels when combining papers.
-2. Select passages and choose **Keep wording**, **Keep meaning** or **Must cover**. Overlapping protections are allowed. Must cover prepares a chat prompt for extracting ideas; send it, import the complete JSON response and review the list.
-3. Set an instruction and optional word budget. **Prepare rewrite** shows the full prompt. Copy it or explicitly insert it into the inspected chat draft. Send it yourself.
-4. Add the completed rewrite to Reply and confirm completion. **Check only** verifies exact characters locally. Meaning checks prepare a chat request; import its complete JSON response to see verdicts and evidence.
-5. Inspect missing, altered or uncertain ideas. Prepare a chat repair and check the revised draft. Changed verdicts appear when comparable ideas change status between checks.
+## Writing rules
 
-Chat mode is a model review, not an independent Jev check. Wrong request tokens, stale replies, missing verdicts and invalid sentence references are rejected. Structural validation does not establish judgment accuracy.
+Open **Writing rules** or press **Alt+Shift+R**. Add one specific rule per line, such as `Keep uncertainty explicit when discussing results.` Save, edit or disable rules at any time.
 
-Normal Ctrl/Cmd+Z works inside text boxes. **Undo selection** restores protection edits; Ctrl/Cmd+Z outside text boxes also triggers it. Editing source text clears marks whose offsets may no longer match.
+Rules apply to future **Lossless sends across chats on this device**. They do not modify ordinary chat messages. Supported explicit preferences at the start of a sent message, such as `Always use British English.` or `Avoid em dashes.`, can be remembered automatically. Capture offers Undo and an off switch. It runs locally, without another model call or scanning earlier conversations. Temporary word limits, quoted examples and AI replies are ignored.
 
-## Optional Jev checks
+Hosted reply checks assess enabled rules alongside selected ideas. Failed rules can be included in **Fix in chat**. Rules can be used without any marked passage. The full editor and optional native companion do not currently check these saved rules.
 
-Choose **Set up Jev** on the sidebar's first screen. It links to the key console, shows where to put `TYPESAFE_API_KEY` in the repository's `.env.local`, and gives a companion setup command containing your extension ID. Follow [companion setup](../companion/README.md) to install the local host, then choose **Connect and check setup**. This checks configuration presence, not key validity. Keys stay in the companion, never in chat prompts.
+## Highlights and quick controls
 
-Open **Check a rewrite → Sites and connections** and choose **Jev · local connection**. The companion only checks: meaning goes to the configured decision model, exact wording stays local. Uncertain results remain Needs review. It cannot call a writer, extract ideas or run a repair pipeline, even if an older panel requests it.
+- **Amber:** matching text from Keep wording selections.
+- **Green:** matching text from Keep meaning selections.
+- **Blue:** other wording in the reply.
 
-Writing, optional idea extraction and **Fix in chat** prepare prompts for your existing conversation. There is no separate writing-model API or CLI connection in the extension. The standalone app and CLI retain their own writer integrations.
+Colours are a text comparison, not a semantic verdict. A paraphrase may be blue even when its meaning is retained. Source and Reply toggle independently.
 
-After updating, restart Chrome so the source-run companion reloads. The extension refuses older companions without the decision-only capability. Checking still takes place in this editor; /lossless does not trigger it automatically. Cancellation detaches from results; a running decision request may finish.
+Drag the round logo to move it. Its six actions are **Source, Reply, Selections, PDF, Sidebar and Hide**. With no source selected, Add source opens guidance. Check status stays on the logo; results open when requested. Hide or × dismisses the launcher; restore it from the sidebar. Escape or an outside click closes open controls.
 
-## Compatibility
+| Shortcut | Action |
+|---|---|
+| Ctrl+Shift+Enter / Command+Shift+Enter | Send the current draft with selections and enabled rules. |
+| Alt+Shift+L / Option+Shift+L | Add `/lossless` without sending. |
+| Alt+Shift+H / Option+Shift+H | Toggle source and reply highlights. |
+| Alt+Shift+R / Option+Shift+R | Open writing rules. |
+| Shift+Enter | Insert a new line. |
+| Escape | Close the popup or menu. |
 
-All five listed origins support permission-gated selection import through the same conservative adapter. Message picking requires accessible article elements; insertion requires exactly one visible composer. Unsupported layouts use copy/paste. DeepSeek's authenticated layout has not been inspected.
+The sidebar's **Shortcuts** button and the popup's **?** explain these in the app.
 
-The extension presses Send only as part of your explicit `/lossless` submission or send shortcut. It does not intercept cookies or session tokens or import whole conversations in the background. Imported page text is plain text. Streaming completion is confirmed by the user. Inline controls appear on the declared chat sites. Chrome manages site access.
+## Full editor
 
-## Privacy and release status
+Open **Check a rewrite** for the source/reply editor. It supports existing drafts, overlapping protections, undo, evidence and export.
 
-See [privacy](PRIVACY.md) and [release checks](RELEASE-CHECKLIST.md). Documents use extension session storage until explicitly saved locally. Local saves are not encrypted or synced.
+- **Keep wording / Keep meaning:** mark source passages.
+- **Must cover:** prepare a request to extract a section's ideas. Send it in your chat, import its structured response and review the checklist.
+- **Prepare rewrite:** review the prompt, copy or insert it, then send in your chat.
+- **Check only:** verify exact wording locally; use chat-based review or the optional companion for meaning.
+- **Fix in chat / style feedback:** prepare a revision and recheck the result.
 
-This preview has no billing, paid entitlements or hosted checking service. Managed subscriptions and one-click store installation need separate infrastructure, submission and approval.
+Chat-based review requires importing the full structured response. It is separate from hosted inline checks. Editing source or reply invalidates old checks. Ctrl/Cmd+Z works inside text fields; **Undo selection** restores marks. The full editor's local saves are unencrypted.
 
-**Compare plans** in the sidebar opens the Free / Plus / Pro comparison. It is a preview of proposed plans; checkout and managed check allowances are not available.
+## Use your own checking key
+
+Available on Free, but requires the optional local companion. Open **Set up checks → Use your own Jev key instead** for instructions and the setup command with your extension ID.
+
+1. Get a key from the [TypeSafe console](https://console.typesafe.ai/keys).
+2. Add `TYPESAFE_API_KEY=your_key_here` to the repository's private `.env.local` file.
+3. Follow the [companion guide](../companion/README.md) to register the local host, then choose **Connect and check setup**.
+4. For the full editor, choose **Sites and connections → Jev · local connection**. For inline replies, enable automatic companion checks in the setup dialog.
+
+Signed-in hosted account checks take priority. Sign out of the Lossless account to use the companion for inline checks. Companion usage goes to your own provider account, not the 25 included credits. Connection setup checks configuration, not key validity. The companion checks meaning only; writing and repairs stay in your chat, and uncertain checks do not call a second model. Saved writing-rule checks currently require the hosted path.
+
+## Plans and privacy
+
+**Free is available now. Plus and Pro are coming soon.** Compare plans shows provisional pricing and capabilities, with an interest list rather than checkout. Joining sends a confirmation email; unsubscribe in that email or remove interest in the extension. Private testers have access to automatic checks and saved reference projects. These are not public Free entitlements.
+
+[Privacy policy](PRIVACY.md) explains local storage, Google/Supabase authentication, text sent for hosted checks, optional companion processing, plan-update emails and deletion requests. Do not put API keys or private manuscript text in public issues.
+
+## Troubleshooting
+
+- **Old UI or “Extension context invalidated”:** Reload the extension, then refresh the chat. Old tabs cannot keep using a replaced extension context.
+- **Nothing to send:** write an instruction in the composer and select a passage, or enable a writing rule.
+- **No controls:** ensure this is a supported site and Chrome allows the extension access. Reopen the sidebar and detect the current chat.
+- **Reply not automatically detected:** choose Check finished reply. Free checks are manual by design.
+- **Changed provider layout:** use the full editor's copy/paste path and report the site and behaviour with fictional text.
+- **Sign-in callback error:** use the store build above. Custom IDs and forks need their own registered callback.
+
+The user has reported working flows on all five declared platforms. That is not a complete automated acceptance test of every account, locale or site layout. [Release record](RELEASE-CHECKLIST.md).

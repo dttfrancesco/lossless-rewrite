@@ -12,55 +12,55 @@
   <main>
     <h1>Compare plans</h1>
     <p class="intro">Your chat writes. Lossless checks what survived.</p>
-    <p class="preview"><span>Plan preview</span> Subscriptions and included checks are not available yet.</p>
+    <p class="preview"><span>Free is available now.</span> Plus and Pro are coming soon. Join the interest list; no payment or commitment.</p>
     <div class="plans" aria-label="Free, Plus and Pro plans">
-      <section class="plan" aria-labelledby="free-title">
-        <h2 id="free-title">Free</h2>
+      <section class="plan plus" aria-labelledby="free-title">
+        <h2 id="free-title">Free <span class="coming">Available now</span></h2>
         <p class="purpose">For occasional rewrites</p>
         <p class="price"><strong>€0</strong><span>/ month</span></p>
-        <p class="allowance">25 checks / month</p>
+        <p class="allowance">25 check credits / month</p>
         <ul>
           <li>Mark the text you want to keep</li>
           <li>Highlight matches in the reply</li>
           <li>Check meaning when you choose</li>
-          <li>No API key for included checks</li>
+          <li>Review missing ideas and prepare a fix</li><li>No API key for included checks</li>
         </ul>
-        <a class="action" href="panel.html">Use free preview</a>
+        <a class="action" href="account.html">Start free</a>
       </section>
-      <section class="plan plus" aria-labelledby="plus-title">
-        <h2 id="plus-title">Plus</h2>
+      <section class="plan" aria-labelledby="plus-title">
+        <h2 id="plus-title">Plus <span class="coming">Coming soon</span></h2>
         <p class="purpose">For regular editing</p>
-        <p class="price"><strong>€1.49</strong><span>/ month</span></p>
-        <p class="allowance">500 checks / month</p>
+        <p class="price"><strong>€1.49</strong><span>/ month · planned</span></p>
+        <p class="allowance">500 check credits / month · planned</p>
         <ul>
           <li>Everything in Free</li>
           <li>Check each Lossless reply automatically</li>
-          <li>See missing or changed ideas</li>
-          <li>Fix and recheck in your chat</li>
+          <li>More included checks for daily editing</li>
         </ul>
-        <button class="action" disabled>Coming soon</button>
+        <button class="action" data-plan="plus">Notify me about Plus</button>
       </section>
       <section class="plan" aria-labelledby="pro-title">
-        <h2 id="pro-title">Pro</h2>
+        <h2 id="pro-title">Pro <span class="coming">Coming soon</span></h2>
         <p class="purpose">For writing from several sources</p>
-        <p class="price"><strong>€3.99</strong><span>/ month</span></p>
-        <p class="allowance">2,000 checks / month</p>
+        <p class="price"><strong>€3.99</strong><span>/ month · planned</span></p>
+        <p class="allowance">2,000 check credits / month · planned</p>
         <ul>
           <li>Everything in Plus</li>
           <li>Save PDF references in a project</li>
           <li>Keep several sources together</li>
           <li>Trace marked text to its source page</li>
         </ul>
-        <button class="action" disabled>Coming soon</button>
+        <button class="action" data-plan="pro">Notify me about Pro</button>
       </section>
     </div>
-    <p class="terms">Proposed prices and allowances. Final limits depend on document size and cost testing.</p>
+    <p class="terms">Free credits reset on the first day of each month (UTC). Larger checks show their credit cost first. Paid prices, features and allowances are provisional; joining the list does not reserve a subscription.</p>
     <details>
       <summary>How checks work</summary>
-      <p>A check covers a completed reply and the ideas you marked, not one check per idea. Checking a revised reply uses another check. Reopening an unchanged result would not use another check.</p>
+      <p>A check covers a completed reply and the ideas you marked, not one check per idea. Running another check uses credits; viewing an already displayed result does not.</p>
       <p>Long documents may use more checks; their cost must be shown before running. Your existing chat handles writing and repairs using its own account allowance. Checks can be wrong.</p>
-      <p>The current preview is free and has no paid accounts or included check allowance. Jev checks currently need your own key and the local companion. The existing local PDF reader remains available; Pro would add persistent reference projects.</p>
+      <p>Google sign-in includes hosted Jev checks. Exact wording is checked locally for free. Pro saves reference projects on this device; PDFs are not uploaded. The optional local companion remains available for your own key. Paid plans cannot be purchased yet. Interest is stored in Supabase with your verified email and chosen plan, only so we can contact you about that plan’s launch. Manage or remove your interest using its button above.</p>
     </details>
-  </main>
+  <p id="plan-status" role="status"></p></main>
+<dialog id="interest-dialog" aria-labelledby="interest-title"><h2 id="interest-title">Join the interest list</h2><p id="interest-note"></p><p class="terms">We’ll send a confirmation and keep you updated about your chosen plan. Your email and plan are saved for these updates. No payment, subscription or unrelated mailing list.</p><form method="dialog"><div class="interest-actions"><button type="button" class="action" id="confirm-interest">Email me when it opens</button><button type="button" class="action secondary" id="remove-interest" hidden>Remove my interest</button><button class="action secondary" value="cancel">Cancel</button></div></form><p id="interest-status" role="status"></p></dialog><script type="module" src="plans.js"></script>
 </body>
 </html>

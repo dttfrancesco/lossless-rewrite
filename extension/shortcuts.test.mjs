@@ -1,8 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isInsertShortcut, insertCommand, commandDraft, isSendShortcut, shortcutLabels } from './shortcuts.js';
+import { isInsertShortcut, insertCommand, commandDraft, isSendShortcut, isRulesShortcut, shortcutLabels } from './shortcuts.js';
 import { protectedPrompt } from './protections.js';
 const saved = [{ type: 'keep_meaning', text: 'The trial had no control group.', source: { kind: 'chat', label: 'Chat passage' } }];
+test('writing rules shortcut ignores composition, repeats and unrelated modifiers',()=>{
+  const event={code:'KeyR',altKey:true,shiftKey:true};assert.equal(isRulesShortcut(event),true);
+  for(const override of [{code:'KeyL'},{altKey:false},{shiftKey:false},{ctrlKey:true},{metaKey:true},{repeat:true},{isComposing:true}])assert.equal(isRulesShortcut({...event,...override}),false);
+  assert.equal(shortcutLabels('Win32').rules,'Alt+Shift+R');assert.equal(shortcutLabels('MacIntel').rules,'Option+Shift+R');
+});
 test('insert shortcut is separate from send and preserves the full draft', () => {
   assert.equal(isInsertShortcut({code:'KeyL',altKey:true,shiftKey:true}),true);
   for (const event of [{code:'KeyL',altKey:true}, {code:'KeyL',shiftKey:true,ctrlKey:true}, {code:'KeyL',altKey:true,shiftKey:true,ctrlKey:true}, {code:'KeyH',altKey:true,shiftKey:true}]) assert.equal(isInsertShortcut(event),false);

@@ -1,5 +1,11 @@
 # Chrome release record
 
+## 0.4.7 white theme
+
+- Sidebar, dialogs, inline controls and PDF reader use white surfaces, neutral borders and dark controls. Only semantic text highlights and errors retain colour.
+- Fixed the launcher hint rule so the shortcut label inside Show kept text does not inherit a divider and oversized padding.
+- Built and visually checked the sidebar at 420px; white page/header backgrounds verified in the local browser harness. Installed-extension verification still requires reload.
+
 ## 0.4.6 decision-only companion
 
 - Companion checks explicitly disable LLM adjudication. Missing/uncertain results remain visible; no writer, extraction, repair or CLI call can be requested through this host.

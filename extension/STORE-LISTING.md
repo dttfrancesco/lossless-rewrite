@@ -11,13 +11,13 @@ Use after the installed acceptance matrix passes. This file is preparation, not 
 Condense documents or combine notes while keeping track of the ideas that matter.
 
 - Keep an exact passage, preserve its meaning, or create a checklist of ideas.
-- Set a word budget and prepare a complete rewrite prompt.
+- Select passages in your chat or a local PDF, then send a /lossless request through the normal chat box.
 - Review which selected ideas were kept, changed or left out, with matching passages.
 - Prepare focused repairs and compare checks across revisions.
 
 Use your existing AI chat. Exact wording checks run on your device. Idea extraction and meaning checks use prompts you send, with structured replies you explicitly import. Model reviews can be wrong; inspect the evidence before relying on them.
 
-The optional local companion enables automated API and CLI workflows. Chat providers have their own account and usage requirements. Lossless does not send chat messages automatically.
+The optional local companion enables automated API and CLI workflows. Chat providers have their own account and usage requirements. Lossless submits only when you explicitly send a /lossless request. Ordinary messages are unchanged.
 
 **Platform wording:** List only platforms that have passed the installed matrix in RELEASE-CHECKLIST.md. An allowed origin or inspected composer is insufficient evidence of complete compatibility.
 

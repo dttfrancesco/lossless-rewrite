@@ -14,11 +14,11 @@ Shared rewrite / verification engine
 Configured writer         Jev checks
 ```
 
-The extension keeps keys in the local companion. Site access is requested separately. It does not read cookies, intercept session tokens, request all-sites access or send chat messages automatically.
+The extension keeps keys in the local companion. Access is declared for the five supported chat origins. It does not read cookies, intercept session tokens, request all-sites access or send chat messages automatically.
 
 ## Writing paths
 
-- **This conversation:** the 0.3.0 launcher enables inline controls beside the chat composer. Review & send adds preservation instructions to the current draft; Send with Lossless inserts the reviewed text and clicks an unambiguous send control once. It does not hook Enter or replace the native Send action. Draft changes, navigation or access revocation abort sending; unknown controls leave the text staged. This does not verify the reply. The full editor checks exact wording locally. Meaning checks and extraction use explicitly sent chat prompts and validated JSON responses, bound to the current document revision and request token. This is a chat-model review; it does not invoke Jev or certify judgment accuracy. Repairs are reviewed and sent manually.
+- **This conversation:** version 0.4.0 automatically loads controls on the five declared chat origins. Page selections and selections from the bundled local PDF reader are saved per tab and conversation through a serialized service-worker store. Only a leading `/lossless` command activates the send interception: normal Enter, click or submit is captured, the complete enhanced draft is inserted, and one unambiguous Send control is clicked. Shift-Enter, IME composition and ordinary messages are unchanged. There is no extra review dialog. Draft changes, navigation or revoked access abort; unknown controls leave text staged. This does not verify the reply. The full editor retains local exact checks and explicit chat-based extraction/review, while the companion retains engine automation.
 - **API or local CLI:** the companion runs the existing rewrite/check/repair pipeline. Results appear in the extension. A web subscription is never treated as an API credential.
 
 Both paths support exact wording, meaning and coverage inventories, source/reply evidence, style feedback, attempts/history, copying and evidence export. Source and reply edits invalidate their previous check. Late results are matched to document/revision/run IDs.
@@ -32,6 +32,6 @@ Page imports rely on conservative adapters and user review. Unsupported or ambig
 - Native messaging has a closed operation set and bounded payload/chunk sizes. See the [companion protocol](../companion/README.md).
 - Cancellation detaches from results; provider execution may continue.
 - The five origins are allowlisted with individual optional permissions. Installed compatibility remains subject to the manual release matrix. Native messaging is optional too.
-- The 0.3.0 preview contains no hosted service, paid entitlements or billing.
+- The 0.4.0 preview contains no hosted service, paid entitlements or billing.
 
 The README media depict this workflow as an illustration. They are not a recording of a live installation.

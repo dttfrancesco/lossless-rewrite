@@ -1,5 +1,13 @@
 # Chrome release record
 
+## 0.4.0 conversation workflow
+
+- Chat origins are declared at installation for automatic detection and injection. Chrome may require accepting the changed permissions when reloading/updating from 0.3.x. No all-sites or history permission is added.
+- Select chat text, Keep meaning/Keep wording, then send a leading /lossless request with normal Enter or Send. A bundled local PDF reader adds selected passages with filename/page provenance to that same conversation. Source files are not uploaded.
+- Browser harness verified a real DOM passage selection, one normal-button slash send, an unchanged ordinary Enter send, Shift-Enter newline, a rich-text slash Enter send, PDF.js rendering/page navigation/selection, and one combined chat+PDF request. Tests use the actual bundled content script and worker selection store with simulated Chrome transport, not a claim of installed compatibility.
+- Unit tests cover isolation between conversations, new-chat migration only after an explicit send, serialized concurrent additions, stale reader rejection, bounded passages, overlapping protections and slash parsing. The public PDF.js basicapi.pdf was used only as a private test fixture; no unpublished paper content was used.
+- Installed 0.4.0 site acceptance is still pending. Live output checking remains a separate editor/companion operation; there is no automatic semantic verdict from slash sending.
+
 ## 0.3.1 activation fix
 
 - Removed the disabled-button dead end when Chrome does not expose the active tab URL before host access is granted. The launcher now offers an explicit five-site picker and requests only the selected origin.

@@ -1,4 +1,4 @@
-// Exact origins only. Site access is optional; manual paste works everywhere.
+// Exact declared chat origins only. Chrome manages site access; manual paste is a fallback.
 export const SITES = [
   { id: "chatgpt", name: "ChatGPT", host: "chatgpt.com" },
   { id: "claude", name: "Claude", host: "claude.ai" },

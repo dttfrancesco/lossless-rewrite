@@ -2,7 +2,7 @@
 
 **Cut words, not ideas.** Protect key ideas or exact wording, condense your text in your usual AI chat, and review what survived.
 
-Version 0.3.1 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek have individual optional site permissions. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
+Version 0.4.0 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek are the five declared chat origins. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
 
 ## Install
 
@@ -22,11 +22,18 @@ When upgrading an existing installation, rebuild its folder and press **Reload**
 
 No API key, companion or Lossless account is needed. Your chat provider's account, usage and payment rules still apply.
 
-1. Open the extension on a supported chat page and choose **Enable on this site**. If Chrome has not exposed the tab address, use **Choose your chat site** and select the provider. Grant access, then close the sidebar.
-2. Turn on **Lossless** beside the normal chat box. Write your request there. Add an optional word limit or notes about what must stay.
-3. Choose **Review & send**, inspect the complete outgoing prompt, then **Send with Lossless**. The extension adds preservation instructions and clicks one identifiable Send button. If it cannot identify the button, it leaves the prompt staged for you to send manually.
+1. Open a supported chat. Lossless detects it automatically after Chrome grants the extension access to the five declared chat sites.
+2. Select text in the conversation and choose **Keep meaning** or **Keep wording**. Overlapping selections can use both. The **Lossless · N kept** button shows your selections and lets you remove them.
+3. To use a PDF reference, choose **Open PDF** beside the chat box. Open a file from your device, select text on a page, and choose what must stay. The reader is linked to that conversation.
+4. Start your request with **/lossless**, for example `/lossless Condense this discussion to 300 words.` Press Enter or click the chat's normal Send button once.
 
-The native Send button and Enter remain unchanged. Inline sending uses the site's currently selected model. It adds instructions; it does not automatically verify or repair the answer. Changed drafts and navigation abort the send, and sends are never retried automatically.
+Lossless removes the command, adds your selected passages and preservation instructions, then sends through the current site's composer. Ordinary messages and Shift-Enter are unchanged. There is no second submission or prompt-review dialog. If a Send button cannot be identified, the enhanced text stays in the composer for manual sending. No automatic retries are made.
+
+Selections belong to the current tab and conversation, survive a page reload during the browser session, and are removed when the chat tab closes. Moving between existing conversations clears them. After an explicit first send, selections follow a new chat into its assigned conversation URL.
+
+The local PDF reader supports selectable text, page navigation, files up to 25 MB, and passages up to 12,000 characters. It includes the filename and page number with each selected passage. The entire PDF is not uploaded. Scanned pages need OCR elsewhere. Chrome's built-in PDF viewer and arbitrary embedded PDF viewers are not injected; open the downloaded reference using **Open PDF**.
+
+This streamlines sending. It does not automatically check or repair the resulting reply. Use the checker below for that.
 
 ## Check what survived
 
@@ -52,7 +59,7 @@ Provider/model selection, bounded repairs, tightening, style feedback, evidence 
 
 All five listed origins support permission-gated selection import through the same conservative adapter. Message picking requires accessible article elements; insertion requires exactly one visible composer. Unsupported layouts use copy/paste. DeepSeek's authenticated layout has not been inspected.
 
-The extension presses Send only after the explicit **Send with Lossless** action. It does not intercept cookies or session tokens or import whole conversations in the background. Imported page text is plain text. Streaming completion is confirmed by the user. Inline controls appear on enabled sites; revoking site access removes them.
+The extension presses Send only as part of your explicit `/lossless` submission. It does not intercept cookies or session tokens or import whole conversations in the background. Imported page text is plain text. Streaming completion is confirmed by the user. Inline controls appear on the declared chat sites. Chrome manages site access.
 
 ## Privacy and release status
 

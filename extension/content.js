@@ -37,6 +37,7 @@ import { sameComposerText } from "./inline-send.js";
       if (message.action === "disable") { dispose(); return respond({ disabled: true }); }
       if (message.action === "access-changed") { allowed().then(ok => { if (!ok) dispose(); }); return respond({ received: true }); }
       if (message.action === "activate") return respond({ activated: true, available: Boolean(composer()) });
+      if (message.action === "protections-changed") { inline?.refresh(); return respond({ refreshed: true }); }
       if (message.action === "list") return respond({ messages: articles().map((el) => ({ id: reference(el), preview: text(el).slice(0, 180), characters: text(el).length })), note: "Choose and review one visible message. Imported page text is plain text, not original Markdown." });
       if (message.action === "selection") {
         const focused = document.activeElement;

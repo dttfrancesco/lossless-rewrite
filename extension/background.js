@@ -1,5 +1,6 @@
 import { HOST, OPERATIONS, supportedPage, assembler } from "./shared.js";
 import { SITES } from "./sites.js";
+import { protectionMessage, forgetProtectionTab } from "./protection-store.js";
 const panels = new Set();
 let native;
 const requests = new Map();
@@ -7,6 +8,7 @@ const decode = assembler();
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 chrome.storage.session.setAccessLevel({ accessLevel: "TRUSTED_CONTEXTS" });
 chrome.storage.local.setAccessLevel({ accessLevel: "TRUSTED_CONTEXTS" });
+chrome.tabs.onRemoved.addListener(tabId => forgetProtectionTab(tabId).catch(() => {}));
 let siteSync = Promise.resolve();
 function syncSites() {
   siteSync = siteSync.catch(() => {}).then(async () => {
@@ -64,6 +66,9 @@ chrome.runtime.onConnect.addListener((port) => {
   });
 });
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
+  if (message.kind === 'protections' && sender.id === chrome.runtime.id) {
+    protectionMessage(message, sender).then(respond, error => respond({ error: error.message })); return true;
+  }
   if (message.kind === "inline-access" && sender.id === chrome.runtime.id && sender.tab && sender.frameId === 0 && supportedPage(sender.url)) {
     chrome.permissions.contains({ origins: [`${new URL(sender.url).origin}/*`] }).then(allowed => respond({ allowed }), () => respond({ allowed: false })); return true;
   }

@@ -1,12 +1,14 @@
 import { build } from "esbuild";
-import { mkdir, copyFile, readFile, writeFile } from "node:fs/promises";
+import { mkdir, copyFile, readFile, writeFile, cp } from "node:fs/promises";
 import { resolve } from "node:path";
 const root = resolve(import.meta.dirname, "..");
 const outdir = resolve(root, "extension/dist");
 await mkdir(outdir, { recursive: true });
-await build({ absWorkingDir: root, entryPoints: ["extension/background.js", "extension/panel.js"], bundle: true, format: "esm", platform: "browser", target: "chrome116", outdir, sourcemap: false });
+await build({ absWorkingDir: root, entryPoints: ["extension/background.js", "extension/panel.js", "extension/reference.js"], bundle: true, format: "esm", platform: "browser", target: "chrome116", outdir, sourcemap: false });
 await build({ absWorkingDir: root, entryPoints: ["extension/content.js"], bundle: true, format: "iife", platform: "browser", target: "chrome116", outdir, sourcemap: false });
-for (const file of ["manifest.json", "panel.html", "panel.css", "README.html"]) await copyFile(resolve(root, "extension", file), resolve(outdir, file));
+for (const file of ["manifest.json", "panel.html", "panel.css", "README.html", "reference.html", "reference.css"]) await copyFile(resolve(root, "extension", file), resolve(outdir, file));
+for (const [source, target] of [["legacy/build/pdf.worker.mjs", "pdf.worker.mjs"], ["web/pdf_viewer.css", "pdf_viewer.css"], ["LICENSE", "PDFJS-LICENSE"]]) await copyFile(resolve(root, "node_modules/pdfjs-dist", source), resolve(outdir, target));
+for (const directory of ["cmaps", "standard_fonts"]) await cp(resolve(root, "node_modules/pdfjs-dist", directory), resolve(outdir, directory), { recursive: true });
 await mkdir(resolve(outdir, "icons"), { recursive: true });
 for (const size of [16, 32, 48, 128]) await copyFile(resolve(root, `extension/icons/icon-${size}.png`), resolve(outdir, `icons/icon-${size}.png`));
 await copyFile(resolve(root, "LICENSE"), resolve(outdir, "LICENSE"));

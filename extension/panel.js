@@ -17,40 +17,18 @@ function editor(open) { $("advanced-editor").hidden = !open; $("launcher").hidde
 $("open-editor").onclick = () => editor(true);
 $("close-editor").onclick = () => editor(false);
 if (document.body.classList.contains("expanded")) editor(true);
-let launchTab, detectedSite;
+let launchTab;
 async function launchSite() {
   try {
     [launchTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    detectedSite = siteFor(launchTab?.url);
-  } catch { launchTab = undefined; detectedSite = undefined; }
-  // A missing URL often means access has not yet been granted. Never disable
-  // the only control that can request that access.
-  $("enable-here").textContent = detectedSite ? `Enable on ${detectedSite.name}` : "Choose your chat site";
-  $("enable-here").disabled = false;
+    const site = siteFor(launchTab?.url);
+    if (!site) { $("enable-here").hidden = false; $("launch-status").textContent = "Open your chat, then click the Lossless extension icon there."; return; }
+    const result = await page("activate", { tabId: launchTab.id });
+    $("enable-here").hidden = result.available;
+    $("launch-status").textContent = result.available ? `Connected to this ${site.name} chat. You can close the sidebar.` : `${site.name} detected. Open a chat with a text box.`;
+  } catch (e) { $("enable-here").hidden = false; $("launch-status").textContent = e.message + " Check this extension's site access in Chrome."; }
 }
-async function enableSite(site) {
-  try {
-    // Keep request directly in the click handler, before any awaited tab lookup.
-    if (!await chrome.permissions.request({ origins: [`https://${site.host}/*`] })) throw new Error("Access was not granted.");
-    const [current] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (siteFor(current?.url)?.id === site.id) {
-      const result = await page("activate", { tabId: current.id });
-      $("launch-status").textContent = result.available ? "Lossless is beside your chat box. You can close this sidebar." : `${site.name} enabled. Open a chat with a text box to use Lossless.`;
-    } else $("launch-status").textContent = `${site.name} enabled. Open or refresh its chat tab to use Lossless.`;
-    $("launch-sites").hidden = true;
-    await renderSites();
-    await launchSite();
-  } catch (e) { $("launch-status").textContent = e.message; }
-}
-for (const site of SITES) {
-  const button = document.createElement("button"); button.textContent = site.name;
-  button.onclick = () => enableSite(site); $("launch-sites").append(button);
-}
-$("enable-here").onclick = () => {
-  if (detectedSite) return enableSite(detectedSite);
-  $("launch-sites").hidden = false;
-  $("launch-status").textContent = "Choose the chat site you want to enable. Chrome will ask for access to that site only.";
-};
+$("enable-here").onclick = launchSite;
 chrome.tabs.onActivated?.addListener(launchSite);
 chrome.tabs.onUpdated?.addListener((_id, info) => { if (info.url) launchSite(); });
 function persist() { state._instance = instance; return chrome.storage.session.set({ document: state }).catch(() => { notice("This document is too large for session storage. Export the evidence before closing the panel.", true); }); }
@@ -238,13 +216,12 @@ function download(name, contents, type) { const url = URL.createObjectURL(new Bl
 action("expand", () => chrome.tabs.create({ url: chrome.runtime.getURL("panel.html?expanded=1") }));
 $("connect").addEventListener("click", async () => { try { if (!await chrome.permissions.request({ permissions: ["nativeMessaging"] })) throw new Error("Companion permission was not granted."); if (!port) attachPort(); const hello = await call("hello"); if (hello.protocolVersion !== 1) throw new Error("Companion protocol differs. Rebuild the extension and companion together."); const models = await call("models.list"); connection = true; providers = models.providers; $("connection").textContent = "Local companion connected"; $("readiness").textContent = `Checker: ${models.checker.configured ? "configured" : "not configured"}. Cancellation: ${hello.cancellation || "stop listening only"}.`; renderModels(); } catch (e) { notice(e.message, true); } });
 async function renderSites() {
-  const buttons = await Promise.all(SITES.map(async site => {
-    const origin = `https://${site.host}/*`, enabled = await chrome.permissions.contains({ origins: [origin] });
-    const b = document.createElement("button"); b.textContent = `${site.name} · ${enabled ? "enabled" : "enable"}`; b.setAttribute("aria-pressed", String(enabled));
-    b.onclick = async () => { try { const allowed = enabled ? await chrome.permissions.remove({ origins: [origin] }) : await chrome.permissions.request({ origins: [origin] }); notice(allowed ? `${site.name} ${enabled ? "access removed" : "enabled"}.` : "Permission unchanged. Copy and paste remains available."); await renderSites(); } catch (e) { notice(e.message, true); } };
-    return b;
-  })); $("site-access").replaceChildren(...buttons);
+  const labels = await Promise.all(SITES.map(async site => {
+    const enabled = await chrome.permissions.contains({ origins: [`https://${site.host}/*`] });
+    const label = document.createElement("span"); label.textContent = `${site.name} · ${enabled ? "allowed" : "blocked in Chrome"}`; return label;
+  })); $("site-access").replaceChildren(...labels);
 }
+
 action("selection", () => importSelection("source")); action("reply-selection", () => importSelection("reply")); action("messages", () => chooseMessages("source")); action("reply-messages", () => chooseMessages("reply"));
 $("file").onchange = async () => { const file = $("file").files[0]; if (!file) return; if (file.size > 400000) return notice("File is too large.", true); try { importText("source", await file.text()); } catch (e) { notice(e.message, true); } $("file").value = ""; };
 $("source").oninput = () => { markUndo.length = 0; $("undo-marks").disabled = true; state.constraints = []; state.facts = []; delete state.sourceRef; saveEdit("source", $("source").value); };

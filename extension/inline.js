@@ -1,66 +1,105 @@
-import { composeInlinePrompt, isSendLabel } from "./inline-prompt.js";
-import { sendPrepared } from "./inline-send.js";
+import { isSendLabel } from './inline-prompt.js';
+import { sendPrepared } from './inline-send.js';
+import { protectedPrompt, slashRequest } from './protections.js';
 
 export function mountInline({ composer, value, write, visible, allowed }) {
-  const host = document.createElement("div");
-  const root = host.attachShadow({ mode: "open" });
+  const host = document.createElement('div'); host.dataset.lossless = 'toolbar';
+  const root = host.attachShadow({ mode: 'open' });
   root.innerHTML = `<style>
-    :host{display:block;position:fixed;z-index:2147483000;bottom:18px;right:20px;font:14px/1.5 system-ui,sans-serif;color:#272822;color-scheme:light;max-width:calc(100vw - 40px)}
-    *{box-sizing:border-box}button,input,textarea{font:inherit;color:inherit}button{cursor:pointer;border:1px solid #c8c6bd;border-radius:6px;background:#fffefb;padding:7px 12px}button:hover{background:#eeeae1}button:disabled{opacity:.55;cursor:default}button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #3a604c;outline-offset:2px}
-    .bar{background:#faf9f5;border:1px solid #d0cec4;border-radius:9px;box-shadow:0 3px 14px #0001;padding:9px 12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.bar label{display:flex;gap:7px;align-items:center;font-weight:600}.primary{background:#2f5140;color:white;border-color:#2f5140}.primary:hover{background:#203d2e}.body{width:300px;max-width:100%;background:#faf9f5;border:1px solid #d0cec4;border-radius:8px;padding:16px;margin-bottom:8px}.body p{margin:0 0 12px}.body label{display:block;margin-top:12px}input[type=number],textarea{width:100%;border:1px solid #b6b9ad;border-radius:5px;background:#fffefb;padding:8px;margin-top:5px}textarea{resize:vertical;line-height:1.5;min-height:85px}summary{cursor:pointer}small{display:block;color:#52584e;margin-top:8px}dialog{width:min(620px,calc(100vw - 32px));max-height:85vh;overflow:auto;border:1px solid #bbbeb2;border-radius:10px;background:#faf9f5;color:#272822;padding:24px;font:15px/1.5 system-ui,sans-serif}dialog::backdrop{background:#0007}h2{font:600 23px/1.3 system-ui;margin:0 0 10px}dialog textarea{min-height:240px}dialog .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.status{white-space:normal;overflow-wrap:anywhere;margin:8px 0 0;max-width:340px;background:#faf9f5}.status:empty{display:none}[hidden]{display:none!important}
-  </style>
-  <div class="body" hidden><p>Write your request in the usual chat box.</p><label>Word limit · optional<input type="number" min="20" max="50000" step="1" placeholder="250"></label><details><summary>Anything that must stay?</summary><textarea aria-label="What must stay" maxlength="4000" placeholder="For example: the negative findings and study limitations."></textarea></details><small>Use Review &amp; send below. The chat’s usual Send button stays unchanged.</small></div>
-  <div class="bar"><label><input type="checkbox">Lossless</label><button class="primary" id="review" hidden>Review &amp; send</button><button id="settings" hidden aria-label="Lossless options" aria-expanded="false">Options</button></div><p class="status" role="status"></p>
-  <dialog><h2>Send with Lossless</h2><p>Your request plus instructions to preserve ideas. It goes to this chat’s provider, using your current model.</p><textarea aria-label="Complete prompt to send"></textarea><p class="review-status" role="status"></p><div class="actions"><button class="primary" id="send">Send with Lossless</button><button id="cancel">Cancel</button></div></dialog>`;
+    :host{all:initial;display:block;position:fixed;z-index:2147483000;bottom:18px;right:20px;pointer-events:auto;font:14px/1.5 system-ui,sans-serif;color:#272822;color-scheme:light;max-width:calc(100vw - 24px)}*{box-sizing:border-box}button{font:inherit;color:inherit;cursor:pointer;border:1px solid #c8c6bd;border-radius:6px;background:#fffefb;padding:7px 11px}button:hover{background:#eeeae1}button:focus-visible{outline:3px solid #3a604c;outline-offset:2px}.bar{background:#faf9f5;border:1px solid #d0cec4;border-radius:8px;box-shadow:0 2px 10px #0001;padding:5px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}.bar button{border-color:transparent;background:transparent}.body{width:330px;max-width:100%;background:#faf9f5;border:1px solid #d0cec4;border-radius:8px;padding:16px;margin-bottom:8px;max-height:45vh;overflow:auto}.body p{margin:0 0 12px}.item{border-top:1px solid #ddd;padding:10px 0}.item p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;max-height:140px;overflow:auto;margin:6px 0}.item small{display:block;color:#4d5a4f}.status{white-space:normal;overflow-wrap:anywhere;margin:6px 0 0;max-width:330px;background:#faf9f5;padding:3px}.status:empty{display:none}.pick{position:fixed;background:#faf9f5;padding:5px;border:1px solid #acae9f;border-radius:8px;box-shadow:0 3px 12px #0002;display:flex;gap:5px;z-index:2147483640}.pick button:first-child{color:#21573e}.pick button:last-child{color:#74411b}[hidden]{display:none!important}code{font:inherit;font-weight:650}button:disabled{opacity:.5;cursor:default}
+  </style><div class="body" hidden><p>Select a passage in this chat or a PDF. Then type <code>/lossless</code> before your request and send normally.</p><div id="items"></div><button id="clear">Clear selections</button></div><div class="bar"><button id="kept" aria-expanded="false">Lossless · 0 kept</button><button id="pdf">Open PDF</button></div><p class="status" role="status"></p><div class="pick" hidden><button data-type="keep_meaning">Keep meaning</button><button data-type="keep_wording">Keep wording</button></div>`;
   document.documentElement.append(host);
-  const q = s => root.querySelector(s);
-  const toggle = q('[type=checkbox]'), options = q('.body'), dialog = q('dialog'), preview = q('dialog textarea');
-  let snapshot, busy = false, destroyed = false, clicked = false;
+  const q = s => root.querySelector(s), status = text => { q('.status').textContent = text; };
+  let context = { items: [] }, selection, busy = false, bypass = false, destroyed = false, lastURL = location.href, frame;
+  async function request(action, args = {}) {
+    const result = await chrome.runtime.sendMessage({ kind: 'protections', action, ...args });
+    if (result?.error) throw new Error(result.error);
+    if (!result?.context) throw new Error('Reload the extension and refresh this chat.');
+    return result.context;
+  }
+  function draw() {
+    q('#kept').textContent = `Lossless · ${context.items.length} kept`;
+    q('#clear').hidden = !context.items.length; q('#items').replaceChildren();
+    for (const item of context.items) {
+      const box = document.createElement('div'); box.className = 'item';
+      const label = document.createElement('small'); label.textContent = `${item.type === 'keep_wording' ? 'Keep wording' : 'Keep meaning'} · ${item.source.label}${item.source.page ? ` · p. ${item.source.page}` : ''}`;
+      const text = document.createElement('p'); text.textContent = item.text;
+      const remove = document.createElement('button'); remove.textContent = 'Remove';
+      remove.onclick = async () => { try { context = await request('remove', { id: item.id, scope: context.scope }); draw(); } catch (e) { status(e.message); } };
+      box.append(label, text, remove); q('#items').append(box);
+    }
+  }
+  async function refresh() { try { context = await request('get'); if (!destroyed) draw(); } catch (e) { status(e.message); } }
   function position() {
-    const el = composer(); host.hidden = !el;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    host.style.left = `${Math.max(12, Math.min(r.left, innerWidth - 332))}px`;
-    host.style.right = "auto";
+    frame = undefined;
+    if (location.href !== lastURL) { lastURL = location.href; selection = undefined; q('.pick').hidden = true; q('.body').hidden = true; status(''); refresh(); }
+    const el = composer(); host.hidden = !el && !selection; if (!el) return;
+    const r = el.getBoundingClientRect(); host.style.left = `${Math.max(12, Math.min(r.left, innerWidth - 342))}px`; host.style.right = 'auto';
     host.style.bottom = `${Math.max(12, Math.min(innerHeight - r.top + 10, innerHeight - host.getBoundingClientRect().height - 12))}px`;
   }
-  const layout = new MutationObserver(position);
-  layout.observe(document.body, { childList: true, subtree: true });
-  const resize = new ResizeObserver(position); resize.observe(host);
-  window.addEventListener('resize', position); window.addEventListener('scroll', position, true); position();
-  function closeOptions() { options.hidden = true; q('#settings').setAttribute('aria-expanded', 'false'); }
-  toggle.onchange = () => { q('#review').hidden = q('#settings').hidden = !toggle.checked; options.hidden = !toggle.checked; q('#settings').setAttribute('aria-expanded', String(toggle.checked)); q('.status').textContent = ''; };
-  q('#settings').onclick = () => { options.hidden = !options.hidden; q('#settings').setAttribute('aria-expanded', String(!options.hidden)); };
-  const outside = e => { if (!e.composedPath().includes(host)) closeOptions(); };
-  document.addEventListener('pointerdown', outside);
-  q('#review').onclick = () => {
+  const schedule = () => { if (!frame) frame = requestAnimationFrame(position); };
+  const layout = new MutationObserver(schedule); layout.observe(document.body, { childList: true, subtree: true });
+  const resize = new ResizeObserver(schedule); resize.observe(host);
+  window.addEventListener('resize', schedule); window.addEventListener('scroll', schedule, true);
+  function closeOptions() { q('.body').hidden = true; q('#kept').setAttribute('aria-expanded', 'false'); }
+  q('#kept').onclick = () => { q('.body').hidden = !q('.body').hidden; q('#kept').setAttribute('aria-expanded', String(!q('.body').hidden)); refresh(); };
+  q('#clear').onclick = async () => { try { context = await request('clear', { scope: context.scope }); draw(); } catch (e) { status(e.message); } };
+  q('#pdf').onclick = () => request('reader').catch(e => status(e.message));
+  function captureSelection(e) {
+    if (e.composedPath().includes(host)) return;
+    const focused = document.activeElement, selected = getSelection();
+    let text = '', rect;
+    if (focused instanceof HTMLTextAreaElement && focused.selectionEnd > focused.selectionStart) { text = focused.value.slice(focused.selectionStart, focused.selectionEnd); rect = focused.getBoundingClientRect(); }
+    else if (selected?.rangeCount && selected.toString().trim()) { text = selected.toString(); rect = selected.getRangeAt(0).getBoundingClientRect(); }
+    if (!text.trim() || text.length > 12000 || !rect) { selection = undefined; q('.pick').hidden = true; return; }
+    selection = { text, url: location.href, scope: context.scope };
+    q('.pick').style.left = `${Math.max(8, Math.min(rect.left, innerWidth - 265))}px`;
+    q('.pick').style.top = `${Math.max(8, Math.min(rect.bottom + 8, innerHeight - 52))}px`;
+    q('.pick').hidden = false; host.hidden = false;
+  }
+  q('.pick').addEventListener('pointerdown', e => e.preventDefault());
+  for (const button of root.querySelectorAll('[data-type]')) button.onclick = async () => {
     try {
-      const el = composer(); if (!el) throw new Error('Cannot identify one chat box. Use the full editor instead.');
-      snapshot = { el, text: value(el), url: location.href };
-      preview.value = composeInlinePrompt(snapshot.text, { budget: q('[type=number]').value, keep: q('.body textarea').value });
-      q('.review-status').textContent = ''; q('#send').disabled = false; clicked = false; closeOptions(); dialog.showModal();
-    } catch (e) { q('.status').textContent = e.message; }
+      if (!selection || selection.url !== location.href) throw new Error('Select the passage again in this chat.');
+      context = await request('add', { scope: selection.scope, item: { type: button.dataset.type, text: selection.text, source: { kind: 'chat', label: 'Chat passage' } } });
+      draw(); selection = undefined; q('.pick').hidden = true; status('Saved. Start your request with /lossless and send normally.');
+    } catch (e) { status(e.message); }
   };
-  q('#cancel').onclick = () => { if (!busy) dialog.close(); };
-  dialog.addEventListener('cancel', e => { if (busy) e.preventDefault(); });
-  dialog.onclick = e => { if (e.target === dialog && !busy) { const r = dialog.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close(); } };
+  const outside = e => { if (!e.composedPath().includes(host)) { closeOptions(); q('.pick').hidden = true; } };
+  document.addEventListener('pointerdown', outside);
+  document.addEventListener('mouseup', captureSelection); document.addEventListener('keyup', captureSelection);
   function sendButton(el) {
-    // Prefer the composer's form, and otherwise require one unambiguous labeled control.
     const scope = el.closest('form') || document;
     const buttons = [...scope.querySelectorAll('button,[role=button]')].filter(b => visible(b) && !b.disabled && b.getAttribute('aria-disabled') !== 'true' && isSendLabel(b.getAttribute('aria-label') || b.getAttribute('title') || b.innerText || ''));
     return buttons.length === 1 ? buttons[0] : null;
   }
-  q('#send').onclick = async () => {
-    if (busy || clicked) return;
-    busy = true; q('#send').disabled = true; q('#cancel').disabled = true;
+  async function send(snapshot) {
+    busy = true; closeOptions(); q('.pick').hidden = true; status('Applying your selections…');
     try {
-      dialog.close(); // Release modal inertness before editing the site's composer.
-      const outcome = await sendPrepared({ snapshot, prepared: preview.value, adapter: { allowed: async () => !destroyed && await allowed(), url: () => location.href, composer, value, write, sendButton } });
-      if (outcome === 'staged') { dialog.close(); q('.status').textContent = 'Prompt added to the chat. Use its Send button to finish.'; return; }
-      clicked = true; dialog.close();
-      q('.status').textContent = 'Send clicked once. Check the chat for its response. This reply has not been checked.';
-    } catch (e) { q('.review-status').textContent = e.message; if (!destroyed) dialog.showModal(); }
-    finally { busy = false; q('#cancel').disabled = false; /* A send attempt is never retried automatically. */ }
-  };
-  return { destroy() { destroyed = true; layout.disconnect(); resize.disconnect(); host.remove(); document.removeEventListener('pointerdown', outside); window.removeEventListener('resize', position); window.removeEventListener('scroll', position, true); } };
+      context = await request('get');
+      if (destroyed || location.href !== snapshot.url) throw new Error('The chat changed. Nothing was sent.');
+      const prepared = protectedPrompt(snapshot.text, context.items);
+      await request('arm', { scope: context.scope });
+      const outcome = await sendPrepared({ snapshot, prepared, adapter: {
+        allowed: async () => !destroyed && await allowed(), url: () => location.href, composer, value, write,
+        sendButton: el => { const button = sendButton(el); return button && { click() { bypass = true; try { button.click(); } finally { bypass = false; } } }; }
+      } });
+      status(outcome === 'clicked' ? `${context.items.length} selection${context.items.length === 1 ? '' : 's'} included. Reply not yet checked.` : 'Selections added. Use the chat’s Send button to finish.');
+    } catch (e) { await request('disarm').catch(() => {}); status(e.message); }
+    finally { busy = false; }
+  }
+  function intercept(e) {
+    if (bypass || destroyed || e.defaultPrevented) return;
+    const el = composer(); if (!el) return;
+    const path = e.composedPath(); if (path.includes(host)) return;
+    if (e.type === 'keydown' && (e.key !== 'Enter' || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey || e.isComposing || !path.includes(el))) return;
+    if (e.type === 'click' && !path.includes(sendButton(el))) return;
+    if (e.type === 'submit' && e.target !== el.closest('form')) return;
+    if (!busy && slashRequest(value(el)) === null) { status(''); return; }
+    e.preventDefault(); e.stopImmediatePropagation();
+    if (!busy && !e.repeat) send({ el, text: value(el), url: location.href });
+  }
+  for (const event of ['keydown', 'click', 'submit']) window.addEventListener(event, intercept, true);
+  refresh(); position();
+  return { refresh, destroy() { destroyed = true; cancelAnimationFrame(frame); layout.disconnect(); resize.disconnect(); host.remove(); document.removeEventListener('pointerdown', outside); document.removeEventListener('mouseup', captureSelection); document.removeEventListener('keyup', captureSelection); window.removeEventListener('resize', schedule); window.removeEventListener('scroll', schedule, true); for (const event of ['keydown', 'click', 'submit']) window.removeEventListener(event, intercept, true); } };
 }

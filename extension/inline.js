@@ -3,8 +3,10 @@ import { sendPrepared } from './inline-send.js';
 import { protectedPrompt, slashRequest } from './protections.js';
 import { createReplyHighlighter } from './reply-highlights.js';
 import manifest from './manifest.json';
+import { isSendShortcut, shortcutLabels } from './shortcuts.js';
 
 export function mountInline({ composer, value, write, visible, allowed }) {
+  const keys = shortcutLabels();
   const host = document.createElement('div'); host.dataset.lossless = 'toolbar';
   host.dataset.losslessVersion = manifest.version;
   const root = host.attachShadow({ mode: 'open' });
@@ -13,11 +15,13 @@ export function mountInline({ composer, value, write, visible, allowed }) {
   </style><div class="body" hidden><p>Select a passage in this chat or a PDF. Then type <code>/lossless</code> before your request and send normally.</p><div id="items"></div><button id="clear">Clear selections</button></div><div class="bar"><button id="kept" aria-expanded="false">Lossless · 0 kept</button><button id="pdf">Open PDF</button></div><p class="status" role="status"></p><div class="pick" hidden><button data-type="keep_meaning">Keep meaning</button><button data-type="keep_wording">Keep wording</button></div>`;
   root.querySelector('style').textContent += ':host([hidden]){display:none!important}.card{width:340px;max-width:100%;background:#faf9f5;border:1px solid #d0cec4;border-radius:10px;padding:12px;box-shadow:0 3px 16px #0001}.heading{display:flex;align-items:center;gap:10px}.heading strong{flex:1}.heading button{border:0;background:transparent;padding:0 5px;font-size:20px}.card p{margin:6px 0 0}.bar{border:0;box-shadow:none;padding:6px 0 0}.bar button{padding:5px 8px}.status{padding:0;margin-top:6px}.note{font-size:13px;color:#53574e}';
   const card = document.createElement('div'); card.className = 'card';
-  card.innerHTML = '<div class="heading"><strong id="heading">Lossless</strong><button id="dismiss" aria-label="Dismiss Lossless">×</button></div><p id="ready" role="status"></p><p class="note" id="check-note">Adds your selections to this request. No Jev check.</p>';
+  card.innerHTML = '<div class="heading"><strong id="heading">Lossless</strong><button id="help" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">?</button><button id="dismiss" aria-label="Dismiss Lossless">×</button></div><p id="ready" role="status"></p><p class="note" id="check-note">Adds your selections to this request. No Jev check.</p><div id="keys" hidden><p><strong id="send-key"></strong><br>Send your draft with saved passages. Focus the chat box first.</p><p><strong id="highlight-key"></strong><br>Show or hide matching text in the latest reply.</p><p><strong>Shift+Enter</strong> adds a new line.<br><strong>Escape</strong> closes this popup.</p><p class="note">/lossless with normal Send still works.</p></div>';
   card.append(root.querySelector('.body'), root.querySelector('.bar'), root.querySelector('.status')); root.append(card);
   host.hidden = true; document.documentElement.append(host);
   const q = s => root.querySelector(s);
-  const show = document.createElement('button'); show.id = 'show-kept'; show.textContent = 'Show kept text'; show.title = 'Highlight matching wording in the latest reply (Alt+Shift+H)'; q('.bar').append(show);
+  q('#send-key').textContent = keys.send; q('#highlight-key').textContent = keys.highlight;
+  const show = document.createElement('button'); show.id = 'show-kept'; show.textContent = 'Show kept text'; show.title = `Highlight matching wording in the latest reply (${keys.highlight})`; q('.bar').append(show);
+  q('.body > p').textContent = `Select a passage in this chat or a PDF. Write your request, then press ${keys.send} to send it with your saved passages.`;
   const highlighter = createReplyHighlighter(() => schedule());
   let message = '', noticeTimer, dismissedDraft, opened = false;
   const status = (text, duration = 8000) => {
@@ -61,9 +65,9 @@ export function mountInline({ composer, value, write, visible, allowed }) {
     card.hidden = !(active || opened || message || busy);
     host.hidden = card.hidden && q('.pick').hidden;
     q('#heading').textContent = busy ? 'Preparing request…' : active ? 'Lossless request' : 'Lossless';
-    q('#ready').hidden = Boolean(message || busy);
-    q('#ready').textContent = !context.items.length ? 'Select text in the chat and choose Keep meaning or Keep wording.' : command === '' ? 'Add an instruction, e.g. “Shorten this to 150 words.”' : active ? `Ready: ${context.items.length} saved passage${context.items.length === 1 ? '' : 's'}. Use the chat’s Send button.` : 'Type /lossless before your request, then send normally.';
-    q('#check-note').hidden = Boolean(message || busy);
+    q('#ready').hidden = Boolean(message || busy || !q('#keys').hidden);
+    q('#ready').textContent = !context.items.length ? 'Select text in the chat and choose Keep meaning or Keep wording.' : command === '' ? 'Add an instruction, e.g. “Shorten this to 150 words.”' : active ? `Ready: ${context.items.length} saved passage${context.items.length === 1 ? '' : 's'}. Use the chat’s Send button.` : `Write your request, then press ${keys.send}. No /lossless needed.`;
+    q('#check-note').hidden = Boolean(message || busy || !q('#keys').hidden);
     q('.bar').hidden = Boolean(message && !active && !opened && !highlighter.active);
     show.textContent = highlighter.active ? 'Hide kept text' : 'Show kept text';
     if (!el) return;
@@ -78,8 +82,9 @@ export function mountInline({ composer, value, write, visible, allowed }) {
   document.addEventListener('input', input);
   function dismiss() { const el = composer(); dismissedDraft = el ? value(el) : ''; opened = false; selection = undefined; closeOptions(); q('.pick').hidden = true; status(''); }
   q('#dismiss').onclick = dismiss;
-  function closeOptions() { q('.body').hidden = true; q('#kept').setAttribute('aria-expanded', 'false'); }
-  q('#kept').onclick = () => { q('.body').hidden = !q('.body').hidden; q('#kept').setAttribute('aria-expanded', String(!q('.body').hidden)); refresh(); };
+  function closeOptions() { q('.body').hidden = true; q('#keys').hidden = true; q('#kept').setAttribute('aria-expanded', 'false'); }
+  q('#help').onclick = () => { const showHelp = q('#keys').hidden; closeOptions(); q('#keys').hidden = !showHelp; opened = true; schedule(); };
+  q('#kept').onclick = () => { q('#keys').hidden = true; q('.body').hidden = !q('.body').hidden; q('#kept').setAttribute('aria-expanded', String(!q('.body').hidden)); refresh(); };
   q('#clear').onclick = async () => { try { context = await request('clear', { scope: context.scope }); draw(); } catch (e) { status(e.message); } };
   q('#pdf').onclick = () => request('reader').catch(e => status(e.message));
   function captureSelection(e) {
@@ -100,7 +105,7 @@ export function mountInline({ composer, value, write, visible, allowed }) {
     try {
       if (!selection || selection.url !== location.href) throw new Error('Select the passage again in this chat.');
       context = await request('add', { scope: selection.scope, item: { type: button.dataset.type, text: selection.text, source: { kind: 'chat', label: 'Chat passage' } } });
-      draw(); selection = undefined; q('.pick').hidden = true; status('Saved. Start your request with /lossless and send normally.');
+      draw(); selection = undefined; q('.pick').hidden = true; status(`Saved. Write your request and press ${keys.send} to send with Lossless.`);
     } catch (e) { status(e.message); }
   };
   const outside = e => { if (!e.composedPath().includes(host)) dismiss(); };
@@ -113,12 +118,12 @@ export function mountInline({ composer, value, write, visible, allowed }) {
     const buttons = [...scope.querySelectorAll('button,[role=button]')].filter(b => visible(b) && !b.disabled && b.getAttribute('aria-disabled') !== 'true' && isSendLabel(b.getAttribute('aria-label') || b.getAttribute('title') || b.innerText || ''));
     return buttons.length === 1 ? buttons[0] : null;
   }
-  async function send(snapshot) {
+  async function send(snapshot, direct = false) {
     busy = true; dismissedDraft = undefined; closeOptions(); q('.pick').hidden = true; status('Adding your selections…', 0);
     try {
       context = await request('get');
       if (destroyed || location.href !== snapshot.url) throw new Error('The chat changed. Nothing was sent.');
-      const prepared = protectedPrompt(snapshot.text, context.items);
+      const prepared = protectedPrompt(snapshot.text, context.items, { direct });
       await request('arm', { scope: context.scope });
       const outcome = await sendPrepared({ snapshot, prepared, adapter: {
         allowed: async () => !destroyed && await allowed(), url: () => location.href, composer, value, write,
@@ -132,12 +137,13 @@ export function mountInline({ composer, value, write, visible, allowed }) {
     if (bypass || destroyed || e.defaultPrevented) return;
     const el = composer(); if (!el) return;
     const path = e.composedPath(); if (path.includes(host)) return;
-    if (e.type === 'keydown' && (e.key !== 'Enter' || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey || e.isComposing || !path.includes(el))) return;
+    const shortcut = e.type === 'keydown' && isSendShortcut(e);
+    if (e.type === 'keydown' && (e.key !== 'Enter' || (!shortcut && (e.shiftKey || e.ctrlKey || e.metaKey || e.altKey)) || e.isComposing || !path.includes(el))) return;
     if (e.type === 'click' && !path.includes(sendButton(el))) return;
     if (e.type === 'submit' && e.target !== el.closest('form')) return;
-    if (!busy && slashRequest(value(el)) === null) { highlighter.clear(); status(''); return; }
+    if (!busy && !shortcut && slashRequest(value(el)) === null) { highlighter.clear(); status(''); return; }
     e.preventDefault(); e.stopImmediatePropagation();
-    if (!busy && !e.repeat) send({ el, text: value(el), url: location.href });
+    if (!busy && !e.repeat) send({ el, text: value(el), url: location.href }, shortcut);
   }
   for (const event of ['keydown', 'click', 'submit']) window.addEventListener(event, intercept, true);
   refresh(); position();

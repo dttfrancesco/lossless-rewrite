@@ -1,3 +1,4 @@
+import { shortcutLabels } from './shortcuts.js';
 import { getDocument, GlobalWorkerOptions, TextLayer } from 'pdfjs-dist/legacy/build/pdf.mjs';
 GlobalWorkerOptions.workerPort = new Worker(chrome.runtime.getURL('pdf.worker.mjs'), { type: 'module' });
 const $ = id => document.getElementById(id), token = new URLSearchParams(location.search).get('token');
@@ -53,7 +54,7 @@ function selectionChanged() {
 }
 document.addEventListener('mouseup', selectionChanged); document.addEventListener('keyup', selectionChanged);
 for (const [id, type] of [['meaning', 'keep_meaning'], ['wording', 'keep_wording']]) $(id).onclick = async () => {
-  try { await request('add', { scope: context.scope, item: { type, text: selected, source: { kind: 'pdf', label: fileName, page: pageNumber } } }); status('Saved to the linked chat. Send your next request with /lossless.'); clearSelection(); }
+  try { await request('add', { scope: context.scope, item: { type, text: selected, source: { kind: 'pdf', label: fileName, page: pageNumber } } }); status(`Saved to the linked chat. Write your request there and press ${shortcutLabels().send}.`); clearSelection(); }
   catch (e) { status(e.message); }
 };
 $('back').onclick = () => request('back').catch(e => status(e.message));

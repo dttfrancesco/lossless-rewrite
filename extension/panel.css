@@ -10,6 +10,7 @@ main{padding:0 18px 18px}.section-heading{display:flex;align-items:baseline;just
 @media(max-width:360px){.welcome{display:block}.welcome button{margin-top:10px}.protect{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr}header strong{font-size:22px}}
 .file input[type=file]{position:absolute;width:1px;height:1px;padding:0;border:0;margin:0;clip-path:inset(50%);overflow:hidden}
 [hidden]{display:none!important}
+.header-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.shortcut-list{display:grid;grid-template-columns:minmax(130px,auto) 1fr;gap:16px 18px}.shortcut-list dt{font-weight:650}.shortcut-list dd{margin:0}#shortcuts-dialog{max-width:520px}@media(max-width:420px){.shortcut-list{grid-template-columns:1fr;gap:6px}.shortcut-list dd{margin-bottom:16px}header{gap:8px}.header-actions button{font-size:14px}}
 #highlight-reply{display:flex;justify-content:space-between;gap:12px;width:100%;margin:0 0 22px}#launcher #manage-selections{margin-bottom:8px}
 #jev-dialog pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eeece6;padding:12px;font-size:13px;border-radius:6px}#jev-dialog li{margin:18px 0}#jev-dialog ol{padding-left:22px}#launcher code{display:block;margin-top:10px;background:#eeece6;padding:12px;border-radius:6px;overflow-wrap:anywhere}#launcher .row>button{flex:1}#launcher #open-editor{width:auto}#manage-selections{width:100%;text-align:center;margin-bottom:22px}
 body.expanded #source-pane,body.expanded #reply-pane,body.expanded #details-pane{display:block!important}

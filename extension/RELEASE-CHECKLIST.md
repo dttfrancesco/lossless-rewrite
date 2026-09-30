@@ -1,5 +1,11 @@
 # Chrome release record
 
+## 0.4.4 send shortcut
+
+- Ctrl+Shift+Enter (Mac: Command+Shift+Enter) sends the focused chat draft with its saved passages without requiring /lossless. Normal Enter remains unchanged; empty drafts and empty selections are refused. Existing draft/navigation/access checks and duplicate-send prevention remain in place.
+- The sidebar header has visible Shortcuts help, and the inline popup has a ? button. Onboarding and PDF save guidance explain the shortcut. Mac labels are adapted to Command/Option.
+- All 41 extension tests pass. The local browser harness verified a single enriched send from a plain textarea draft and a rich editor, two rapid shortcut presses producing only one request, an unchanged ordinary Enter send, and Shift-Enter preserving its newline. Installed platform shortcut acceptance remains pending.
+
 ## 0.4.3 reply highlights
 
 - Show kept text and Alt+Shift+H toggle visual matches in the latest identifiable assistant reply. Wording is amber, meaning selections green, and wording wins for overlapping spans. No model or API request is made by highlighting.

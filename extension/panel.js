@@ -5,7 +5,13 @@ import { refreshEvidenceLabels, requireIdle, beginOperation, evidenceLabel } fro
 import { SITES, siteFor } from "./sites.js";
 import { createChatTask, applyChatResponse, unitsForChat, localResult, revisionChanges } from "./chat-workflow.js";
 import { wordCount } from "../lib/text/sentences.ts";
+import { shortcutLabels } from './shortcuts.js';
 const $ = (id) => document.getElementById(id);
+const keyboard = shortcutLabels();
+for (const el of document.querySelectorAll('[data-send-keys]')) el.textContent = keyboard.send;
+for (const el of document.querySelectorAll('[data-highlight-keys]')) el.textContent = keyboard.highlight;
+$("open-shortcuts").onclick = () => $("shortcuts-dialog").showModal();
+$("close-shortcuts").onclick = () => $("shortcuts-dialog").close();
 let state = newDocument(); let active = null; let inference = null; let connection = false; let providers = CATALOG; let port; const callbacks = new Map();
 let composer = null; let promptTabId; const instance = crypto.randomUUID();
 const markUndo = [];

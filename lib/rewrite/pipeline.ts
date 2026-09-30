@@ -1,5 +1,5 @@
 import { DecisionClient } from "../decision/client";
-import type { RequiredUnit } from "../coverage/questions";
+import { unitsFor } from "./units";
 import { problemsOf, verifyRewrite, type Verification } from "../coverage/verify";
 import { splitSentences, wordCount } from "../text/sentences";
 import type { Attempt, Constraint, Fact, PipelineEvent, RewriteResult } from "./types";
@@ -28,19 +28,7 @@ export interface RewriteRequest {
   writerModel?: string;
 }
 
-/** Keep meaning selections become units P1…Pn; Keep wording spans W1…Wn. */
-export function unitsFor(request: Pick<RewriteRequest, "constraints" | "facts">) {
-  const keepMeaning: RequiredUnit[] = request.constraints
-    .filter((c) => c.type === "keep_meaning")
-    .sort((a, b) => a.start - b.start)
-    .map((c, i) => ({ id: `P${i + 1}`, kind: "keep_meaning", text: c.text }));
-  const facts: RequiredUnit[] = request.facts.map((f) => ({ id: f.id, kind: "must_cover", text: f.text }));
-  const keepWording = request.constraints
-    .filter((c) => c.type === "keep_wording")
-    .sort((a, b) => a.start - b.start)
-    .map((c, i) => ({ id: `W${i + 1}`, text: c.text }));
-  return { keepMeaning, facts, keepWording };
-}
+export { unitsFor } from "./units";
 
 function problems(verification: Verification): Problem[] {
   const { units, wording } = problemsOf(verification);

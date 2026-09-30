@@ -1,5 +1,12 @@
 # Chrome release record
 
+## 0.4.6 decision-only companion
+
+- Companion checks explicitly disable LLM adjudication. Missing/uncertain results remain visible; no writer, extraction, repair or CLI call can be requested through this host.
+- The extension removes writer/model/pass controls and routes Fix in chat, style edits and optional idea extraction to explicit prompts in the current conversation.
+- Requires decision-only-v1 in the companion handshake; old hosts are refused. Restart Chrome after updating the source-run companion.
+- Regression tests cover uncertain/missing evidence, rejection of legacy generation operations, and the old-host guard. Type checking, extension build, native source/Windows launcher tests and the local browser UI harness passed. Installed-extension/provider verification remains separate.
+
 ## 0.4.5 insert command shortcut
 
 - Alt+Shift+L (Mac: Option+Shift+L) inserts /lossless into the focused chat draft without submitting; existing text stays intact and repeated presses do not duplicate the command.

@@ -104,7 +104,7 @@ The CLI supports existing drafts, explicit protections, stdin and JSON reports. 
 
 ### Browser extension
 
-An **experimental Chrome sidebar** helps protect ideas while condensing text in ChatGPT, Claude, Gemini, Grok or DeepSeek. Exact wording checks run locally. You can prepare and import a chat-model review without an API key, or use the optional companion for automated API/CLI checks and repairs.
+An **experimental Chrome sidebar** helps protect ideas while condensing text in ChatGPT, Claude, Gemini, Grok or DeepSeek. Exact wording checks run locally. Use your existing chat for writing and repairs; the optional companion checks meaning with Jev, without calling a second model. You can also prepare and import a review from your chat without an API key.
 
 Load it unpacked. Select passages in your chat or the local PDF reader, then send a `/lossless` request using the normal chat box. Full installed-site compatibility is still being validated, and unsupported layouts use copy/paste. [Install the extension](extension/README.md)
 

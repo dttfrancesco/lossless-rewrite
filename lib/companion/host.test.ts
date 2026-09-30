@@ -49,7 +49,9 @@ async function exercise(executable: string, args: string[], cwd: string) {
     const hello = await call("hello",{},"hello"); assert.equal(hello.type,"result");
     assert.equal((hello.payload as {protocolVersion:number}).protocolVersion,1);
     const models = await call("models.list",{},"models"); assert.equal(models.type,"result");
-    assert.ok((models.payload as {providers:unknown[]}).providers.length >= 7);
+    assert.equal((hello.payload as {checkMode:string}).checkMode,"decision-only-v1");
+    assert.ok((models.payload as {checker:unknown}).checker);
+    assert.equal("providers" in (models.payload as object),false);
     const source = "Keep THIS sentence.";
     const check = await call("check",{source,instruction:"Shorten to one word",constraints:[{id:"c1",type:"keep_wording",start:0,end:source.length,text:source}],facts:[],initialText:source,maxTightens:2},"check");
     assert.equal(check.type,"result");

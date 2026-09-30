@@ -1,6 +1,9 @@
 import { siteFor } from "./sites.js";
 export const HOST = "com.lossless_rewrite.companion";
-export const OPERATIONS = new Set(["hello", "models.list", "extract", "check", "rewrite", "cancel", "run.status"]);
+export const OPERATIONS = new Set(["hello", "models.list", "check", "cancel", "run.status"]);
+export function assertCheckerOnly(hello) {
+  if (hello?.protocolVersion !== 1 || hello?.checkMode !== "decision-only-v1") throw new Error("Update the companion and restart Chrome before checking. This version requires checks without a second model.");
+}
 export function supportedPage(url) {
   return Boolean(siteFor(url));
 }
@@ -40,7 +43,7 @@ export function summary(result) {
   if (!statuses.length) return "No details checked";
   const failed = statuses.filter((s) => s === "missing" || s === "altered").length;
   const uncertain = statuses.filter((s) => s === "uncertain").length;
-  return failed ? `${failed} detail${failed === 1 ? " needs" : "s need"} repair${uncertain ? `; ${uncertain} uncertain` : ""}` : uncertain ? `${uncertain} detail${uncertain === 1 ? " is" : "s are"} uncertain` : `${statuses.length} selected detail${statuses.length === 1 ? "" : "s"} kept`;
+  return failed ? `${failed} detail${failed === 1 ? " needs" : "s need"} repair${uncertain ? `; ${uncertain} need review` : ""}` : uncertain ? `${uncertain} detail${uncertain === 1 ? " needs" : "s need"} review` : `${statuses.length} selected detail${statuses.length === 1 ? "" : "s"} kept`;
 }
 export function preparePrompt(state, repair = false, feedback = "") {
   const wording = state.constraints.filter((c) => c.type === "keep_wording").map((c) => c.text);

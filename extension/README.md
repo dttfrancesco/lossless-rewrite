@@ -61,13 +61,15 @@ Chat mode is a model review, not an independent Jev check. Wrong request tokens,
 
 Normal Ctrl/Cmd+Z works inside text boxes. **Undo selection** restores protection edits; Ctrl/Cmd+Z outside text boxes also triggers it. Editing source text clears marks whose offsets may no longer match.
 
-## Optional API and CLI automation
+## Optional Jev checks
 
 Choose **Set up Jev** on the sidebar's first screen. It links to the key console, shows where to put `TYPESAFE_API_KEY` in the repository's `.env.local`, and gives a companion setup command containing your extension ID. Follow [companion setup](../companion/README.md) to install the local host, then choose **Connect and check setup**. This checks configuration presence, not key validity. Keys stay in the companion, never in chat prompts.
 
-Open **Check a rewrite → Sites and connections**, choose **Local companion** for checking, and **API or local CLI** as writer when it should generate text too. Configuring Jev does not enable automatic checks after /lossless; checking still takes place in this editor.
+Open **Check a rewrite → Sites and connections** and choose **Jev · local connection**. The companion only checks: meaning goes to the configured decision model, exact wording stays local. Uncertain results remain Needs review. It cannot call a writer, extract ideas or run a repair pipeline, even if an older panel requests it.
 
-Provider/model selection, bounded repairs, tightening, style feedback, evidence and history remain available. Keys and CLI authentication stay in the companion. A web subscription is not an API credential. Cancellation detaches from results; a running provider call may finish.
+Writing, optional idea extraction and **Fix in chat** prepare prompts for your existing conversation. There is no separate writing-model API or CLI connection in the extension. The standalone app and CLI retain their own writer integrations.
+
+After updating, restart Chrome so the source-run companion reloads. The extension refuses older companions without the decision-only capability. Checking still takes place in this editor; /lossless does not trigger it automatically. Cancellation detaches from results; a running decision request may finish.
 
 ## Compatibility
 

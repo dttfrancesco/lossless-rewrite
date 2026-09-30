@@ -17,7 +17,7 @@ Condense documents or combine notes while keeping track of the ideas that matter
 
 Use your existing AI chat. Exact wording checks run on your device. Idea extraction and meaning checks use prompts you send, with structured replies you explicitly import. Model reviews can be wrong; inspect the evidence before relying on them.
 
-The optional local companion enables automated API and CLI workflows. Chat providers have their own account and usage requirements. Lossless submits only when you explicitly use its send shortcut or send a /lossless request. Ordinary messages are unchanged.
+The optional local companion checks meaning with Jev, without a second model. Uncertain results stay marked for review. Repairs use your existing chat. Chat providers have their own account and usage requirements. Lossless submits only when you explicitly use its send shortcut or send a /lossless request. Ordinary messages are unchanged.
 
 **Platform wording:** List only platforms that have passed the installed matrix in RELEASE-CHECKLIST.md. An allowed origin or inspected composer is insufficient evidence of complete compatibility.
 

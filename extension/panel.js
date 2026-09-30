@@ -1,6 +1,5 @@
-import { CATALOG } from "../lib/llm/catalog.ts";
 import recorded from "../demo/document-repair.json";
-import { newDocument, invalidate, currentEnvelope, summary, preparePrompt, evidenceFor, extendFeedback } from "./shared.js";
+import { newDocument, invalidate, currentEnvelope, summary, preparePrompt, evidenceFor, extendFeedback, assertCheckerOnly } from "./shared.js";
 import { refreshEvidenceLabels, requireIdle, beginOperation, evidenceLabel } from "./view.js";
 import { SITES, siteFor } from "./sites.js";
 import { createChatTask, applyChatResponse, unitsForChat, localResult, revisionChanges } from "./chat-workflow.js";
@@ -13,7 +12,7 @@ for (const el of document.querySelectorAll('[data-send-keys]')) el.textContent =
 for (const el of document.querySelectorAll('[data-highlight-keys]')) el.textContent = keyboard.highlight;
 $("open-shortcuts").onclick = () => $("shortcuts-dialog").showModal();
 $("close-shortcuts").onclick = () => $("shortcuts-dialog").close();
-let state = newDocument(); let active = null; let inference = null; let connection = false; let providers = CATALOG; let port; const callbacks = new Map();
+let state = newDocument(); let active = null; let inference = null; let connection = false; let port; const callbacks = new Map();
 let composer = null; let promptTabId; const instance = crypto.randomUUID();
 const markUndo = [];
 function rememberMarks() { markUndo.push({ documentId: state.documentId, source: state.source, constraints: structuredClone(state.constraints), facts: structuredClone(state.facts), focus: state.focus }); if (markUndo.length > 30) markUndo.shift(); $("undo-marks").disabled = false; }
@@ -76,24 +75,13 @@ async function page(action, args = {}) { const target = document.body.classList.
 function action(id, fn) { $(id).addEventListener("click", () => Promise.resolve().then(fn).catch((e) => notice(e.message, true))); }
 function tab(name) { for (const n of ["source", "reply", "details"]) { $(`${n}-pane`).hidden = n !== name; document.querySelector(`[data-tab="${n}"]`).setAttribute("aria-selected", String(n === name)); } }
 document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => tab(b.dataset.tab)));
-function renderModels() {
-  const provider = state.model.split("/")[0]; const model = state.model.slice(provider.length + 1);
-  $("provider").replaceChildren(...providers.map((p) => new Option(`${p.name}${p.configured === false ? " · not configured" : ""}`, p.id)));
-  $("provider").value = provider;
-  const found = providers.find((p) => p.id === provider) || providers[0];
-  $("model").replaceChildren(...found.models.map((id) => new Option(id, id)));
-  if (found.models.includes(model)) { $("model").value = model; $("custom-model").value = ""; } else $("custom-model").value = model;
-  $("model-summary").textContent = `${state.writer === "conversation" ? "Assistant" : "Writer"}: ${found.name} / ${model}`;
-}
 function render() {
-  for (const key of ["source", "reply", "instruction", "writer"]) $(key).value = state[key];
-  $("complete").checked = Boolean(state.complete); $("repairs").value = state.maxRepairs; $("tightens").value = state.maxTightens;
-  $("run").textContent = state.writer === "conversation" ? "Prepare rewrite" : "Rewrite";
+  for (const key of ["source", "reply", "instruction"]) $(key).value = state[key];
+  $("complete").checked = Boolean(state.complete);
+  $("run").textContent = "Prepare rewrite";
   $("checking").value = state.checking || "chat"; $("word-target").value = state.wordTarget || "";
-  $("assistant-settings").hidden = state.writer === "conversation" && state.checking !== "companion";
   taskUI(); counts();
-  $("assistant-note").textContent = state.writer === "conversation" ? "Used for extraction and second opinions. The chat site's model stays selected there." : "Used for extraction, writing, repairs and second opinions.";
-  renderModels(); renderRequirements(); renderTraces(); renderHistory(); renderChanges(); notice(`${state.recorded ? "Recorded example · " : state.result?.method === "chat-review" ? "Chat model review · " : state.result?.method === "local-exact" ? "Local wording check · " : ""}${state.result ? summary(state.result) : state.notice || "Not checked"}`);
+  renderRequirements(); renderTraces(); renderHistory(); renderChanges(); notice(`${state.recorded ? "Recorded example · " : state.result?.method === "chat-review" ? "Chat model review · " : state.result?.method === "local-exact" ? "Local wording check · " : ""}${state.result ? summary(state.result) : state.notice || "Not checked"}`);
 }
 function renderChanges() {
   const root = $("revision-changes"); root.replaceChildren(); if (!state.result) return;
@@ -146,19 +134,7 @@ function renderHistory() {
     article.append(details); return article;
   }));
 }
-async function extract() {
-  if (state.checking !== "companion") return prepareTask("inventory");
-  if (!connection) throw new Error("Connect the companion to extract ideas.");
-  requireIdle(inference);
-  beginOperation(state, "Finding key ideas…"); refreshEvidenceLabels($("requirements"), state); renderTraces(); persist();
-  const request = rpc("extract", { source: state.source, constraints: state.constraints.filter((c) => c.type === "must_cover"), writerModel: state.model });
-  active = inference = request.envelope; notice("Finding key ideas…");
-  try {
-    const result = await request.promise;
-    if (!currentEnvelope(state, request.envelope, active)) return notice("Extraction ignored because the source or settings changed. Retry it.");
-    state.facts = result.facts; active = null; persist(); render(); tab("details");
-  } finally { if (active?.requestId === request.envelope.requestId) active = null; if (inference?.requestId === request.envelope.requestId) inference = null; }
-}
+async function extract() { return prepareTask("inventory"); }
 function validate() {
   if (!$("word-target").checkValidity()) throw new Error("Use a whole-number word budget between 20 and 50,000.");
   if (!state.source.trim()) throw new Error("Add the complete source first.");
@@ -166,19 +142,18 @@ function validate() {
   if (state.constraints.some((c) => c.type === "must_cover" && !state.facts.some((f) => f.constraintId === c.id))) throw new Error("Extract ideas for each Must cover mark, or remove the incomplete mark.");
   if (state.facts.some((f) => !f.text.trim())) throw new Error("Required ideas cannot be blank.");
 }
-async function run(operation, { existing = false, steer } = {}) {
+async function runCheck() {
   validate(); if (!connection) throw new Error("Connect the local companion first.");
-  if (existing && (!state.reply.trim() || !state.complete)) throw new Error("Import a reply and confirm that it is complete.");
+  if (!state.reply.trim() || !state.complete) throw new Error("Import a reply and confirm that it is complete.");
   requireIdle(inference);
-  const payload = { source: state.source, instruction: state.instruction + (state.wordTarget ? `\nTarget: ${state.wordTarget} words.` : ""), constraints: state.constraints, facts: state.facts, writerModel: state.model, maxRepairs: state.maxRepairs, maxTightens: state.maxTightens, ...(existing ? { initialText: state.reply } : {}), ...(steer ? { steer } : {}) };
-  beginOperation(state, operation === "check" ? "Checking this reply…" : "Writing and checking…"); refreshEvidenceLabels($("requirements"), state); renderTraces();
-  const request = rpc(operation, payload); active = inference = request.envelope; state.pendingRun = request.envelope.requestId; persist(); $("cancel").hidden = false; notice(state.notice);
+  const payload = { source: state.source, instruction: state.instruction, constraints: state.constraints, facts: state.facts, initialText: state.reply };
+  beginOperation(state, "Checking this reply…"); refreshEvidenceLabels($("requirements"), state); renderTraces();
+  const request = rpc("check", payload); active = inference = request.envelope; state.pendingRun = request.envelope.requestId; persist(); $("cancel").hidden = false; notice(state.notice);
   try {
     const result = await request.promise;
     if (!currentEnvelope(state, request.envelope, active)) return notice("Result ignored because the source, reply or settings changed. Check the current version.");
     state.result = result; state.reply = result.final.text; state.complete = true; state.recorded = false; delete state.chatTask;
-    if (operation === "rewrite") delete state.replyRef;
-    state.history.push({ kind: operation, time: Date.now(), revision: state.revision, source: state.source, instruction: state.instruction, feedback: steer?.feedback, model: state.model, result });
+    state.history.push({ kind: "Jev check", time: Date.now(), revision: state.revision, source: state.source, instruction: state.instruction, result });
     state.history = state.history.slice(-15); delete state.pendingRun; active = null; persist(); render(); tab("reply");
   } finally { if (active?.requestId === request.envelope.requestId) active = null; if (inference?.requestId === request.envelope.requestId) inference = null; $("cancel").hidden = true; }
 }
@@ -210,7 +185,7 @@ async function checkReply() {
   if (!state.reply.trim() || !state.complete) throw new Error("Add a reply and confirm it is complete first.");
   if (!state.constraints.length) throw new Error("Choose at least one idea or exact passage to check in Source.");
   if (!unitsForChat(state).length) return acceptResult(localResult(state), "Local wording check");
-  if (state.checking === "companion") return run("check", { existing: true });
+  if (state.checking === "companion") return runCheck();
   return prepareTask("check");
 }
 async function chooseMessages(target) {
@@ -233,13 +208,12 @@ async function connectCompanion() {
   try {
     if (!await chrome.permissions.request({ permissions: ["nativeMessaging"] })) throw new Error("Companion permission was not granted.");
     if (!port) attachPort();
-    const hello = await call("hello"); if (hello.protocolVersion !== 1) throw new Error("Companion protocol differs. Rebuild the extension and companion together.");
-    const models = await call("models.list"); connection = true; providers = models.providers;
+    const hello = await call("hello"); assertCheckerOnly(hello);
+    const models = await call("models.list"); connection = true;
     $("connection").textContent = "Local companion connected";
     $("readiness").textContent = `Checker: ${models.checker.configured ? "configured" : "not configured"}. Cancellation: ${hello.cancellation || "stop listening only"}.`;
     $("setup-status").textContent = models.checker.configured ? `Companion connected. Checker: ${models.checker.provider}. Configuration found; key validity has not been tested.` : "Companion connected, but no checker key found. Add TYPESAFE_API_KEY to .env.local, then close and reopen Chrome to restart the companion.";
-    renderModels();
-  } catch (e) { $("setup-status").textContent = `${e.message} Check the companion installation in step 2.`; notice(e.message, true); }
+  } catch (e) { connection = false; $("setup-status").textContent = `${e.message} Check the companion installation in step 2.`; notice(e.message, true); }
   finally { $("connect").disabled = $("setup-connect").disabled = false; }
 }
 $("connect").addEventListener("click", connectCompanion);
@@ -272,13 +246,8 @@ action("undo-marks", () => { const prior = markUndo.pop(); if (!prior || prior.d
 document.addEventListener("keydown", e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !e.shiftKey && !e.target.closest("textarea,input,[contenteditable=true]")) { e.preventDefault(); $("undo-marks").click(); } });
 $("checking").onchange = () => { saveEdit("checking", $("checking").value); render(); };
 $("word-target").onchange = () => { if (!$("word-target").checkValidity()) { $("word-target").reportValidity(); return; } saveEdit("wordTarget", $("word-target").value ? Number($("word-target").value) : undefined); };
-$("writer").onchange = () => { saveEdit("writer", $("writer").value); render(); };
-$("provider").onchange = () => { const p = providers.find((p) => p.id === $("provider").value); state.model = `${p.id}/${p.models[0] || "default"}`; changed(); renderModels(); };
-function updateModel() { state.model = `${$("provider").value}/${$("custom-model").value.trim() || $("model").value}`; changed(); renderModels(); }
-$("model").onchange = () => { $("custom-model").value = ""; updateModel(); }; $("custom-model").onchange = updateModel;
-$("repairs").onchange = () => saveEdit("maxRepairs", Number($("repairs").value)); $("tightens").onchange = () => saveEdit("maxTightens", Number($("tightens").value));
-action("run", () => state.writer === "conversation" ? prepare() : run("rewrite")); action("check", checkReply); action("repair", () => { if (state.writer === "conversation") return prepare(true); return run("rewrite", { existing: true }); }); action("prepare-repair", () => prepare(true));
-action("steer", () => { state.styleFeedback = extendFeedback(state.styleFeedback, $("feedback").value); persist(); return state.writer === "conversation" ? prepare(true, state.styleFeedback.join("\n")) : run("rewrite", { steer: { previous: state.reply, feedback: state.styleFeedback } }); });
+action("run", () => prepare()); action("check", checkReply); action("repair", () => prepare(true));
+action("steer", () => { state.styleFeedback = extendFeedback(state.styleFeedback, $("feedback").value); persist(); return prepare(true, state.styleFeedback.join("\n")); });
 action("cancel", async () => { const runId = active?.requestId; active = null; $("cancel").hidden = true; notice("Stopped listening. The current provider request may still finish."); if (runId) { const callback = callbacks.get(runId); callbacks.delete(runId); callback?.reject(new Error("Stopped listening. The current provider request may still finish.")); await call("cancel", { runId }); } });
 action("copy", () => navigator.clipboard.writeText(state.reply)); action("export-text", () => download("lossless-rewrite.txt", state.reply, "text/plain")); action("export-json", () => download("lossless-evidence.json", JSON.stringify(state, null, 2), "application/json"));
 action("copy-prompt", () => navigator.clipboard.writeText($("prompt-preview").value));

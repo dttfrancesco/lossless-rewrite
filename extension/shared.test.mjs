@@ -1,6 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assembler, supportedPage, newDocument, invalidate, currentEnvelope, summary, preparePrompt, evidenceFor, extendFeedback } from "./shared.js";
+import { assembler, supportedPage, newDocument, invalidate, currentEnvelope, summary, preparePrompt, evidenceFor, extendFeedback, assertCheckerOnly, OPERATIONS } from "./shared.js";
+
+test("extension refuses companions that could call a second model and blocks generation operations", () => {
+  for (const hello of [undefined,{}, {protocolVersion:1}, {protocolVersion:2,checkMode:'decision-only-v1'}]) assert.throws(()=>assertCheckerOnly(hello),/Update the companion/);
+  assert.doesNotThrow(()=>assertCheckerOnly({protocolVersion:1,checkMode:'decision-only-v1'}));
+  assert.equal(OPERATIONS.has('extract'),false);
+  assert.equal(OPERATIONS.has('rewrite'),false);
+  assert.equal(OPERATIONS.has('check'),true);
+});
 test("site access accepts exact HTTPS chat origins only", () => {
   assert.equal(supportedPage("https://chatgpt.com/c/123"), true);
   for (const url of ["https://chatgpt.com.evil.test/", "http://claude.ai/", "https://evil.test/?url=https://claude.ai", "file:///tmp/a"]) assert.equal(supportedPage(url), false);
@@ -14,7 +22,7 @@ test("editing rejects late results, clears green and preserves historical eviden
 });
 test("zero checks and uncertainty never become all kept", () => {
   assert.equal(summary({ final: { verification: { units: [], wording: [] } } }), "No details checked");
-  assert.match(summary({ final: { verification: { units: [{ status: "uncertain" }], wording: [] } } }), /uncertain/);
+  assert.match(summary({ final: { verification: { units: [{ status: "uncertain" }], wording: [] } } }), /needs review/);
 });
 test("chat prompts include full context and exact wording rather than highlights only", () => {
   const state = newDocument(); state.source = "Context. Exact  words. Useful closing."; state.constraints = [{ type: "keep_wording", text: "Exact  words." }];

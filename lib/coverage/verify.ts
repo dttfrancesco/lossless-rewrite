@@ -1,7 +1,6 @@
 import type { Questions } from "@typesafe-ai/sdk";
 import type { DecisionClient } from "../decision/client";
 import { missingNumbers } from "../text/numbers";
-import { adjudicate } from "./adjudicate";
 import { presenceQuestion, rewriteState, traceQuestion, type RequiredUnit, type SentenceRef } from "./questions";
 import { findWording } from "./wording";
 
@@ -115,6 +114,7 @@ export async function verifyRewrite(options: {
   const unsure = results.filter((r) => r.status !== "kept");
   let adjudicationMs = 0;
   if (unsure.length && options.adjudicate !== false) {
+    const { adjudicate } = await import("./adjudicate");
     options.onEscalate?.(unsure.map((r) => r.unit));
     const { verdicts, ms } = await adjudicate(unsure.map((r) => r.unit), sentences, options.judgeModel);
     adjudicationMs = ms;
@@ -136,7 +136,7 @@ export async function verifyRewrite(options: {
   return {
     units: results,
     wording,
-    escalated: unsure.length,
+    escalated: options.adjudicate === false ? 0 : unsure.length,
     decisionMs,
     adjudicationMs,
     decisionTokens,

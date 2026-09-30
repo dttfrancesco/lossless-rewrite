@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { CompanionSession } from "../../companion/session";
-import { checkOnly } from "../../companion/engine";
+import { checkOnly, execute } from "../../companion/engine";
 import type { Request, Response } from "../../companion/protocol";
 import type { DecisionClient } from "../decision/client";
 
@@ -30,13 +30,48 @@ test("check-only semantic evidence uses the shared verifier without generating t
   assert.equal(result.final.text,source);
 });
 
+test("uncertain and missing evidence never escalates to a writer, even with legacy writer settings", async () => {
+  const previous = process.env.LLM_PROVIDER;
+  // Any attempted fallback fails immediately instead of making a paid call.
+  process.env.LLM_PROVIDER = "forbidden-in-extension-checks";
+  try {
+    for (const [score, expected] of [[0.5,"uncertain"],[0.05,"missing"],[0.99,"kept"]] as const) {
+      let calls = 0;
+      const events: unknown[] = [];
+      const client = { config:{provider:"jev"}, ask:async () => { calls++; return {answers:{"P1::present":{noul:score},"P1::trace":{probabilities:{NOT_PRESENT:1}}},ms:3,inputTokens:9}; } } as unknown as DecisionClient;
+      const result = await checkOnly({...base,writerModel:"sonnet",constraints:[{...base.constraints[0],type:"keep_meaning"}]},e=>events.push(e),client);
+      assert.equal(calls,1);
+      assert.equal(result.final.verification.units[0]?.status,expected);
+      assert.equal(result.final.verification.units[0]?.decidedBy,"decision");
+      assert.equal(result.final.verification.adjudicationMs,0);
+      assert.equal(result.final.verification.escalated,0);
+      assert.equal(result.final.text,source);
+      assert.doesNotMatch(JSON.stringify(events),/adjudicating|repairing|writing/);
+    }
+    const hello = await execute("hello",{},()=>{});
+    assert.equal((hello as {checkMode:string}).checkMode,"decision-only-v1");
+    for (const operation of ["extract","rewrite"] as const) await assert.rejects(execute(operation,base,()=>{}),/Unsupported/);
+  } finally {
+    if (previous === undefined) delete process.env.LLM_PROVIDER; else process.env.LLM_PROVIDER=previous;
+  }
+});
+
+test("legacy extraction and rewrite requests are rejected before inference", async () => {
+  const replies: Response[]=[];
+  let calls=0;
+  const session=new CompanionSession(r=>replies.push(r),async()=>{calls++;});
+  for (const operation of ["extract","rewrite"] as const) await session.receive(request(operation,base,operation));
+  assert.equal(calls,0);
+  assert.equal(replies.filter(r=>r.type==="error").length,2);
+});
+
 test("session validates source before inference and does not leak provider error text", async () => {
   const replies: Response[]=[];
   let calls = 0;
   const session = new CompanionSession(r => replies.push(r), async () => {calls++;throw new Error("sk-secret credential and private document");});
-  await session.receive(request("rewrite",{...base,source:"different"}));
+  await session.receive(request("check",{...base,source:"different"}));
   assert.equal(calls,0);
-  await session.receive(request("rewrite",base,"two"));
+  await session.receive(request("check",base,"two"));
   assert.equal(calls,1);
   assert.equal(replies.at(-1)?.type,"error");
   assert.doesNotMatch(JSON.stringify(replies),/sk-secret|private document/);
@@ -46,7 +81,7 @@ test("duplicate requests are idempotent; changed input with same ID is rejected"
   const replies: Response[]=[];
   let calls = 0;
   const session = new CompanionSession(r => replies.push(r),async () => {calls++;return {ok:true};});
-  const input = request("rewrite",base);
+  const input = request("check",base);
   await session.receive(input);
   await session.receive(input);
   assert.equal(calls,1);
@@ -62,10 +97,10 @@ test("detach cancellation suppresses late success and keeps inference slot until
   let finish!: (value: unknown) => void;
   const pending = new Promise(resolve => {finish=resolve;});
   const session = new CompanionSession(r=>replies.push(r),async ()=>pending);
-  const running = session.receive(request("rewrite",base));
+  const running = session.receive(request("check",base));
   await session.receive(request("cancel",{runId:"one"},"cancel"));
   assert.match(JSON.stringify(replies.at(-1)?.payload),/may finish/);
-  await session.receive(request("rewrite",base,"another"));
+  await session.receive(request("check",base,"another"));
   assert.equal(replies.at(-1)?.type,"error");
   finish({shouldNeverDisplay:true}); await running;
   assert.equal(replies.some(r=>r.requestId==="one" && r.type==="result"),false);

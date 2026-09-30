@@ -8,6 +8,7 @@ import { wordCount } from "../lib/text/sentences.ts";
 import { shortcutLabels } from './shortcuts.js';
 const $ = (id) => document.getElementById(id);
 const keyboard = shortcutLabels();
+for (const el of document.querySelectorAll("[data-insert-keys]")) el.textContent = keyboard.insert;
 for (const el of document.querySelectorAll('[data-send-keys]')) el.textContent = keyboard.send;
 for (const el of document.querySelectorAll('[data-highlight-keys]')) el.textContent = keyboard.highlight;
 $("open-shortcuts").onclick = () => $("shortcuts-dialog").showModal();

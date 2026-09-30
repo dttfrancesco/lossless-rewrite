@@ -29,9 +29,11 @@ No API key, companion or Lossless account is needed. Your chat provider's accoun
 
 Lossless adds your selected passages and preservation instructions, then sends through the current site's composer. A leading slash command, if present, is removed. Ordinary Enter and Shift-Enter are unchanged. There is no second submission or prompt-review dialog. If a Send button cannot be identified, the enhanced text stays in the composer for manual sending. No automatic retries are made.
 
-With no saved passages, /lossless leaves your draft untouched and explains what to select. Remove the command to send an ordinary message instead. A brief receipt reports when selections were added and Send was pressed; it does not claim the provider accepted the request or that Jev checked the reply. Close the notice with × or Escape. Word limits remain instructions to the chat model, not enforced length guarantees.
+With no text marked to keep, /lossless leaves your draft untouched and explains what to select. Remove the command to send an ordinary message instead. A brief receipt reports when selections were added and Send was pressed; it does not claim the provider accepted the request or that Jev checked the reply. Close the notice with × or Escape. Word limits remain instructions to the chat model, not enforced length guarantees.
 
-**Shortcuts** in the sidebar header explains sending, highlighting, newlines and dismissal. The inline popup's **?** button shows the same help. The send shortcut requires a nonempty draft and saved passages; it does not run from another editor or send automatically when you mark text.
+**Alt+Shift+L** (Mac: **Option+Shift+L**) adds `/lossless` at the start of your draft without sending. It keeps your existing text and does not duplicate a command already present. You can use it before or after typing.
+
+**Shortcuts** in the sidebar header explains sending, highlighting, newlines and dismissal. The inline popup's **?** button shows the same help. The send shortcut requires a nonempty draft and text marked to keep; it does not run from another editor or send automatically when you mark text.
 
 Selections belong to the current tab and conversation, survive a page reload during the browser session, and are removed when the chat tab closes. Moving between existing conversations clears them. After an explicit first send, selections follow a new chat into its assigned conversation URL.
 
@@ -43,7 +45,7 @@ This streamlines sending. It does not automatically check or repair the resultin
 
 After the reply finishes, press **Alt+Shift+H** or choose **Show kept text** in the sidebar or inline controls. Press again to hide the highlights. Amber marks text selected as Keep wording; green marks text selected as Keep meaning. Overlapping wording marks take priority. No API key or model call is used.
 
-This finds matching text, ignoring layout whitespace. It does not find semantic paraphrases or prove that meaning was preserved. The notice reports how many saved passages have text matches. Highlights clear when the reply changes, a new reply replaces it, the conversation changes, or selections change. Automatic reply detection currently targets ChatGPT's observed assistant containers and explicitly labelled assistant articles; other layouts report a fallback to the full editor.
+This finds matching text, ignoring layout whitespace. It does not find semantic paraphrases or prove that meaning was preserved. The notice reports how many marked passages have text matches. Highlights clear when the reply changes, a new reply replaces it, the conversation changes, or selections change. Automatic reply detection currently targets ChatGPT's observed assistant containers and explicitly labelled assistant articles; other layouts report a fallback to the full editor.
 
 ## Check what survived
 

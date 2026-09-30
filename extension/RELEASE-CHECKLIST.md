@@ -1,5 +1,11 @@
 # Chrome release record
 
+## 0.4.5 insert command shortcut
+
+- Alt+Shift+L (Mac: Option+Shift+L) inserts /lossless into the focused chat draft without submitting; existing text stays intact and repeated presses do not duplicate the command.
+- Ctrl+Shift+Enter still sends directly. Keyboard help and onboarding say text marked to keep, with selection instructions.
+- 42 extension tests and the production extension build passed. Installed-browser verification of this new shortcut remains pending a manual reload.
+
 ## 0.4.4 send shortcut
 
 - Ctrl+Shift+Enter (Mac: Command+Shift+Enter) sends the focused chat draft with its saved passages without requiring /lossless. Normal Enter remains unchanged; empty drafts and empty selections are refused. Existing draft/navigation/access checks and duplicate-send prevention remain in place.

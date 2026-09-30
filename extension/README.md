@@ -1,32 +1,51 @@
-# Browser extension — experimental
+# Lossless Rewrite for Chrome
 
-This is a loadable Manifest V3 extension. It uses the existing rewrite/verification engine through `companion/`. **An unpacked Chrome installation and Windows companion registration have been completed, but live ChatGPT/Claude interactions remain unvalidated.** The conservative semantic page adapter supports accessible message articles and an unambiguous composer; unsupported layouts use select/copy/paste. Do not advertise live-site compatibility until the manual matrix below passes.
+**Cut words, not ideas.** Protect key ideas or exact wording, condense your text in your usual AI chat, and review what survived.
 
-## Build and owner trial
+Version 0.2.0 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek have individual optional site permissions. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
+
+## Install
+
+Use Node 22.16+:
 
 ```sh
-npm install
-node scripts/build-extension.mjs
-node --test extension/*.test.mjs
+npm ci
+npm run extension:build
+npm run test:extension
 ```
 
-Load `extension/dist` using Chrome's **Load unpacked** control. Edge is a separate compatibility trial. Follow [companion setup](../companion/README.md) for explicit native-host registration using the extension's exact ID. This task does not install or register anything automatically. The browser action opens the side panel; Expand opens the same document in an extension tab.
+Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `extension/dist`. Pin the extension and click its icon. **Expand** opens a wider editor.
 
-No credentials belong in the extension. The panel receives only connection configuration status. Site access is optional and requested separately for `chatgpt.com` and `claude.ai`. No cookies, history, debugger, session-token interception or all-sites access is requested.
+When upgrading an existing installation, rebuild its folder and press **Reload** in Chrome. A different folder can produce a different extension ID; companion registration must match it.
 
-## Implemented
+## Use your existing chat
 
-- Full-source paste/file/message/selection import and editing; all three protection modes. Must-cover extraction, editable ideas, removal and incomplete-inventory blocking.
-- Same provider catalog as the app, custom model IDs, API/CLI rewriting, checking existing text without generation, bounded repairs/tightening and style feedback.
-- Conversation mode previews complete prompts and repairs, then explicitly appends/replaces the inspected chat draft. A changed draft refuses insertion. The user sends the message.
-- Manual completed-reply confirmation, selected requirement/source/reply evidence, pass history, immediate stale-check invalidation on edits, detected page mutation/navigation, and revision/run checks for late results.
-- Recorded fixture with no network, text/evidence download, clipboard, session persistence and explicit local save/clear; no browser sync.
-- Native transport with closed operations, extension-page sender checks, bounded chunk assembly, disconnect errors and no automatic generation retry. Cancel honestly detaches from results; provider execution may continue.
+No API key, companion or Lossless account is needed. Your chat provider's account, usage and payment rules still apply.
 
-Page annotations deliberately stop at revealing an exact unchanged captured message. Inline page word highlighting and automatic stream-completion detection are not claimed. Evidence highlighting remains available in the panel's captured source/reply. DOM message imports are reviewed plain text, not a claim to recover original Markdown. Selected text imports exactly the selection, with a reminder when a larger source message exists.
+1. Add your complete source or notes. Include source labels when combining papers.
+2. Select passages and choose **Keep wording**, **Keep meaning** or **Must cover**. Overlapping protections are allowed. Must cover prepares a chat prompt for extracting ideas; send it, import the complete JSON response and review the list.
+3. Set an instruction and optional word budget. **Prepare rewrite** shows the full prompt. Copy it or explicitly insert it into the inspected chat draft. Send it yourself.
+4. Add the completed rewrite to Reply and confirm completion. **Check only** verifies exact characters locally. Meaning checks prepare a chat request; import its complete JSON response to see verdicts and evidence.
+5. Inspect missing, altered or uncertain ideas. Prepare a chat repair and check the revised draft. Changed verdicts appear when comparable ideas change status between checks.
 
-## Manual release matrix (pending)
+Chat mode is a model review, not an independent Jev check. Wrong request tokens, stale replies, missing verdicts and invalid sentence references are rejected. Structural validation does not establish judgment accuracy.
 
-For both sites: test fresh/long conversation, list/code/table messages, regenerated reply, branch changes, streaming reply (must remain unchecked), navigation, ambiguous composer, existing draft append/replace and unsupported layout. Verify no messages are ever sent automatically. Exercise 320px panel, keyboard selection, 200% zoom, expanded/sidebar synchronization, restore, and worker/native disconnects. Check API and local CLI routes through an installed native host and report provider availability honestly. Use redacted or synthetic source text.
+Normal Ctrl/Cmd+Z works inside text boxes. **Undo selection** restores protection edits; Ctrl/Cmd+Z outside text boxes also triggers it. Editing source text clears marks whose offsets may no longer match.
 
-The companion protocol tests and extension fixture tests do not replace this live browser matrix.
+## Optional API and CLI automation
+
+Follow [companion setup](../companion/README.md), then open **Sites and connections → Connect API or local CLI**. Grant optional native-messaging access and connect the registered host. Choose **Local companion** for checking, and **API or local CLI** as writer when it should generate text too.
+
+Provider/model selection, bounded repairs, tightening, style feedback, evidence and history remain available. Keys and CLI authentication stay in the companion. A web subscription is not an API credential. Cancellation detaches from results; a running provider call may finish.
+
+## Compatibility
+
+All five listed origins support permission-gated selection import through the same conservative adapter. Message picking requires accessible article elements; insertion requires exactly one visible composer. Unsupported layouts use copy/paste. DeepSeek's authenticated layout has not been inspected.
+
+The extension never presses Send, intercepts cookies or session tokens, or imports whole conversations in the background. Imported page text is plain text. Streaming completion is confirmed by the user.
+
+## Privacy and release status
+
+See [privacy](PRIVACY.md) and [release checks](RELEASE-CHECKLIST.md). Documents use extension session storage until explicitly saved locally. Local saves are not encrypted or synced.
+
+This preview has no billing, paid entitlements or hosted checking service. Managed subscriptions and one-click store installation need separate infrastructure, submission and approval.

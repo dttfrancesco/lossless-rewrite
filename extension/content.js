@@ -15,7 +15,7 @@
     return [...document.querySelectorAll('article, [role="article"]')].filter((el) => visible(el) && !el.parentElement?.closest('article,[role="article"]') && text(el).trim()).slice(-60);
   }
   function composer() {
-    const candidates = [...document.querySelectorAll('textarea, [contenteditable="true"][role="textbox"], [contenteditable="true"][aria-label]')].filter((el) => visible(el) && !el.closest('[role="dialog"]') && !el.disabled);
+    const candidates = [...document.querySelectorAll('textarea, [contenteditable="true"]')].filter((el) => visible(el) && !el.closest('[role="dialog"]') && !el.disabled && !el.readOnly && el.getAttribute?.("aria-hidden") !== "true" && !el.parentElement?.closest('[contenteditable="true"]'));
     return candidates.length === 1 ? candidates[0] : null;
   }
   const value = (el) => el instanceof HTMLTextAreaElement ? el.value : el.innerText;
@@ -24,6 +24,12 @@
     try {
       if (message.action === "list") return respond({ messages: articles().map((el) => ({ id: reference(el), preview: text(el).slice(0, 180), characters: text(el).length })), note: "Choose and review one visible message. Imported page text is plain text, not original Markdown." });
       if (message.action === "selection") {
+        const focused = document.activeElement;
+        if (focused instanceof HTMLTextAreaElement && focused.selectionEnd > focused.selectionStart) {
+          const selected = focused.value.slice(focused.selectionStart, focused.selectionEnd);
+          if (selected.length > 100000) throw new Error("Selection exceeds 100,000 characters.");
+          if (selected.trim()) return respond({ text: selected, fullMessage: null, id: null, url: location.href });
+        }
         const s = getSelection(); if (!s?.rangeCount || !s.toString().trim()) throw new Error("Select text in the conversation first, or paste it in Source.");
         if (s.toString().length > 100000) throw new Error("Selection exceeds 100,000 characters.");
         const common = s.getRangeAt(0).commonAncestorContainer;
@@ -41,6 +47,7 @@
         el.focus();
         if (el instanceof HTMLTextAreaElement) { Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(el, after); el.dispatchEvent(new Event("input", { bubbles: true })); }
         else { const range = document.createRange(); range.selectNodeContents(el); const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range); if (!document.execCommand("insertText", false, after)) throw new Error("This editor does not support insertion. Copy and paste the prompt."); }
+        if (value(el).replace(/\r\n/g, "\n") !== after.replace(/\r\n/g, "\n")) throw new Error("The editor did not accept the complete prompt. Review the chat draft and use copy/paste.");
         return respond({ staged: true }); // Never submit, click send or press Enter.
       }
       if (message.action === "reveal") { const item = references.get(message.id); if (!item?.el.isConnected || text(item.el) !== message.expected) throw new Error("Page message no longer matches the captured text."); item.el.scrollIntoView({ block: "center", behavior: "smooth" }); return respond({ located: true }); }

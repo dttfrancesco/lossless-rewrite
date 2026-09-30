@@ -5,6 +5,7 @@ const requests = new Map();
 const decode = assembler();
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 chrome.storage.session.setAccessLevel({ accessLevel: "TRUSTED_CONTEXTS" });
+chrome.storage.local.setAccessLevel({ accessLevel: "TRUSTED_CONTEXTS" });
 function broadcast(message) { for (const port of panels) { try { port.postMessage(message); } catch { panels.delete(port); } } }
 function connect() {
   if (native) return native;
@@ -44,7 +45,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     let tab;
     if (message.tabId) tab = await chrome.tabs.get(message.tabId);
     else [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    if (!tab?.id || !supportedPage(tab.url)) throw new Error("Open ChatGPT or Claude, then try again. You can always paste text here.");
+    if (!tab?.id || !supportedPage(tab.url)) throw new Error("Open ChatGPT, Claude, Gemini, Grok or DeepSeek. You can also copy and paste text from any app.");
     const origin = `${new URL(tab.url).origin}/*`;
     if (!await chrome.permissions.contains({ origins: [origin] })) throw new Error("Enable this site first using the site access buttons.");
     await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });

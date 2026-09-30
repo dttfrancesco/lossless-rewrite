@@ -1,13 +1,14 @@
+import { siteFor } from "./sites.js";
 export const HOST = "com.lossless_rewrite.companion";
 export const OPERATIONS = new Set(["hello", "models.list", "extract", "check", "rewrite", "cancel", "run.status"]);
 export function supportedPage(url) {
-  try { const u = new URL(url); return u.protocol === "https:" && ["chatgpt.com", "claude.ai"].includes(u.hostname); } catch { return false; }
+  return Boolean(siteFor(url));
 }
 export function newDocument() {
-  return { documentId: crypto.randomUUID(), revision: 0, source: "", reply: "", instruction: "Make the tone friendlier. Keep the details unchanged.", constraints: [], facts: [], history: [], result: null, focus: null, writer: "conversation", model: "codex-cli/default", maxRepairs: 1, maxTightens: 0, recorded: false };
+  return { documentId: crypto.randomUUID(), revision: 0, source: "", reply: "", instruction: "Make this shorter and clearer. Preserve the selected ideas and useful context.", constraints: [], facts: [], history: [], result: null, focus: null, writer: "conversation", model: "codex-cli/default", maxRepairs: 1, maxTightens: 0, recorded: false };
 }
 export function invalidate(state, reason) {
-  state.revision += 1; state.result = null; state.recorded = false; state.notice = reason || "Not checked — the document changed.";
+  state.revision += 1; state.result = null; state.recorded = false; delete state.chatTask; state.notice = reason || "Not checked — the document changed.";
 }
 export function currentEnvelope(state, envelope, active) {
   return envelope.requestId === active?.requestId && envelope.documentId === state.documentId && envelope.revision === state.revision;
@@ -21,7 +22,7 @@ export function evidenceFor(state, focus) {
   const id = c.type === "keep_wording" ? `W${sorted.findIndex((x) => x.id === c.id) + 1}` : c.type === "keep_meaning" ? `P${sorted.findIndex((x) => x.id === c.id) + 1}` : (fact || state.facts.find((f) => f.constraintId === c.id))?.id;
   const wording = v?.wording.find((w) => w.id === id); const unit = v?.units.find((u) => u.unit.id === id);
   const sentence = state.result?.final?.sentences.find((s) => s.id === unit?.sentences[0]);
-  return { source: fact?.sources[0] || c, location: wording?.location || sentence, status: wording ? wording.kept ? "kept" : "missing" : unit?.status || "Not checked" };
+  return { source: fact?.sources[0] || c, location: wording?.location || sentence, reason: unit?.reason, status: wording ? wording.kept ? "kept" : "missing" : unit?.status || "Not checked" };
 }
 export function extendFeedback(previous, feedback) {
   const clean = feedback.trim();
@@ -46,7 +47,7 @@ export function preparePrompt(state, repair = false, feedback = "") {
   const meaning = state.constraints.filter((c) => c.type === "keep_meaning").map((c) => c.text);
   const required = state.facts.map((f) => f.text);
   return [repair ? "Revise the draft below. Return the complete revised document." : "Rewrite the complete source below.",
-    `Instruction: ${state.instruction}`, feedback && `Style feedback: ${feedback}`,
+    `Instruction: ${state.instruction}`, state.wordTarget && `Word budget: aim for at most ${state.wordTarget} words. If the required ideas do not fit, explain the conflict instead of silently dropping them.`, feedback && `Style feedback: ${feedback}`,
     "Preserve useful surrounding context. The protected details are constraints, not a request to return only those details.",
     wording.length && `Keep these exact characters:\n${wording.map((t) => `- ${t}`).join("\n")}`,
     meaning.length && `Keep the meaning, conditions, scope and numbers:\n${meaning.map((t) => `- ${t}`).join("\n")}`,

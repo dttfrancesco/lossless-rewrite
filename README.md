@@ -104,9 +104,9 @@ The CLI supports existing drafts, explicit protections, stdin and JSON reports. 
 
 ### Browser extension
 
-An **experimental sidebar for ChatGPT and Claude** provides the same protection modes, checks and API/CLI repairs. It can also prepare a follow-up for you to send in the chat; it never sends messages automatically.
+An **experimental Chrome sidebar** helps protect ideas while condensing text in ChatGPT, Claude, Gemini, Grok or DeepSeek. Exact wording checks run locally. You can prepare and import a chat-model review without an API key, or use the optional companion for automated API/CLI checks and repairs.
 
-Requires an unpacked extension and a local companion. Live-site behavior has not yet been manually validated. [Install the extension](extension/README.md)
+Load it unpacked; it never sends chat messages automatically. Full installed-site compatibility is still being validated, and unsupported layouts use copy/paste. [Install the extension](extension/README.md)
 
 ## Contribute
 

@@ -82,3 +82,5 @@ The extension presses Send only as part of your explicit `/lossless` submission 
 See [privacy](PRIVACY.md) and [release checks](RELEASE-CHECKLIST.md). Documents use extension session storage until explicitly saved locally. Local saves are not encrypted or synced.
 
 This preview has no billing, paid entitlements or hosted checking service. Managed subscriptions and one-click store installation need separate infrastructure, submission and approval.
+
+**Compare plans** in the sidebar opens the Free / Plus / Pro comparison. It is a preview of proposed plans; checkout and managed check allowances are not available.

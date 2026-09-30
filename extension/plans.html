@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plans · Lossless Rewrite</title>
+  <link rel="stylesheet" href="plans.css">
+</head>
+<body>
+  <header><a class="brand" href="panel.html">lossless rewrite.</a><a href="panel.html">Back to extension</a></header>
+  <main>
+    <h1>Compare plans</h1>
+    <p class="intro">Your chat writes. Lossless checks what survived.</p>
+    <p class="preview">Plan preview. Subscriptions and included checks are not available yet.</p>
+    <div class="plans" aria-label="Free, Plus and Pro plans">
+      <section class="plan" aria-labelledby="free-title">
+        <h2 id="free-title">Free</h2>
+        <p class="purpose">For occasional rewrites</p>
+        <p class="price"><strong>€0</strong><span>/ month</span></p>
+        <p class="allowance">25 checks / month</p>
+        <ul>
+          <li>Mark the text you want to keep</li>
+          <li>Highlight matches in the reply</li>
+          <li>Check meaning when you choose</li>
+          <li>No API key for included checks</li>
+        </ul>
+        <a class="action" href="panel.html">Use free preview</a>
+      </section>
+      <section class="plan plus" aria-labelledby="plus-title">
+        <h2 id="plus-title">Plus</h2>
+        <p class="purpose">For regular editing</p>
+        <p class="price"><strong>€1.49</strong><span>/ month</span></p>
+        <p class="allowance">500 checks / month</p>
+        <ul>
+          <li>Everything in Free</li>
+          <li>Check each Lossless reply automatically</li>
+          <li>See missing or changed ideas</li>
+          <li>Fix and recheck in your chat</li>
+        </ul>
+        <button class="action" disabled>Coming soon</button>
+      </section>
+      <section class="plan" aria-labelledby="pro-title">
+        <h2 id="pro-title">Pro</h2>
+        <p class="purpose">For writing from several sources</p>
+        <p class="price"><strong>€3.99</strong><span>/ month</span></p>
+        <p class="allowance">2,000 checks / month</p>
+        <ul>
+          <li>Everything in Plus</li>
+          <li>Save PDF references in a project</li>
+          <li>Keep several sources together</li>
+          <li>Trace marked text to its source page</li>
+        </ul>
+        <button class="action" disabled>Coming soon</button>
+      </section>
+    </div>
+    <p class="terms">Proposed prices and allowances. Final limits depend on document size and cost testing.</p>
+    <details>
+      <summary>How checks work</summary>
+      <p>A check covers a completed reply and the ideas you marked, not one check per idea. Checking a revised reply uses another check. Reopening an unchanged result would not use another check.</p>
+      <p>Long documents may use more checks; their cost must be shown before running. Your existing chat handles writing and repairs using its own account allowance. Checks can be wrong.</p>
+      <p>The current preview is free and has no paid accounts or included check allowance. Jev checks currently need your own key and the local companion. The existing local PDF reader remains available; Pro would add persistent reference projects.</p>
+    </details>
+  </main>
+</body>
+</html>

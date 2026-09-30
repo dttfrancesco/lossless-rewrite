@@ -14,7 +14,7 @@ window.chrome={
  storage:{session:{get:async key=>({[key]:stored[key]}),set:async items=>{Object.assign(stored,items);for(const fn of listeners)fn(Object.fromEntries(Object.entries(items).map(([k,v])=>[k,{newValue:v}])),'session');}},local:{get:async()=>({}),set:async()=>{},remove:async()=>{}},onChanged:{addListener:fn=>listeners.push(fn)}},
  permissions:{contains:async()=>granted,request:async()=>{granted=true;return true;},remove:async()=>{granted=false;return true;}},tabs:{query:async()=>[{id:1,...(granted?{url:'https://chatgpt.com/'}:{})}],create:async({url})=>window.open(url,'_blank')}
 };`;
-const allowed = new Map([["/", "panel.html"], ...['panel.html','panel.js','content.js','panel.css','README.html','reference.html','reference.js','reference.css','pdf.worker.mjs','pdf_viewer.css'].map(f=>['/'+f,f])]);
+const allowed = new Map([["/", "panel.html"], ...['plans.html','plans.css','panel.html','panel.js','content.js','panel.css','README.html','reference.html','reference.js','reference.css','pdf.worker.mjs','pdf_viewer.css'].map(f=>['/'+f,f])]);
 const server = http.createServer(async (req, res) => {
   const path = new URL(req.url, "http://127.0.0.1").pathname;
   if (path === "/chat-fixture.html") { res.setHeader("Content-Type", "text/html"); res.end(await readFile(resolve(import.meta.dirname, "extension-chat-fixture.html"), "utf8")); return; }

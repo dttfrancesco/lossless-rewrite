@@ -1,5 +1,11 @@
 # Chrome release record
 
+## 0.4.8 plan comparison
+
+- Compare plans opens a bundled comparison page with Free, Plus and Pro cards, prices, proposed allowances and concise feature bullets. Desktop shows three columns; narrow screens stack cards.
+- The page labels subscriptions and included checks as unavailable. Paid buttons are disabled Coming soon; Use free preview opens the working extension panel. No checkout or account collection is implied.
+- Build and local browser navigation/layout checks passed. Reload the installed extension to get the new page.
+
 ## 0.4.7 white theme
 
 - Sidebar, dialogs, inline controls and PDF reader use white surfaces, neutral borders and dark controls. Only semantic text highlights and errors retain colour.

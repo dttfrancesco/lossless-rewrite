@@ -17,3 +17,6 @@ body.expanded #source-pane,body.expanded #reply-pane,body.expanded #details-pane
 #launcher{padding:28px 22px;max-width:480px;margin:auto}#launcher h1{font:normal 29px/1.2 Georgia,serif;margin:0 0 16px}#launcher p{margin:0 0 20px}#launcher ol{padding-left:22px;margin:26px 0}#launcher li{padding-left:4px;margin:14px 0}#launcher .primary{width:100%;padding:12px;text-align:center}#launch-status{font-size:14px;color:#52525b;margin-top:12px!important}#open-editor{background:transparent;width:100%;text-align:center}#launcher > .hint{border-top:1px solid #d4d4d8;padding-top:22px}body:has(#advanced-editor[hidden]) #expand{display:none}
 
 #launcher .plans-link{margin:24px 0 0;font-size:14px;text-align:center}#launcher .plans-link a{color:#52525b;text-underline-offset:4px}
+
+/* Shared identity: compact text mark and editorial wordmark. */
+.brand-lockup{display:flex;align-items:center;gap:10px;min-width:0}.brand-lockup>img{flex:none}.brand-lockup strong{font-size:23px;letter-spacing:-.7px;white-space:nowrap}.brand-lockup p{font-size:12px;margin-top:2px}header{border-bottom-color:#e8e9e8}.header-actions button{font-size:12px;padding:7px 9px;border-color:#e1e3e1}@media(max-width:370px){.brand-lockup{gap:8px}.brand-lockup strong{font-size:19px}.brand-lockup>img{width:28px;height:28px}.brand-lockup p{font-size:11px}}

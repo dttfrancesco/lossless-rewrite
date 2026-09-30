@@ -10,6 +10,7 @@ for (const file of ["manifest.json", "panel.html", "panel.css", "plans.html", "p
 for (const [source, target] of [["legacy/build/pdf.worker.mjs", "pdf.worker.mjs"], ["web/pdf_viewer.css", "pdf_viewer.css"], ["LICENSE", "PDFJS-LICENSE"]]) await copyFile(resolve(root, "node_modules/pdfjs-dist", source), resolve(outdir, target));
 for (const directory of ["cmaps", "standard_fonts"]) await cp(resolve(root, "node_modules/pdfjs-dist", directory), resolve(outdir, directory), { recursive: true });
 await mkdir(resolve(outdir, "icons"), { recursive: true });
+await copyFile(resolve(root, "extension/icons/mark.svg"), resolve(outdir, "icons/mark.svg"));
 for (const size of [16, 32, 48, 128]) await copyFile(resolve(root, `extension/icons/icon-${size}.png`), resolve(outdir, `icons/icon-${size}.png`));
 await copyFile(resolve(root, "LICENSE"), resolve(outdir, "LICENSE"));
 const manifest = JSON.parse(await readFile(resolve(outdir, "manifest.json"), "utf8"));

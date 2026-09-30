@@ -1,5 +1,11 @@
 # Chrome release record
 
+## 0.4.9 identity and pricing polish
+
+- Added a geometric text/L mark, matching sidebar and pricing wordmarks, and refreshed Chrome icons at all four sizes. SVG source is included.
+- Refined the white plan cards with aligned pricing, quieter borders, consistent spacing and checkmark lists.
+- Extension build passed; pricing and sidebar were visually reviewed, with no horizontal overflow at 360px. Installed Chrome still requires reload.
+
 ## 0.4.8 plan comparison
 
 - Compare plans opens a bundled comparison page with Free, Plus and Pro cards, prices, proposed allowances and concise feature bullets. Desktop shows three columns; narrow screens stack cards.

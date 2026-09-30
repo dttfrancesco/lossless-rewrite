@@ -1,5 +1,11 @@
 # Chrome release record
 
+## 0.3.1 activation fix
+
+- Removed the disabled-button dead end when Chrome does not expose the active tab URL before host access is granted. The launcher now offers an explicit five-site picker and requests only the selected origin.
+- The current window is used for tab detection and is checked again after permission is granted. Activation distinguishes an available composer from an enabled site without an identifiable composer.
+- Verified in the browser harness with the active tab URL initially withheld: Choose your chat site → ChatGPT → simulated permission grant → activation confirmation. All 31 extension tests pass. Installed confirmation is still pending.
+
 ## 0.3.0 preview
 
 - User confirmed the 0.2.0 installed sidebar opens, but reported a crowded and confusing interface.

@@ -5,11 +5,12 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 const root = resolve(import.meta.dirname, "../extension/dist");
 const fixture = `
-const listeners=[]; const stored={};
+const listeners=[]; const stored={}; let granted=false;
+document.addEventListener('DOMContentLoaded',()=>{const banner=document.createElement('p');banner.textContent='Local UI test: permissions and chat access are simulated.';banner.style.cssText='padding:10px;margin:0;background:#fff0ce;color:#403919;font:14px system-ui';document.body.prepend(banner);});
 window.chrome={
- runtime:{connect:()=>({onDisconnect:{addListener(){}},onMessage:{addListener(){}},postMessage(){throw new Error('Native messaging is unavailable in this UI harness.')}}),sendMessage:async()=>({error:'UI harness: use copy and paste.'}),getURL:path=>'/'+path},
+ runtime:{connect:()=>({onDisconnect:{addListener(){}},onMessage:{addListener(){}},postMessage(){throw new Error('Native messaging is unavailable in this UI harness.')}}),sendMessage:async m=>m.action==='activate'?{activated:true,available:true,tabId:1}:{error:'UI harness: use copy and paste.'},getURL:path=>'/'+path},
  storage:{session:{get:async key=>({[key]:stored[key]}),set:async items=>{Object.assign(stored,items);for(const fn of listeners)fn(Object.fromEntries(Object.entries(items).map(([k,v])=>[k,{newValue:v}])),'session');}},local:{get:async()=>({}),set:async()=>{},remove:async()=>{}},onChanged:{addListener:fn=>listeners.push(fn)}},
- permissions:{contains:async()=>false,request:async()=>false,remove:async()=>true},tabs:{create:async({url})=>window.open(url,'_blank')}
+ permissions:{contains:async()=>granted,request:async()=>{granted=true;return true;},remove:async()=>{granted=false;return true;}},tabs:{query:async()=>[{id:1,...(granted?{url:'https://chatgpt.com/'}:{})}],create:async({url})=>window.open(url,'_blank')}
 };`;
 const allowed = new Map([["/", "panel.html"], ["/panel.html", "panel.html"], ["/panel.js", "panel.js"], ["/content.js", "content.js"], ["/panel.css", "panel.css"], ["/README.html", "README.html"]]);
 const server = http.createServer(async (req, res) => {

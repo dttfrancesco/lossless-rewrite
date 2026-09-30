@@ -17,23 +17,39 @@ function editor(open) { $("advanced-editor").hidden = !open; $("launcher").hidde
 $("open-editor").onclick = () => editor(true);
 $("close-editor").onclick = () => editor(false);
 if (document.body.classList.contains("expanded")) editor(true);
-let launchTab;
+let launchTab, detectedSite;
 async function launchSite() {
   try {
-    [launchTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-    const site = siteFor(launchTab?.url);
-    $("enable-here").disabled = !site;
-    if (site) $("enable-here").textContent = `Enable on ${site.name}`;
-  } catch { $("enable-here").disabled = true; }
+    [launchTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    detectedSite = siteFor(launchTab?.url);
+  } catch { launchTab = undefined; detectedSite = undefined; }
+  // A missing URL often means access has not yet been granted. Never disable
+  // the only control that can request that access.
+  $("enable-here").textContent = detectedSite ? `Enable on ${detectedSite.name}` : "Choose your chat site";
+  $("enable-here").disabled = false;
 }
-$("enable-here").onclick = async () => {
+async function enableSite(site) {
   try {
-    const site = siteFor(launchTab?.url); if (!site) throw new Error("Open a supported chat site first.");
+    // Keep request directly in the click handler, before any awaited tab lookup.
     if (!await chrome.permissions.request({ origins: [`https://${site.host}/*`] })) throw new Error("Access was not granted.");
-    await page("activate", { tabId: launchTab.id });
-    $("launch-status").textContent = "Lossless is beside your chat box. You can close this sidebar.";
+    const [current] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (siteFor(current?.url)?.id === site.id) {
+      const result = await page("activate", { tabId: current.id });
+      $("launch-status").textContent = result.available ? "Lossless is beside your chat box. You can close this sidebar." : `${site.name} enabled. Open a chat with a text box to use Lossless.`;
+    } else $("launch-status").textContent = `${site.name} enabled. Open or refresh its chat tab to use Lossless.`;
+    $("launch-sites").hidden = true;
     await renderSites();
+    await launchSite();
   } catch (e) { $("launch-status").textContent = e.message; }
+}
+for (const site of SITES) {
+  const button = document.createElement("button"); button.textContent = site.name;
+  button.onclick = () => enableSite(site); $("launch-sites").append(button);
+}
+$("enable-here").onclick = () => {
+  if (detectedSite) return enableSite(detectedSite);
+  $("launch-sites").hidden = false;
+  $("launch-status").textContent = "Choose the chat site you want to enable. Chrome will ask for access to that site only.";
 };
 chrome.tabs.onActivated?.addListener(launchSite);
 chrome.tabs.onUpdated?.addListener((_id, info) => { if (info.url) launchSite(); });

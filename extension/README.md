@@ -2,7 +2,7 @@
 
 **Cut words, not ideas.** Protect key ideas or exact wording, condense your text in your usual AI chat, and review what survived.
 
-Version 0.3.0 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek have individual optional site permissions. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
+Version 0.3.1 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek have individual optional site permissions. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
 
 ## Install
 
@@ -22,7 +22,7 @@ When upgrading an existing installation, rebuild its folder and press **Reload**
 
 No API key, companion or Lossless account is needed. Your chat provider's account, usage and payment rules still apply.
 
-1. Open the extension on a supported chat page and choose **Enable on this site**. Close the sidebar.
+1. Open the extension on a supported chat page and choose **Enable on this site**. If Chrome has not exposed the tab address, use **Choose your chat site** and select the provider. Grant access, then close the sidebar.
 2. Turn on **Lossless** beside the normal chat box. Write your request there. Add an optional word limit or notes about what must stay.
 3. Choose **Review & send**, inspect the complete outgoing prompt, then **Send with Lossless**. The extension adds preservation instructions and clicks one identifiable Send button. If it cannot identify the button, it leaves the prompt staged for you to send manually.
 

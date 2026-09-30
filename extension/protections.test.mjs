@@ -12,6 +12,7 @@ test('slash activation is explicit, strips only the leading command and preserve
   assert.ok(prompt.startsWith('Synthesize the discussion.'));
   assert.match(prompt, /No effect on speed/); assert.match(prompt, /Results.pdf/); assert.match(prompt, /"page":3/);
   assert.throws(() => protectedPrompt('/lossless', []));
+  assert.throws(() => protectedPrompt('/lossless Make it 150 words.', []), /Nothing sent/);
 });
 test('protections are scoped to a conversation; only a recent explicit send carries a new-chat draft forward', () => {
   const old = addProtection(contextFor(null, 'https://chatgpt.com/'), passage);

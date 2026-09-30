@@ -84,7 +84,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     const origin = `${new URL(tab.url).origin}/*`;
     if (!await chrome.permissions.contains({ origins: [origin] })) throw new Error("Enable this site first using the site access buttons.");
     await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });
-    if (!["list", "selection", "capture", "composer", "stage", "reveal", "activate"].includes(message.action)) throw new Error("Unknown page action");
+    if (!["list", "selection", "capture", "composer", "stage", "reveal", "activate", "inline-options", "highlight-reply"].includes(message.action)) throw new Error("Unknown page action");
     const result = await chrome.tabs.sendMessage(tab.id, { kind: "lossless", action: message.action, id: message.id, text: message.text, mode: message.mode, expected: message.expected });
     return { ...result, tabId: tab.id };
   })().then(respond, (error) => respond({ error: error.message }));

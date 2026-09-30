@@ -2,7 +2,7 @@
 
 **Cut words, not ideas.** Protect key ideas or exact wording, condense your text in your usual AI chat, and review what survived.
 
-Version 0.4.0 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek are the five declared chat origins. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
+Version 0.4.3 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek are the five declared chat origins. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
 
 ## Install
 
@@ -23,17 +23,25 @@ When upgrading an existing installation, rebuild its folder and press **Reload**
 No API key, companion or Lossless account is needed. Your chat provider's account, usage and payment rules still apply.
 
 1. Open a supported chat. Lossless detects it automatically after Chrome grants the extension access to the five declared chat sites.
-2. Select text in the conversation and choose **Keep meaning** or **Keep wording**. Overlapping selections can use both. The **Lossless · N kept** button shows your selections and lets you remove them.
-3. To use a PDF reference, choose **Open PDF** beside the chat box. Open a file from your device, select text on a page, and choose what must stay. The reader is linked to that conversation.
+2. Select text in the conversation and choose **Keep meaning** or **Keep wording**. Overlapping selections can use both. Lossless stays hidden during ordinary chat; typing **/lossless** shows the saved-passage count and sending instructions. Use **Selections** to review or remove passages.
+3. To use a PDF reference, click the extension icon, then **Selections & PDF → Open PDF**. Open a file from your device, select text on a page, and choose what must stay. The reader is linked to that conversation. Open PDF is also available while typing /lossless.
 4. Start your request with **/lossless**, for example `/lossless Condense this discussion to 300 words.` Press Enter or click the chat's normal Send button once.
 
 Lossless removes the command, adds your selected passages and preservation instructions, then sends through the current site's composer. Ordinary messages and Shift-Enter are unchanged. There is no second submission or prompt-review dialog. If a Send button cannot be identified, the enhanced text stays in the composer for manual sending. No automatic retries are made.
+
+With no saved passages, /lossless leaves your draft untouched and explains what to select. Remove the command to send an ordinary message instead. A brief receipt reports when selections were added and Send was pressed; it does not claim the provider accepted the request or that Jev checked the reply. Close the notice with × or Escape. Word limits remain instructions to the chat model, not enforced length guarantees.
 
 Selections belong to the current tab and conversation, survive a page reload during the browser session, and are removed when the chat tab closes. Moving between existing conversations clears them. After an explicit first send, selections follow a new chat into its assigned conversation URL.
 
 The local PDF reader supports selectable text, page navigation, files up to 25 MB, and passages up to 12,000 characters. It includes the filename and page number with each selected passage. The entire PDF is not uploaded. Scanned pages need OCR elsewhere. Chrome's built-in PDF viewer and arbitrary embedded PDF viewers are not injected; open the downloaded reference using **Open PDF**.
 
 This streamlines sending. It does not automatically check or repair the resulting reply. Use the checker below for that.
+
+### Show kept text in the reply
+
+After the reply finishes, press **Alt+Shift+H** or choose **Show kept text** in the sidebar or inline controls. Press again to hide the highlights. Amber marks text selected as Keep wording; green marks text selected as Keep meaning. Overlapping wording marks take priority. No API key or model call is used.
+
+This finds matching text, ignoring layout whitespace. It does not find semantic paraphrases or prove that meaning was preserved. The notice reports how many saved passages have text matches. Highlights clear when the reply changes, a new reply replaces it, the conversation changes, or selections change. Automatic reply detection currently targets ChatGPT's observed assistant containers and explicitly labelled assistant articles; other layouts report a fallback to the full editor.
 
 ## Check what survived
 
@@ -51,7 +59,9 @@ Normal Ctrl/Cmd+Z works inside text boxes. **Undo selection** restores protectio
 
 ## Optional API and CLI automation
 
-Follow [companion setup](../companion/README.md), then open **Sites and connections → Connect API or local CLI**. Grant optional native-messaging access and connect the registered host. Choose **Local companion** for checking, and **API or local CLI** as writer when it should generate text too.
+Choose **Set up Jev** on the sidebar's first screen. It links to the key console, shows where to put `TYPESAFE_API_KEY` in the repository's `.env.local`, and gives a companion setup command containing your extension ID. Follow [companion setup](../companion/README.md) to install the local host, then choose **Connect and check setup**. This checks configuration presence, not key validity. Keys stay in the companion, never in chat prompts.
+
+Open **Check a rewrite → Sites and connections**, choose **Local companion** for checking, and **API or local CLI** as writer when it should generate text too. Configuring Jev does not enable automatic checks after /lossless; checking still takes place in this editor.
 
 Provider/model selection, bounded repairs, tightening, style feedback, evidence and history remain available. Keys and CLI authentication stay in the companion. A web subscription is not an API credential. Cancellation detaches from results; a running provider call may finish.
 

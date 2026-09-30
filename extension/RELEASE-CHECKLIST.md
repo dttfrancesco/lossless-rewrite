@@ -1,5 +1,19 @@
 # Chrome release record
 
+## 0.4.3 reply highlights
+
+- Show kept text and Alt+Shift+H toggle visual matches in the latest identifiable assistant reply. Wording is amber, meaning selections green, and wording wins for overlapping spans. No model or API request is made by highlighting.
+- Uses browser highlight ranges without replacing reply nodes or editing content. Whitespace is normalized for locating visible text; paraphrases and semantic correctness are not inferred. Unmatched passages remain unverified.
+- The local browser harness verified a match spanning bold and plain text, shortcut activation, button dismissal and clearing after a reply edit. All 39 extension tests pass, including repeated matches, offsets, overlaps, missing passages, Unicode and range limits. Installed highlight rendering still requires acceptance on each advertised provider.
+
+## 0.4.2 quieter controls and command feedback
+
+- Removed the permanent composer bar. Controls appear for a text selection, a leading /lossless request, or an explicit Selections & PDF action. Click outside, press Escape or use × to dismiss; receipts expire after eight seconds.
+- Empty-selection requests stay unsent with the original draft intact. Readiness and receipts distinguish prompt enrichment from Jev checking. Sending still does not automatically check the reply.
+- Set up Jev is available on the launcher's first screen, with the key-console link, local configuration instructions, an extension-ID-specific companion command and connection feedback. No credentials are stored in prompts or in the extension.
+- Installed ChatGPT inspection found the cause of literal commands reaching chat unchanged: an editable answer made the composer ambiguous. The adapter now recognizes the labelled Ask ChatGPT input inside its form; a regression test confirms that insertion never edits the answer block.
+- All 36 extension tests pass. The local browser harness verified empty-selection refusal, single submission through textarea and rich-text composers, Shift-Enter, outside-click dismissal, automatic receipt expiry and the setup screen at 400px width. Installed acceptance of the composer fix remains pending; no new cross-provider or live Jev claim is made.
+
 ## 0.4.0 conversation workflow
 
 - Chat origins are declared at installation for automatic detection and injection. Chrome may require accepting the changed permissions when reloading/updating from 0.3.x. No all-sites or history permission is added.

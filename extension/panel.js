@@ -16,6 +16,12 @@ document.body.classList.toggle("expanded", new URLSearchParams(location.search).
 function editor(open) { $("advanced-editor").hidden = !open; $("launcher").hidden = open; }
 $("open-editor").onclick = () => editor(true);
 $("close-editor").onclick = () => editor(false);
+$("manage-selections").onclick = async () => { try { await page("inline-options"); $("launch-status").textContent = "Selections and Open PDF are now beside your chat box."; } catch (e) { $("launch-status").textContent = e.message; } };
+$("highlight-reply").onclick = async () => { try { const result = await page("highlight-reply"); $("launch-status").textContent = result.message; } catch (e) { $("launch-status").textContent = e.message; } };
+$("companion-command").textContent = `npx tsx companion/setup.ts --extension-id ${chrome.runtime.id || 'YOUR_EXTENSION_ID'} --browser chrome`;
+$("jev-setup").onclick = () => $("jev-dialog").showModal();
+$("close-jev").onclick = () => $("jev-dialog").close();
+for (const dialog of document.querySelectorAll("dialog")) dialog.addEventListener("click", e => { const r = dialog.getBoundingClientRect(); if (e.target === dialog && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) dialog.close(); });
 if (document.body.classList.contains("expanded")) editor(true);
 let launchTab;
 async function launchSite() {
@@ -214,7 +220,23 @@ function importText(target, value, ref) {
 async function importSelection(target) { const result = await page("selection"); importText(target, result.text, result.id ? { id: result.id, tabId: result.tabId, url: result.url } : undefined); if (target === "source" && result.fullMessage && result.fullMessage !== result.text) notice("Only the selected text was imported. Use Choose a message if you need the whole source."); }
 function download(name, contents, type) { const url = URL.createObjectURL(new Blob([contents], { type })); const a = document.createElement("a"); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
 action("expand", () => chrome.tabs.create({ url: chrome.runtime.getURL("panel.html?expanded=1") }));
-$("connect").addEventListener("click", async () => { try { if (!await chrome.permissions.request({ permissions: ["nativeMessaging"] })) throw new Error("Companion permission was not granted."); if (!port) attachPort(); const hello = await call("hello"); if (hello.protocolVersion !== 1) throw new Error("Companion protocol differs. Rebuild the extension and companion together."); const models = await call("models.list"); connection = true; providers = models.providers; $("connection").textContent = "Local companion connected"; $("readiness").textContent = `Checker: ${models.checker.configured ? "configured" : "not configured"}. Cancellation: ${hello.cancellation || "stop listening only"}.`; renderModels(); } catch (e) { notice(e.message, true); } });
+async function connectCompanion() {
+  $("connect").disabled = $("setup-connect").disabled = true;
+  $("setup-status").textContent = "Connecting to the local companion…";
+  try {
+    if (!await chrome.permissions.request({ permissions: ["nativeMessaging"] })) throw new Error("Companion permission was not granted.");
+    if (!port) attachPort();
+    const hello = await call("hello"); if (hello.protocolVersion !== 1) throw new Error("Companion protocol differs. Rebuild the extension and companion together.");
+    const models = await call("models.list"); connection = true; providers = models.providers;
+    $("connection").textContent = "Local companion connected";
+    $("readiness").textContent = `Checker: ${models.checker.configured ? "configured" : "not configured"}. Cancellation: ${hello.cancellation || "stop listening only"}.`;
+    $("setup-status").textContent = models.checker.configured ? `Companion connected. Checker: ${models.checker.provider}. Configuration found; key validity has not been tested.` : "Companion connected, but no checker key found. Add TYPESAFE_API_KEY to .env.local, then close and reopen Chrome to restart the companion.";
+    renderModels();
+  } catch (e) { $("setup-status").textContent = `${e.message} Check the companion installation in step 2.`; notice(e.message, true); }
+  finally { $("connect").disabled = $("setup-connect").disabled = false; }
+}
+$("connect").addEventListener("click", connectCompanion);
+$("setup-connect").addEventListener("click", connectCompanion);
 async function renderSites() {
   const labels = await Promise.all(SITES.map(async site => {
     const enabled = await chrome.permissions.contains({ origins: [`https://${site.host}/*`] });

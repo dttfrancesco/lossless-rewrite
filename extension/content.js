@@ -18,6 +18,12 @@ import { sameComposerText } from "./inline-send.js";
   }
   function composer() {
     const candidates = [...document.querySelectorAll('textarea, [contenteditable="true"]')].filter((el) => visible(el) && !el.closest('[role="dialog"]') && !el.disabled && !el.readOnly && el.getAttribute?.("aria-hidden") !== "true" && !el.parentElement?.closest('[contenteditable="true"]'));
+    // ChatGPT can show an editable response alongside its composer. Prefer the
+    // explicitly labelled chat input inside its form, never the writing block.
+    if (new URL(location.href).hostname === 'chatgpt.com') {
+      const chat = candidates.filter(el => el.closest('form') && el.getAttribute?.('aria-label') === 'Ask ChatGPT');
+      if (chat.length) return chat.length === 1 ? chat[0] : null;
+    }
     return candidates.length === 1 ? candidates[0] : null;
   }
   const value = (el) => el instanceof HTMLTextAreaElement ? el.value : el.innerText;
@@ -29,7 +35,7 @@ import { sameComposerText } from "./inline-send.js";
   }
   let inline, disposed = false;
   const allowed = async () => { try { return Boolean((await chrome.runtime.sendMessage({ kind: "inline-access" }))?.allowed); } catch { return false; } };
-  allowed().then(ok => { if (ok && !disposed) inline = mountInline({ composer, value, write, visible, allowed }); });
+  const inlineReady = allowed().then(ok => { if (ok && !disposed) inline = mountInline({ composer, value, write, visible, allowed }); });
   function dispose() { disposed = true; clearTimeout(timer); observer.disconnect(); inline?.destroy(); references.clear(); chrome.runtime.onMessage.removeListener(receive); delete globalThis.__losslessLoaded; }
   function receive(message, sender, respond) {
     if (sender.id !== chrome.runtime.id || message.kind !== "lossless") return;
@@ -37,6 +43,8 @@ import { sameComposerText } from "./inline-send.js";
       if (message.action === "disable") { dispose(); return respond({ disabled: true }); }
       if (message.action === "access-changed") { allowed().then(ok => { if (!ok) dispose(); }); return respond({ received: true }); }
       if (message.action === "activate") return respond({ activated: true, available: Boolean(composer()) });
+      if (message.action === "inline-options") { inlineReady.then(() => { if (!inline || disposed) respond({ error: "Refresh this chat after granting site access." }); else { inline.open(); respond({ opened: true }); } }, e => respond({ error: e.message })); return true; }
+      if (message.action === "highlight-reply") { inlineReady.then(() => inline && !disposed ? inline.highlight() : { error: "Refresh this chat after granting site access." }).then(respond, e => respond({ error: e.message })); return true; }
       if (message.action === "protections-changed") { inline?.refresh(); return respond({ refreshed: true }); }
       if (message.action === "list") return respond({ messages: articles().map((el) => ({ id: reference(el), preview: text(el).slice(0, 180), characters: text(el).length })), note: "Choose and review one visible message. Imported page text is plain text, not original Markdown." });
       if (message.action === "selection") {

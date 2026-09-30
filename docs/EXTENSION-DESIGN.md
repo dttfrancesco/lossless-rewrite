@@ -18,7 +18,7 @@ The extension keeps keys in the local companion. Site access is requested separa
 
 ## Writing paths
 
-- **This conversation:** review a prepared prompt, insert or copy it, and send it yourself. Exact wording is checked locally. Meaning checks and extraction use explicitly sent chat prompts and validated JSON responses, bound to the current document revision and request token. This is a chat-model review; it does not invoke Jev or certify judgment accuracy. Repairs are reviewed and sent manually.
+- **This conversation:** the 0.3.0 launcher enables inline controls beside the chat composer. Review & send adds preservation instructions to the current draft; Send with Lossless inserts the reviewed text and clicks an unambiguous send control once. It does not hook Enter or replace the native Send action. Draft changes, navigation or access revocation abort sending; unknown controls leave the text staged. This does not verify the reply. The full editor checks exact wording locally. Meaning checks and extraction use explicitly sent chat prompts and validated JSON responses, bound to the current document revision and request token. This is a chat-model review; it does not invoke Jev or certify judgment accuracy. Repairs are reviewed and sent manually.
 - **API or local CLI:** the companion runs the existing rewrite/check/repair pipeline. Results appear in the extension. A web subscription is never treated as an API credential.
 
 Both paths support exact wording, meaning and coverage inventories, source/reply evidence, style feedback, attempts/history, copying and evidence export. Source and reply edits invalidate their previous check. Late results are matched to document/revision/run IDs.
@@ -32,6 +32,6 @@ Page imports rely on conservative adapters and user review. Unsupported or ambig
 - Native messaging has a closed operation set and bounded payload/chunk sizes. See the [companion protocol](../companion/README.md).
 - Cancellation detaches from results; provider execution may continue.
 - The five origins are allowlisted with individual optional permissions. Installed compatibility remains subject to the manual release matrix. Native messaging is optional too.
-- The 0.2.0 preview contains no hosted service, paid entitlements or billing.
+- The 0.3.0 preview contains no hosted service, paid entitlements or billing.
 
 The README media depict this workflow as an illustration. They are not a recording of a live installation.

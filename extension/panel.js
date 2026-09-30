@@ -2,7 +2,7 @@ import { CATALOG } from "../lib/llm/catalog.ts";
 import recorded from "../demo/document-repair.json";
 import { newDocument, invalidate, currentEnvelope, summary, preparePrompt, evidenceFor, extendFeedback } from "./shared.js";
 import { refreshEvidenceLabels, requireIdle, beginOperation, evidenceLabel } from "./view.js";
-import { SITES } from "./sites.js";
+import { SITES, siteFor } from "./sites.js";
 import { createChatTask, applyChatResponse, unitsForChat, localResult, revisionChanges } from "./chat-workflow.js";
 import { wordCount } from "../lib/text/sentences.ts";
 const $ = (id) => document.getElementById(id);
@@ -13,6 +13,30 @@ function rememberMarks() { markUndo.push({ documentId: state.documentId, source:
 function taskUI() { $("chat-task").hidden = !state.chatTask; $("task-label").textContent = state.chatTask?.kind === "inventory" ? "Next: get your list of ideas" : "Next: review this rewrite in your chat"; }
 function counts() { $("source-count").textContent = `${wordCount(state.source)} words`; }
 document.body.classList.toggle("expanded", new URLSearchParams(location.search).has("expanded"));
+function editor(open) { $("advanced-editor").hidden = !open; $("launcher").hidden = open; }
+$("open-editor").onclick = () => editor(true);
+$("close-editor").onclick = () => editor(false);
+if (document.body.classList.contains("expanded")) editor(true);
+let launchTab;
+async function launchSite() {
+  try {
+    [launchTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    const site = siteFor(launchTab?.url);
+    $("enable-here").disabled = !site;
+    if (site) $("enable-here").textContent = `Enable on ${site.name}`;
+  } catch { $("enable-here").disabled = true; }
+}
+$("enable-here").onclick = async () => {
+  try {
+    const site = siteFor(launchTab?.url); if (!site) throw new Error("Open a supported chat site first.");
+    if (!await chrome.permissions.request({ origins: [`https://${site.host}/*`] })) throw new Error("Access was not granted.");
+    await page("activate", { tabId: launchTab.id });
+    $("launch-status").textContent = "Lossless is beside your chat box. You can close this sidebar.";
+    await renderSites();
+  } catch (e) { $("launch-status").textContent = e.message; }
+};
+chrome.tabs.onActivated?.addListener(launchSite);
+chrome.tabs.onUpdated?.addListener((_id, info) => { if (info.url) launchSite(); });
 function persist() { state._instance = instance; return chrome.storage.session.set({ document: state }).catch(() => { notice("This document is too large for session storage. Export the evidence before closing the panel.", true); }); }
 function notice(text, error = false) { $("status").textContent = text; $("status").classList.toggle("error", error); }
 function changed(reason, refresh = true) { invalidate(state, reason); active = null; $("cancel").hidden = true; persist(); notice(state.notice); if (refresh) renderRequirements(); else refreshEvidenceLabels($("requirements"), state); renderTraces(); taskUI(); counts(); $("revision-changes").replaceChildren(); }
@@ -259,4 +283,4 @@ chrome.storage.onChanged.addListener((changes, area) => { if (area === "session"
 attachPort();
 const saved = await chrome.storage.session.get("document"); if (saved.document) state = saved.document;
 if (state.sourceRef || state.replyRef) { invalidate(state, "Review captured messages after reopening; previous page evidence is stale."); state.complete = false; await persist(); }
-render(); await renderSites();
+render(); await renderSites(); await launchSite();

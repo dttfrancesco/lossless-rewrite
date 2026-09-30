@@ -1,5 +1,13 @@
 # Chrome release record
 
+## 0.3.0 preview
+
+- User confirmed the 0.2.0 installed sidebar opens, but reported a crowded and confusing interface.
+- Replaced the default view with a small launcher. Added optional inline controls, complete prompt review and explicit sending through the current chat provider. The full checker remains behind Check a rewrite.
+- Local browser harness verified one send through textarea and contenteditable composers using the actual bundled content script. The harness is a synthetic page with simulated extension permission APIs; it does not establish installed-provider compatibility.
+- Transaction tests cover draft edits, navigation, permission revocation, unknown send controls, prompt limits and rich-editor blank blocks. No auto-send, automatic verification or subscription service is claimed.
+- Installed 0.3.0 acceptance remains pending. Reload the extension and refresh chat tabs before testing this version.
+
 ## 0.2.0 preview
 
 - Packaged MV3 source, no remote executable code, no all-sites permission.

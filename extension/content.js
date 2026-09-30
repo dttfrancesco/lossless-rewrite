@@ -1,3 +1,5 @@
+import { mountInline } from "./inline.js";
+import { sameComposerText } from "./inline-send.js";
 // This script runs in Chrome's isolated world. No window-message or page event bridge.
 (() => {
   if (globalThis.__losslessLoaded) return;
@@ -19,9 +21,22 @@
     return candidates.length === 1 ? candidates[0] : null;
   }
   const value = (el) => el instanceof HTMLTextAreaElement ? el.value : el.innerText;
-  chrome.runtime.onMessage.addListener((message, sender, respond) => {
+  function write(el, after) {
+    el.focus();
+    if (el instanceof HTMLTextAreaElement) { Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(el, after); el.dispatchEvent(new Event("input", { bubbles: true })); }
+    else { const range = document.createRange(); range.selectNodeContents(el); const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range); if (!document.execCommand("insertText", false, after)) throw new Error("This editor does not support insertion. Copy and paste the prompt."); }
+    if (!sameComposerText(value(el), after)) throw new Error("The editor did not accept the complete prompt. Review the chat draft and use copy/paste.");
+  }
+  let inline, disposed = false;
+  const allowed = async () => { try { return Boolean((await chrome.runtime.sendMessage({ kind: "inline-access" }))?.allowed); } catch { return false; } };
+  allowed().then(ok => { if (ok && !disposed) inline = mountInline({ composer, value, write, visible, allowed }); });
+  function dispose() { disposed = true; clearTimeout(timer); observer.disconnect(); inline?.destroy(); references.clear(); chrome.runtime.onMessage.removeListener(receive); delete globalThis.__losslessLoaded; }
+  function receive(message, sender, respond) {
     if (sender.id !== chrome.runtime.id || message.kind !== "lossless") return;
     try {
+      if (message.action === "disable") { dispose(); return respond({ disabled: true }); }
+      if (message.action === "access-changed") { allowed().then(ok => { if (!ok) dispose(); }); return respond({ received: true }); }
+      if (message.action === "activate") return respond({ activated: true });
       if (message.action === "list") return respond({ messages: articles().map((el) => ({ id: reference(el), preview: text(el).slice(0, 180), characters: text(el).length })), note: "Choose and review one visible message. Imported page text is plain text, not original Markdown." });
       if (message.action === "selection") {
         const focused = document.activeElement;
@@ -44,20 +59,19 @@
         const before = value(el); if (before !== message.expected) throw new Error("The chat draft changed. Review it again before inserting.");
         if (!["append", "replace"].includes(message.mode) || typeof message.text !== "string" || message.text.length > 300000) throw new Error("Invalid prompt");
         const after = message.mode === "append" && before ? `${before}\n\n${message.text}` : message.text;
-        el.focus();
-        if (el instanceof HTMLTextAreaElement) { Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value").set.call(el, after); el.dispatchEvent(new Event("input", { bubbles: true })); }
-        else { const range = document.createRange(); range.selectNodeContents(el); const selection = getSelection(); selection.removeAllRanges(); selection.addRange(range); if (!document.execCommand("insertText", false, after)) throw new Error("This editor does not support insertion. Copy and paste the prompt."); }
-        if (value(el).replace(/\r\n/g, "\n") !== after.replace(/\r\n/g, "\n")) throw new Error("The editor did not accept the complete prompt. Review the chat draft and use copy/paste.");
+        write(el, after);
         return respond({ staged: true }); // Never submit, click send or press Enter.
       }
       if (message.action === "reveal") { const item = references.get(message.id); if (!item?.el.isConnected || text(item.el) !== message.expected) throw new Error("Page message no longer matches the captured text."); item.el.scrollIntoView({ block: "center", behavior: "smooth" }); return respond({ located: true }); }
     } catch (error) { respond({ error: error.message }); }
-  });
+  }
+  chrome.runtime.onMessage.addListener(receive);
   let timer;
-  new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(() => {
+  const observer = new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(() => {
     const navigation = lastURL !== location.href; lastURL = location.href;
     const ids = [];
     for (const [id, item] of references) if (!item.el.isConnected || text(item.el) !== item.text) { ids.push(id); item.text = item.el.isConnected ? text(item.el) : ""; }
     if (navigation || ids.length) chrome.runtime.sendMessage({ kind: "page-changed", ids, navigation }).catch(() => {});
-  }, 150); }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  }, 150); });
+  observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
 })();

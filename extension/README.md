@@ -2,7 +2,7 @@
 
 **Cut words, not ideas.** Protect key ideas or exact wording, condense your text in your usual AI chat, and review what survived.
 
-Version 0.2.0 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek have individual optional site permissions. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
+Version 0.3.0 is an unpacked preview, not a Chrome Web Store release. ChatGPT, Claude, Gemini, Grok and DeepSeek have individual optional site permissions. Full installed-site acceptance remains pending. Copy/paste works with other tools too.
 
 ## Install
 
@@ -16,11 +16,21 @@ npm run test:extension
 
 Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `extension/dist`. Pin the extension and click its icon. **Expand** opens a wider editor.
 
-When upgrading an existing installation, rebuild its folder and press **Reload** in Chrome. A different folder can produce a different extension ID; companion registration must match it.
+When upgrading an existing installation, rebuild its folder and press **Reload** in Chrome, then refresh your chat tab. A different folder can produce a different extension ID; companion registration must match it.
 
 ## Use your existing chat
 
 No API key, companion or Lossless account is needed. Your chat provider's account, usage and payment rules still apply.
+
+1. Open the extension on a supported chat page and choose **Enable on this site**. Close the sidebar.
+2. Turn on **Lossless** beside the normal chat box. Write your request there. Add an optional word limit or notes about what must stay.
+3. Choose **Review & send**, inspect the complete outgoing prompt, then **Send with Lossless**. The extension adds preservation instructions and clicks one identifiable Send button. If it cannot identify the button, it leaves the prompt staged for you to send manually.
+
+The native Send button and Enter remain unchanged. Inline sending uses the site's currently selected model. It adds instructions; it does not automatically verify or repair the answer. Changed drafts and navigation abort the send, and sends are never retried automatically.
+
+## Check what survived
+
+Choose **Check a rewrite** in the sidebar to open the full editor. Its existing checks, overlapping protections, evidence, undo and companion tools remain available.
 
 1. Add your complete source or notes. Include source labels when combining papers.
 2. Select passages and choose **Keep wording**, **Keep meaning** or **Must cover**. Overlapping protections are allowed. Must cover prepares a chat prompt for extracting ideas; send it, import the complete JSON response and review the list.
@@ -42,7 +52,7 @@ Provider/model selection, bounded repairs, tightening, style feedback, evidence 
 
 All five listed origins support permission-gated selection import through the same conservative adapter. Message picking requires accessible article elements; insertion requires exactly one visible composer. Unsupported layouts use copy/paste. DeepSeek's authenticated layout has not been inspected.
 
-The extension never presses Send, intercepts cookies or session tokens, or imports whole conversations in the background. Imported page text is plain text. Streaming completion is confirmed by the user.
+The extension presses Send only after the explicit **Send with Lossless** action. It does not intercept cookies or session tokens or import whole conversations in the background. Imported page text is plain text. Streaming completion is confirmed by the user. Inline controls appear on enabled sites; revoking site access removes them.
 
 ## Privacy and release status
 

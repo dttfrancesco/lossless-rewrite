@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Lossless Rewrite",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Cut words, not ideas. Protect key ideas, compare rewrites, and prepare focused repairs beside your AI chat.",
   "minimum_chrome_version": "116",
   "icons": { "16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png" },

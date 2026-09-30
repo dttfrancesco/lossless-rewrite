@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { buildSync } from "esbuild";
+import { fileURLToPath } from "node:url";
 import vm from "node:vm";
-const code = await readFile(new URL("./content.js", import.meta.url), "utf8");
+const code = buildSync({ entryPoints: [fileURLToPath(new URL("./content.js", import.meta.url))], bundle: true, write: false, format: "iife" }).outputFiles[0].text;
 function harness() {
   let handler; let mutation; let timer; const events = []; const sent = [];
   class Textarea {
@@ -13,7 +14,7 @@ function harness() {
   const article = { innerText: "User\nComplete source with a condition.", isConnected: true, getClientRects: () => [1], parentElement: { closest: () => null }, scrollIntoView: () => events.push("scroll") };
   const composer = new Textarea("Existing unsent draft"); let composers = [composer];
   const document = { documentElement: {}, querySelectorAll: (selector) => selector.startsWith("article") ? [article] : composers };
-  const chrome = { runtime: { id: "extension-id", onMessage: { addListener: (fn) => handler = fn }, sendMessage: (m) => { sent.push(m); return Promise.resolve(); } } };
+  const chrome = { runtime: { id: "extension-id", onMessage: { addListener: (fn) => handler = fn }, sendMessage: (m) => { if (m.kind === "inline-access") return Promise.resolve({ allowed: false }); sent.push(m); return Promise.resolve(); } } };
   vm.runInNewContext(code, { chrome, document, location: { href: "https://chatgpt.com/c/1" }, HTMLTextAreaElement: Textarea, getComputedStyle: () => ({ visibility: "visible" }), MutationObserver: class { constructor(fn) { mutation = fn; } observe() {} }, Event: class { constructor(type) { this.type = type; } }, clearTimeout() {}, setTimeout(fn) { timer = fn; }, getSelection: () => null });
   return { article, composer, sent, ambiguous() { composers = [composer, new Textarea("Other")]; }, mutate() { mutation(); timer(); }, request(action, fields = {}, senderId = "extension-id") { let response; handler({ kind: "lossless", action, ...fields }, { id: senderId }, (r) => response = r); return response; } };
 }

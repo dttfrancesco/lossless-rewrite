@@ -1,4 +1,5 @@
 import { HOST, OPERATIONS, supportedPage, assembler } from "./shared.js";
+import { SITES } from "./sites.js";
 const panels = new Set();
 let native;
 const requests = new Map();
@@ -6,6 +7,32 @@ const decode = assembler();
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
 chrome.storage.session.setAccessLevel({ accessLevel: "TRUSTED_CONTEXTS" });
 chrome.storage.local.setAccessLevel({ accessLevel: "TRUSTED_CONTEXTS" });
+let siteSync = Promise.resolve();
+function syncSites() {
+  siteSync = siteSync.catch(() => {}).then(async () => {
+    const registered = await chrome.scripting.getRegisteredContentScripts();
+    for (const site of SITES) {
+      const origin = `https://${site.host}/*`, id = `lossless-${site.id}`;
+      const enabled = await chrome.permissions.contains({ origins: [origin] });
+      const exists = registered.some(s => s.id === id);
+      if (enabled && !exists) await chrome.scripting.registerContentScripts([{ id, matches: [origin], js: ["content.js"], runAt: "document_idle", persistAcrossSessions: true }]);
+      if (!enabled && exists) await chrome.scripting.unregisterContentScripts({ ids: [id] });
+    }
+  });
+  return siteSync;
+}
+syncSites().catch(() => {});
+chrome.permissions.onAdded.addListener(() => syncSites().catch(() => {}));
+chrome.permissions.onRemoved.addListener(async permission => {
+  await syncSites().catch(() => {});
+  // Unregistering alone leaves injected scripts alive. Explicitly dispose them too.
+  if (!permission.origins?.length) return;
+  for (const tab of await chrome.tabs.query({})) {
+    // Tab URLs may no longer be readable after revocation. Each existing script
+    // asks the worker about its own trusted sender origin before staying active.
+    await chrome.tabs.sendMessage(tab.id, { kind: "lossless", action: "access-changed" }).catch(() => {});
+  }
+});
 function broadcast(message) { for (const port of panels) { try { port.postMessage(message); } catch { panels.delete(port); } } }
 function connect() {
   if (native) return native;
@@ -37,6 +64,9 @@ chrome.runtime.onConnect.addListener((port) => {
   });
 });
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
+  if (message.kind === "inline-access" && sender.id === chrome.runtime.id && sender.tab && sender.frameId === 0 && supportedPage(sender.url)) {
+    chrome.permissions.contains({ origins: [`${new URL(sender.url).origin}/*`] }).then(allowed => respond({ allowed }), () => respond({ allowed: false })); return true;
+  }
   if (message.kind === "page-changed" && sender.id === chrome.runtime.id && sender.tab && supportedPage(sender.url)) {
     broadcast({ kind: "page-changed", tabId: sender.tab.id, ids: Array.isArray(message.ids) ? message.ids.filter((id) => typeof id === "string").slice(0, 100) : [], navigation: Boolean(message.navigation) }); return;
   }
@@ -49,7 +79,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     const origin = `${new URL(tab.url).origin}/*`;
     if (!await chrome.permissions.contains({ origins: [origin] })) throw new Error("Enable this site first using the site access buttons.");
     await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });
-    if (!["list", "selection", "capture", "composer", "stage", "reveal"].includes(message.action)) throw new Error("Unknown page action");
+    if (!["list", "selection", "capture", "composer", "stage", "reveal", "activate"].includes(message.action)) throw new Error("Unknown page action");
     const result = await chrome.tabs.sendMessage(tab.id, { kind: "lossless", action: message.action, id: message.id, text: message.text, mode: message.mode, expected: message.expected });
     return { ...result, tabId: tab.id };
   })().then(respond, (error) => respond({ error: error.message }));

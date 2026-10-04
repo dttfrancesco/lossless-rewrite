@@ -2,6 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {checkPayload, localWording, checkedItems, repairDraft, completionGate} from './inline-check.js';
 const items = [{type:'keep_wording',text:'No control group.',source:{label:'Paper'}},{type:'keep_meaning',text:'Cannot infer causality.',source:{label:'Paper'}}];
+test('removal has opposite semantics and repairs never restore excluded information',()=>{
+ const excluded={type:'remove',text:'The pilot cost $200.'};
+ assert.equal(localWording([excluded],excluded.text)[0].status,'missing');
+ assert.equal(localWording([excluded],'The pilot was expensive.')[0].status,'unchecked');
+ const prompt=repairDraft('Full reply.',[{...excluded,status:'missing'}]);
+ assert.match(prompt,/For remove findings, delete that content and its paraphrases; never restore it/);
+});
 test('check payload preserves offsets for combined marks and never enables a writing pass',()=>{
  const p=checkPayload(items,'Reply'); for(const c of p.constraints) assert.equal(p.source.slice(c.start,c.end),c.text);
  assert.equal(p.maxRepairs,0); assert.throws(()=>checkPayload(items,''));

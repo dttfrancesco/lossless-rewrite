@@ -2,3 +2,5 @@
 .document{scrollbar-gutter:stable}
 /* Once loaded, keep the document above the fold; setup help stays on demand. */
 .loaded #linked,.loaded #sharing-note{display:none}.loaded main{gap:6px;padding:8px}.loaded .drop-zone{padding:6px 9px}.loaded .drop-zone strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.loaded .upload-help{font-size:12px;margin:5px 0}.loaded .nav{margin-top:5px}.loaded #status{font-size:12px;margin:4px 0}.loaded header{padding:9px 12px}.loaded header strong{font-size:19px}.loaded .document{min-height:260px}.loaded details.saved-passages,.loaded #projects{padding-top:4px}
+
+#remove{background:#fbe0df;color:#8b2620;border-color:#dda8a4}.selection-actions{flex-wrap:wrap}

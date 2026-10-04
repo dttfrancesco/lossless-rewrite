@@ -13,11 +13,11 @@ async function request(action, args = {}) {
   const result = await chrome.runtime.sendMessage({ kind: 'protections', token, action, ...args });
   if (result?.error) throw new Error(result.error);
   if (!result?.context) throw new Error('Open this reader using Open PDF beside your chat.');
-  context = result.context; $('linked').textContent = `Linked to ${new URL(context.scope).hostname}. ${context.items.length} passages kept.`;
+  context = result.context; $('linked').textContent = `Linked to ${new URL(context.scope).hostname}. ${context.items.length} passages marked.`;
   $('kept-summary').textContent = `Selected passages (${context.items.filter(i=>i.source.kind==='pdf').length})`;
-  $('kept').replaceChildren(...context.items.filter(i => i.source.kind === 'pdf').map(i => { const p = document.createElement(i.source.fileId?'button':'p'); if(i.source.fileId){p.dataset.fileId=i.source.fileId;p.dataset.page=i.source.page;p.title='Open source page';} p.textContent = `${i.source.label}, p. ${i.source.page}: ${i.text}`; return p; }));
+  $('kept').replaceChildren(...context.items.filter(i => i.source.kind === 'pdf').map(i => { const p = document.createElement(i.source.fileId?'button':'p'); if(i.source.fileId){p.dataset.fileId=i.source.fileId;p.dataset.page=i.source.page;p.title='Open source page';} p.textContent = `${i.type==='remove'?'Remove this':i.type==='keep_wording'?'Keep wording':'Keep meaning'} · ${i.source.label}, p. ${i.source.page}: ${i.text}`; return p; }));
 }
-function clearSelection() { selected = ''; $('selected').value = ''; $('meaning').disabled = $('wording').disabled = true; $('selection-tools').hidden=true; }
+function clearSelection() { selected = ''; $('selected').value = ''; $('meaning').disabled = $('wording').disabled = $('remove').disabled = true; $('selection-tools').hidden=true; }
 async function renderPage() {
   if (!pdf) return;
   if (rendering) { rerender=true; return; }
@@ -66,10 +66,10 @@ function selectionChanged() {
   if (!s?.rangeCount || !layer.contains(s.anchorNode) || !layer.contains(s.focusNode)) return;
   selected = s.toString(); $('selected').value = selected;
   $('selection-tools').hidden=!selected.trim();
-  $('meaning').disabled = $('wording').disabled = !selected.trim() || selected.length > 12000;
+  $('meaning').disabled = $('wording').disabled = $('remove').disabled = !selected.trim() || selected.length > 12000;
 }
 document.addEventListener('mouseup', selectionChanged); document.addEventListener('keyup', selectionChanged);
-for (const [id, type] of [['meaning', 'keep_meaning'], ['wording', 'keep_wording']]) $(id).onclick = async () => {
+for (const [id, type] of [['meaning', 'keep_meaning'], ['wording', 'keep_wording'], ['remove', 'remove']]) $(id).onclick = async () => {
   try { await request('add', { scope: context.scope, item: { type, text: selected, source: { kind: 'pdf', label: fileName, page: pageNumber, fileId:activeFileId } } }); status(`Saved to the linked chat. Write your request there and press ${shortcutLabels().send}.`); clearSelection(); }
   catch (e) { status(e.message); }
 };

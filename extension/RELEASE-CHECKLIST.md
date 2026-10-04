@@ -1,4 +1,15 @@
 # Chrome release record
+
+## 0.5.16 selection and rule workflow · 4 October 2026
+
+- Keep meaning / Keep wording / Remove this are available for chat and PDF selections. Remove requests omit the selected content and paraphrases, while Unmark cancels a selection.
+- Hosted checks evaluate removals separately from preservation. Exact forbidden wording is a local failure; local absence is never claimed as semantic success. Fix prompts delete excluded content rather than restoring it.
+- Check reply works on the latest completed ordinary chat reply, without requiring a previous Lossless send. It includes saved writing rules, blocks streaming, discards stale results, and retains explicit confirmation for larger checks.
+- The six quick actions are Selections, Check reply, Writing rules, PDF, Highlights and Sidebar. Highlights contains independent Source and Reply toggles. The X hides the launcher.
+- Rule capture accepts natural style phrasing and explicit `Writing rules:` blocks. Verified newly sent user turns support remounted composers and new-chat URL changes. It never scans assistant replies for preferences.
+- 86 extension tests and TypeScript checks pass. Hosted removal support deployed to lossless-api. Installed Chrome test captured a custom rule and returned a correct still-present removal finding on fictional text.
+- Rebuild/package and Chrome Store upload are separate from installed testing. This version does not change permissions.
+
 ## 0.5.15 store identity · 1 October 2026
 
 - Store draft ID: `cnnhnhonmpadooefbdnpokpipokghigb`. User-provided public key hashes to that exact Chrome ID; store builds fail on a mismatch.

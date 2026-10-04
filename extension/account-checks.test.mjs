@@ -63,6 +63,12 @@ test('signed-in private account checks automatically even with old consent set t
   assert.deepEqual(w.calls,['account','quote','check']);
 });
 
+test('removals reach hosted checks and are never silently accepted by a local-only check',async()=>{
+ const w=worker({type:'remove'});assert.equal((await w.send()).items[0].type,'remove');
+ assert.deepEqual(w.calls,['account','quote','check']);
+ const local=worker({type:'remove',signedIn:false});assert.match((await local.send()).error,/removals/);assert.deepEqual(local.calls,[]);
+});
+
 test('rule-only checks call Jev, preserve uncertainty, and reject a changed rule snapshot',async()=>{
  const w=worker({rules:['Use active voice.'],ruleOnly:true});const result=await w.send();
  assert.equal(result.items[0].type,'writing_rule');assert.equal(result.items[0].status,'uncertain');assert.deepEqual(w.calls,['account','quote','check']);

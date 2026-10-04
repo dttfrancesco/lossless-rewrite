@@ -32,6 +32,17 @@ test('overlapping wording and meaning are retained, identical marks deduplicated
   assert.throws(() => addProtection(c, { ...passage, text: 'x'.repeat(12001) }));
   assert.throws(() => addProtection(c, { ...passage, source: { kind: 'pdf', label: 'x', page: -1 } }));
 });
+
+test('Remove this is an exclusion, replacing opposite marks on the same passage',()=>{
+  let c=addProtection(contextFor(null,url),passage);
+  c=addProtection(c,{...passage,type:'keep_wording'});
+  c=addProtection(c,{...passage,type:'remove'});
+  assert.deepEqual(c.items.map(i=>i.type),['remove']);
+  const prompt=protectedPrompt('/lossless Shorten the paper.',c.items);
+  assert.match(prompt,/Omit the content of each remove passage, including paraphrases/);
+  assert.match(prompt,/not a privacy redaction/);
+  c=addProtection(c,passage);assert.deepEqual(c.items.map(i=>i.type),['keep_meaning']);
+});
 test('real worker store serializes selections, rejects stale readers and blocks foreign senders', async () => {
   const stored = {}, tab = { id: 5, url };
   globalThis.chrome = { runtime: { getURL: file => `chrome-extension://test/${file}` }, permissions: { contains: async () => true }, storage: { local:{get:async()=>({})},session: { get: async key => key === null ? structuredClone(stored) : ({ [key]: structuredClone(stored[key]) }), set: async data => Object.assign(stored, structuredClone(data)), remove: async keys => { for (const key of keys) delete stored[key]; } } }, tabs: { get: async () => tab, sendMessage: async () => {} } };

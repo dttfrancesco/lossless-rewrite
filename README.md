@@ -30,6 +30,7 @@ Your chat handles writing and repairs. No separate writing-model API is needed f
 | **Keep meaning** | Check that a selected claim survives paraphrasing, including its conditions, numbers and uncertainty. |
 | **Keep wording** | Preserve a quote or approved sentence; check exact text locally. Combine overlapping protections. |
 | **PDF references** | Read a PDF beside your chat and mark passages with their filename and page number. |
+| **Remove this** | Mark content to omit, including paraphrases. Check for content that is still present. |
 | **Writing rules** | Save specific preferences across chats. Supported explicit style requests can be remembered locally, with Undo and an off switch. Check whether the reply follows them. |
 | **Highlights** | Toggle source and reply colours separately. Text matches are visual aids; meaning is checked separately. |
 | **Quick controls** | Move or hide the small launcher. Open selections, PDF references or the sidebar without leaving the chat. |
@@ -51,7 +52,7 @@ Marking, prompting and exact-wording checks need no Lossless account. **Google s
 
 ## Install
 
-**Current version: 0.5.15. A Chrome Web Store listing is being prepared; store installation is not available yet.**
+**Current version: 0.5.16. A Chrome Web Store listing is being prepared; store installation is not available yet.**
 
 Until it is approved, load the extension from source. Requires Git, Node.js 22.16+ and Chrome 116+.
 

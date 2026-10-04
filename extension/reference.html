@@ -10,7 +10,7 @@
 <p id="status" role="status">Open a reference, then select what must stay.</p>
 </section>
 <section class="document" aria-label="PDF page" hidden><div id="page"><canvas></canvas><div class="textLayer"></div></div></section>
-<section id="selection-tools" hidden><textarea id="selected" aria-label="Selected PDF passage" readonly></textarea><div class="selection-actions"><button id="meaning" disabled>Keep meaning</button><button id="wording" disabled>Keep wording</button></div></section>
+<section id="selection-tools" hidden><textarea id="selected" aria-label="Selected PDF passage" readonly></textarea><div class="selection-actions"><button id="meaning" disabled>Keep meaning</button><button id="wording" disabled>Keep wording</button><button id="remove" disabled title="Omit this content from the reply. The selection is still sent as context.">Remove this</button></div></section>
 <details class="saved-passages"><summary id="kept-summary">Selected passages</summary><div id="kept"></div></details>
 <details id="projects"><summary>Saved reference projects</summary><p class="hint">Save PDFs and selections on this device. Available to private test accounts; Pro is coming soon.</p><label>Project name<input id="project-name" maxlength="120" placeholder="e.g. Literature review"></label><button id="save-project">Save project on this device</button><button id="list-projects">Open a saved project</button><div id="project-list"></div><div id="project-files"></div></details>
 </main><script type="module" src="reference.js"></script></body></html>

@@ -25,3 +25,14 @@ test('hosted checks evaluate rules as compliance, preserve uncertainty and meter
  assert.throws(()=>prepare({reply:'Text',items:[{type:'writing_rule',text:'x'.repeat(501)}]}));
  assert.ok(prepare({reply:'x'.repeat(13000),items:[{type:'writing_rule',text:'Use active voice.'}]}).credits>1);
 });
+
+test('hosted removal checks evaluate absence and preserve uncertain results',async()=>{
+ const context={TextEncoder,fixture:{result:()=>({answers:{P0:{noul:.95},P1:{noul:.05},P2:{noul:.5}},usage:{input_tokens:100}})}};
+ vm.runInNewContext(output.outputFiles[0].text,context);
+ const {prepare,run}=context.checking;
+ const p=prepare({reply:'A shortened reply.',items:['Remove this claim','Another claim','Unclear claim'].map(text=>({type:'remove',text}))});
+ assert.match(p.payload.questions.P0.instruction.question,/including paraphrases/);
+ assert.equal(p.payload.questions.P0.labels.true,'The selected content was removed');
+ assert.deepEqual(Array.from((await run(p,'A shortened reply.','test')).items,i=>i.status),['kept','missing','uncertain']);
+ assert.equal(p.credits,1);
+});

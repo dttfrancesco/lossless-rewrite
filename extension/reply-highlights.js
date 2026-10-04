@@ -59,20 +59,21 @@ export function otherWordingRanges(length, matches) {
 }
 export function createReplyHighlighter(onChange = () => {}) {
   let sourceEnabled = true, replyEnabled = true, observer, style, target, capturedText, replyItems = [], sources = new Map();
-  const keys = ['lossless-kept-wording', 'lossless-kept-meaning', 'lossless-other-wording'];
+  const keys = ['lossless-kept-wording', 'lossless-kept-meaning', 'lossless-other-wording', 'lossless-remove'];
   function paint() {
     if (!globalThis.CSS?.highlights || typeof Highlight === 'undefined') return;
     for (const key of keys) CSS.highlights.delete(key);
     if (!sourceEnabled && !replyEnabled) return;
     if (!style) {
       style = document.createElement('style'); style.dataset.lossless = 'highlight-style';
-      style.textContent = '::highlight(lossless-kept-wording){background:#ffe4a6;color:#4b3100}::highlight(lossless-kept-meaning){background:#c5ead5;color:#174b33}::highlight(lossless-other-wording){background:#e1edff;color:#173c68}';
+      style.textContent = '::highlight(lossless-kept-wording){background:#ffe4a6;color:#4b3100}::highlight(lossless-kept-meaning){background:#c5ead5;color:#174b33}::highlight(lossless-other-wording){background:#e1edff;color:#173c68}::highlight(lossless-remove){background:#fbe0df;color:#8b2620;text-decoration:line-through}';
       document.head.append(style);
     }
-    const wording = new Highlight(), meaning = new Highlight(), other = new Highlight();
+    const wording = new Highlight(), meaning = new Highlight(), other = new Highlight(), removed = new Highlight();
+    removed.priority = 3;
     wording.priority = 2; meaning.priority = 1;
     if(sourceEnabled) for (const {item,range} of sources.values()) {
-      if (range.startContainer.isConnected && normalized(range.toString()).value.trim() === normalized(item.text).value.trim()) (item.type === 'keep_wording' ? wording : meaning).add(range);
+      if (range.startContainer.isConnected && normalized(range.toString()).value.trim() === normalized(item.text).value.trim()) (item.type === 'remove' ? removed : item.type === 'keep_wording' ? wording : meaning).add(range);
     }
     if (replyEnabled && target?.isConnected) {
       const {text,nodes} = textNodes(target), result = findPassageMatches(text,replyItems);
@@ -82,10 +83,10 @@ export function createReplyHighlighter(onChange = () => {}) {
         const range = document.createRange();
         range.setStart(first.node,Math.max(0,match.start-first.start)); range.setEnd(last.node,match.end-last.start); highlight.add(range);
       };
-      for (const m of result.matches) add(m,m.type === 'keep_wording' ? wording : meaning);
+      for (const m of result.matches) add(m,m.type === 'remove' ? removed : m.type === 'keep_wording' ? wording : meaning);
       for (const m of otherWordingRanges(text.length,result.matches)) if (text.slice(m.start,m.end).trim()) add(m,other);
     }
-    CSS.highlights.set(keys[0],wording); CSS.highlights.set(keys[1],meaning); CSS.highlights.set(keys[2],other);
+    CSS.highlights.set(keys[0],wording); CSS.highlights.set(keys[1],meaning); CSS.highlights.set(keys[2],other); CSS.highlights.set(keys[3],removed);
   }
   function clear() { observer?.disconnect(); observer=undefined; target=undefined; capturedText=undefined; replyItems=[]; paint(); onChange(); }
   function remember(item,range) { if (range) sources.set(item.id,{item,range:range.cloneRange()}); paint(); }

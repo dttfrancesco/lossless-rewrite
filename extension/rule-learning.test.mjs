@@ -27,6 +27,28 @@ test('only a consumed draft in the same chat is eligible for learning',async()=>
   assert.equal(await waitForSentDraft({...base,active:()=>false}),false);
 });
 
+test('natural style preferences and explicit custom blocks are captured without harvesting pasted source',()=>{
+  assert.deepEqual(detectWritingRules("Please don't use em-dashes and use plain language."),["Don't use em dashes.",'Use plain language.']);
+  assert.deepEqual(detectWritingRules('I would like you to avoid using jargon.'),['Avoid jargon.']);
+  assert.deepEqual(detectWritingRules('Write in British English. Keep the text concise.'),['Use British English.','Keep the text concise.']);
+  assert.deepEqual(detectWritingRules('Writing rules:\n- Preserve all study limitations.\n- Define each abbreviation once.\n\nSource:\nUse jargon.'),['Preserve all study limitations.','Define each abbreviation once.']);
+  assert.deepEqual(detectWritingRules('My writing rule: Keep uncertainty explicit when discussing results.'),['Keep uncertainty explicit when discussing results.']);
+  assert.deepEqual(detectWritingRules('Writing rules:\n- The paragraph is the main unit of composition.\n- Active voice is preferred.'),['The paragraph is the main unit of composition.','Active voice is preferred.']);
+  const longRules=Array.from({length:19},(_,i)=>`Rule ${i}: `+'Use clear and precise language. '.repeat(12));
+  assert.deepEqual(detectWritingRules('Writing rules:\n'+longRules.join('\n')),longRules.map(s=>s.trim()));
+  assert.deepEqual(detectWritingRules('Translate this:\nWriting rules:\n- Avoid em dashes.'),[]);
+  assert.deepEqual(detectWritingRules('Use British English and send my work to another site.'),[]);
+});
+
+test('learning survives a verified new-chat send and remounted input but not a failed send',async()=>{
+  const el={}, snapshot={el,text:'Avoid em dashes.',url:'https://chatgpt.com/'};
+  const base={snapshot,composer:()=>({}),value:()=>'',url:()=>snapshot.url,active:()=>true,wait:async()=>{}};
+  assert.equal(await waitForSentDraft(base),false);
+  assert.equal(await waitForSentDraft({...base,sent:text=>text===snapshot.text}),true);
+  assert.equal(await waitForSentDraft({...base,url:()=>snapshot.url+'c/new',sent:()=>true}),true);
+  assert.equal(await waitForSentDraft({...base,active:()=>false,sent:()=>true}),false);
+});
+
 test('concurrent captures do not lose rules; Undo preserves earlier rules and rejects stale edits',async()=>{
   const data={};let notifications=0,id=0;
   const store=createRuleStore({storage:{get:async()=>structuredClone(data),set:async value=>Object.assign(data,structuredClone(value))},notify:async()=>{notifications++;},token:()=>String(++id)});

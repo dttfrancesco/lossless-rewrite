@@ -147,7 +147,7 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
         if(!Array.isArray(result.items)||result.items.length!==items.length)throw new Error('The checker did not cover every passage and rule.');
         return {...result,items:result.items.map((item,i)=>({...items[i],status:item.status}))};
       }
-      if(context.rules?.length)throw new Error('Sign in through Account to check writing rules. They were included in your prompt, but have not been checked.');
+      if(context.rules?.length || context.items.some(i=>i.type==='remove'))throw new Error('Sign in through Account to check writing rules and removals. These requirements were included in your prompt, but have not been checked.');
       const payload=checkPayload(context.items,message.reply);
       if (!(await chrome.storage.local.get('autoCheckConsent')).autoCheckConsent) throw new Error('Sign in through Account to check meaning, or set up your own Jev connection.');
       if (inlineRuns.has(sender.tab.id)) throw new Error('A check is already running for this chat.');

@@ -2,7 +2,7 @@
 
 **Cut words, not ideas.** Keep selected ideas, exact wording and writing requirements when condensing text in your existing AI chat.
 
-Version **0.5.15** supports ChatGPT, Claude, Gemini, Grok and DeepSeek. The store listing is being prepared; this guide installs the source build. Site layouts can change. [Validation status](../docs/REVIEW.md).
+Version **0.5.16** supports ChatGPT, Claude, Gemini, Grok and DeepSeek. The store listing is being prepared; this guide installs the source build. Site layouts can change. [Validation status](../docs/REVIEW.md).
 
 ## Install
 
@@ -54,11 +54,17 @@ Select text on a page and click **Keep meaning** or **Keep wording**. Its filena
 
 Selectable-text PDFs up to 25 MB are supported. Scanned pages need OCR elsewhere. Saved multi-PDF reference projects are in private testing for the planned Pro tier; the basic PDF reader is available now.
 
+## Remove content
+
+Select text in the chat or PDF and choose **Remove this**. This asks the writer to leave out that information, including paraphrases. It does not erase the original message or redact the prompt: the marked text is sent as context. Red highlights distinguish removal requests from Keep selections. **Unmark** cancels a selection.
+
+Use **Check reply** to check the latest answer against your selections and writing rules, even after an ordinary chat send. Hosted checks assess whether removed content is still present. Without sign-in, an exact match can flag a failure, but absence is not treated as proof that all paraphrases were removed.
+
 ## Writing rules
 
 Open **Writing rules** or press **Alt+Shift+R**. Add one specific rule per line, such as `Keep uncertainty explicit when discussing results.` Save, edit or disable rules at any time.
 
-Rules apply to future **Lossless sends across chats on this device**. They do not modify ordinary chat messages. Supported explicit preferences at the start of a sent message, such as `Always use British English.` or `Avoid em dashes.`, can be remembered automatically. Capture offers Undo and an off switch. It runs locally, without another model call or scanning earlier conversations. Temporary word limits, quoted examples and AI replies are ignored.
+Rules apply to future **Lossless sends across chats on this device**. They do not modify ordinary chat messages. Supported explicit preferences at the start of a sent message, such as `Always use British English.` or `Avoid em dashes.`, can be remembered automatically. For custom preferences, send a message starting with `Writing rules:` and put one instruction per line. A blank line ends this rules block. Capture offers Undo and an off switch. It runs locally, without another model call or scanning earlier conversations. Temporary word limits, quoted examples and AI replies are ignored.
 
 Hosted reply checks assess enabled rules alongside selected ideas. Failed rules can be included in **Fix in chat**. Rules can be used without any marked passage. The full editor and optional native companion do not currently check these saved rules.
 
@@ -66,11 +72,12 @@ Hosted reply checks assess enabled rules alongside selected ideas. Failed rules 
 
 - **Amber:** matching text from Keep wording selections.
 - **Green:** matching text from Keep meaning selections.
+- **Red:** content marked Remove this (also red if that wording remains in the reply).
 - **Blue:** other wording in the reply.
 
 Colours are a text comparison, not a semantic verdict. A paraphrase may be blue even when its meaning is retained. Source and Reply toggle independently.
 
-Drag the round logo to move it. Its six actions are **Source, Reply, Selections, PDF, Sidebar and Hide**. With no source selected, Add source opens guidance. Check status stays on the logo; results open when requested. Hide or × dismisses the launcher; restore it from the sidebar. Escape or an outside click closes open controls.
+Drag the round logo to move it. Its six actions are **Selections, Check reply, Writing rules, PDF, Highlights and Sidebar**. Highlights contains independent Source and Reply toggles. Check status stays on the logo; results open when requested. × dismisses the launcher; restore it from the sidebar. Escape or an outside click closes open controls.
 
 | Shortcut | Action |
 |---|---|
@@ -104,7 +111,7 @@ Available on Free, but requires the optional local companion. Open **Set up chec
 3. Follow the [companion guide](../companion/README.md) to register the local host, then choose **Connect and check setup**.
 4. For the full editor, choose **Sites and connections → Jev · local connection**. For inline replies, enable automatic companion checks in the setup dialog.
 
-Signed-in hosted account checks take priority. Sign out of the Lossless account to use the companion for inline checks. Companion usage goes to your own provider account, not the 25 included credits. Connection setup checks configuration, not key validity. The companion checks meaning only; writing and repairs stay in your chat, and uncertain checks do not call a second model. Saved writing-rule checks currently require the hosted path.
+Signed-in hosted account checks take priority. Sign out of the Lossless account to use the companion for inline checks. Companion usage goes to your own provider account, not the 25 included credits. Connection setup checks configuration, not key validity. The companion checks meaning only; writing and repairs stay in your chat, and uncertain checks do not call a second model. Saved writing-rule and removal checks currently require the hosted path.
 
 ## Plans and privacy
 
